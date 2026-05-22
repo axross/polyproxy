@@ -1,6 +1,6 @@
 ---
 name: react-component-guidelines
-description: Apply this skill when writing, reviewing, or refactoring React components in this Next.js 16 URL proxy app. Covers route-local _components placement, kebab-case component files, named exports for non-page components, explicit JSX return types, interface props, typed DOM props, Server vs Client Component boundaries, "use client" placement, Suspense/loading splits, Tailwind utility styling, cn()/tailwind-merge class isolation, and testable data-testid patterns. Use when the user says component, React, RSC, use client, Suspense, Tailwind, className, cn, or data-testid.
+description: Apply this skill when writing, reviewing, or refactoring React components in this Next.js 16 URL proxy app. Covers route-local _components placement, kebab-case component files, named exports for non-page components, explicit JSX return types, interface props, typed DOM props, Server vs Client Component boundaries, "use client" placement, Suspense/loading splits, Tailwind utility styling, twMerge/tailwind-merge class isolation, and testable data-testid patterns. Use when the user says component, React, RSC, use client, Suspense, Tailwind, className, twMerge, or data-testid.
 ---
 
 # React Component Guidelines
@@ -32,13 +32,13 @@ The default component in this app is a Server Component. Client Components are n
 
 ## Tailwind Styling
 
-Component styling uses Tailwind utilities. `tailwind-merge` is exposed through `cn()` in `@/helpers/class-names` so base component classes and caller-provided layout classes can be merged without leaking style responsibility across component levels.
+Component styling uses Tailwind utilities. Import `twMerge` from `tailwind-merge` when base component classes and caller-provided layout classes need to be merged without leaking style responsibility across component levels.
 
 **Guidelines:**
 
 - MUST read [tailwind-styling.md](./references/tailwind-styling.md) when adding or changing component styling, className passthroughs, responsive layout, focus states, or global CSS tokens.
 - MUST prefer Tailwind utilities over CSS modules for component styling.
-- MUST use `cn()` when a component accepts `className` or combines base classes with caller-provided classes.
+- MUST use `twMerge()` when a component accepts `className` or combines base classes with caller-provided classes.
 - SHOULD keep global CSS limited to Tailwind import, design tokens, reset rules, and truly global browser behavior.
 
 ## Testable Components

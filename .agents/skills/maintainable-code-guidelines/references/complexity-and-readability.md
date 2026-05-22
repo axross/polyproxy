@@ -14,13 +14,13 @@ The Obsidian route has distinct invalid-link, crawler, and human experiences. JS
 
 ## Tailwind Class Complexity
 
-Route-local styling should stay with the component that owns the markup. Tailwind utility strings are preferred over CSS modules, and `cn()` from `@/helpers/class-names` should merge parent-supplied layout classes with component-owned defaults.
+Route-local styling should stay with the component that owns the markup. Tailwind utility strings are preferred over CSS modules, and `twMerge()` from `tailwind-merge` should merge parent-supplied layout classes with component-owned defaults.
 
 **Guidelines:**
 
 - SHOULD flag long Tailwind class strings that mix unrelated component levels, such as page shell, panel, and button styling in one component.
 - SHOULD flag duplicated Tailwind class groups across sibling route components when a small route-local component would be clearer.
-- MUST use `cn()` when a component accepts `className` or combines base classes with caller-provided classes.
+- MUST use `twMerge()` when a component accepts `className` or combines base classes with caller-provided classes.
 - MUST keep parent-level spacing and layout at the parent component level; child components should own their internal shape, color, and interaction classes.
 - SHOULD verify text still fits at narrow mobile widths when copy or Tailwind classes change.
 

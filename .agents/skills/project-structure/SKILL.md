@@ -15,20 +15,24 @@ Use this tree to decide where code belongs before adding files. Public routes li
 ```
 app/
 ├── _/
-│   └── helpers/
-│       ├── base64url.ts
-│       ├── base64url.test.ts
-│       ├── bot-detection.ts
-│       ├── bot-detection.test.ts
-│       ├── bridge-url.ts
-│       ├── bridge-url.test.ts
-│       ├── class-names.ts
-│       ├── decode-link.ts
-│       ├── decode-link.test.ts
-│       ├── obsidian-uri.ts
-│       ├── obsidian-uri.test.ts
-│       ├── types.ts
-│       └── validation.ts
+│   ├── helpers/
+│   │   ├── base64url.ts
+│   │   ├── base64url.test.ts
+│   │   ├── bot-detection.ts
+│   │   ├── bot-detection.test.ts
+│   │   ├── bridge-url.ts
+│   │   ├── bridge-url.test.ts
+│   │   ├── decode-link.ts
+│   │   ├── decode-link.test.ts
+│   │   ├── obsidian-uri.ts
+│   │   ├── obsidian-uri.test.ts
+│   │   ├── sentry-privacy.ts
+│   │   ├── sentry-privacy.test.ts
+│   │   ├── types.ts
+│   │   └── validation.ts
+│   ├── logger.ts                # shared Pino root logger
+│   └── runtime.ts               # runtime and public observability config helpers
+├── global-error.tsx          # root App Router error boundary and Sentry capture
 ├── globals.css                # global CSS for the app
 ├── layout.tsx                 # root layout
 ├── obsidian/
@@ -81,9 +85,11 @@ Support files carry workflow, documentation, configuration, and agent guidance a
 | `.agents/skills/**` | Agent skills and reference files |
 | `README.md` | Public overview, tech stack, and development/test instructions only |
 | `.env.example` | Documented environment variables |
+| `instrumentation.ts` / `instrumentation-client.ts` | Next.js server and client observability entry points |
 | `next.config.ts` | Next.js configuration |
 | `playwright.config.ts` | Playwright E2E configuration |
 | `postcss.config.mjs` | Tailwind CSS PostCSS plugin configuration |
+| `sentry.server.config.ts` / `sentry.edge.config.ts` | Sentry runtime initialization |
 | `vitest.config.mts` | Vitest configuration |
 | `package.json` / `package-lock.json` | npm scripts and dependency graph |
 
@@ -122,7 +128,9 @@ For naming and export conventions inside these directories, consult [maintainabl
 - MUST place route rendering and metadata generation directly under `app/`.
 - MUST place dynamic route prop contracts in a co-located `page-props.ts` file that exports `PageProps`.
 - MUST place route-local UI modules under the owning route's `_components/` directory.
-- MUST keep Tailwind class composition local to the component level that owns the markup, using `cn()` from `@/helpers/class-names` when classes cross component boundaries.
+- MUST keep Tailwind class composition local to the component level that owns the markup, using `twMerge()` from `tailwind-merge` when classes cross component boundaries.
+- MUST keep shared Pino logger and runtime configuration helpers under `app/_/`.
+- MUST keep Sentry event scrubbing under `app/_/helpers/` with colocated Vitest coverage.
 - MUST place unit tests next to the target file and mirror the target filename, such as `app/_/helpers/bridge-url.test.ts` for `app/_/helpers/bridge-url.ts`.
 - MUST place Playwright route tests under `e2e/tests/routes/<route>/` and shared Playwright fixtures under `e2e/helpers/`.
 - MUST place static files in `public/`.

@@ -32,6 +32,7 @@ Route behavior is the user-visible fallback layer. Invalid input should produce 
 - MUST return invalid metadata for invalid payloads rather than letting metadata generation throw.
 - MUST preserve crawler-safe rendering for bot user agents; bot handling should not run client-side redirect code.
 - SHOULD keep route error handling close to the route so the user-facing behavior is visible during review.
+- MUST NOT convert expected invalid-link `Result` failures into thrown errors just to make them visible to Sentry.
 
 ## Client-Side Custom Protocol Launch
 
@@ -42,6 +43,7 @@ Browser launch attempts can fail silently or be blocked by the browser. The manu
 - SHOULD keep custom-protocol launch attempts idempotent in client components.
 - SHOULD avoid unhandled promise rejections in future async client-side side effects; terminate intentional fire-and-forget promises with a `.catch(...)`.
 - MUST NOT log the full `obsidian://` URI if a launch attempt fails.
+- MUST NOT send the full `obsidian://` URI to Sentry breadcrumbs, tags, contexts, or captured exception metadata.
 
 ## Error Messages
 

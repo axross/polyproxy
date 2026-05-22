@@ -22,7 +22,8 @@ Tailwind is the component styling default. Global CSS exists for Tailwind import
 - MUST use Tailwind utilities for component-level styling.
 - SHOULD NOT add CSS modules for ordinary component layout, color, spacing, typography, or responsive behavior.
 - MUST keep `app/globals.css` limited to Tailwind import, root tokens, reset rules, and global browser behavior.
-- SHOULD use existing root CSS variables through Tailwind arbitrary values, such as `text-[var(--foreground)]`, when styling with project tokens.
+- MUST put global element resets that overlap Tailwind utilities, such as anchor color or text decoration resets, inside `@layer base` so component utility classes can override them.
+- SHOULD use existing root CSS variables through Tailwind arbitrary values, such as `text-[color:var(--foreground)]`, when styling text color with project tokens.
 - MUST NOT add hard-coded color literals inside component class strings when an existing token covers the role.
 
 ## Class Ownership and Merging
@@ -33,22 +34,22 @@ Each component level owns its own styling concerns. Parents own placement and ou
 
 ```tsx
 const styles = {
-  actions: cn("mt-8"),
+  actions: twMerge("mt-8"),
 };
 
 <OpenActions className={styles.actions} obsidianUri={obsidianUri} />;
 ```
 
 ```tsx
-const actionStyles = cn("flex flex-wrap items-center gap-3");
+const actionStyles = twMerge("flex flex-wrap items-center gap-3");
 
-return <div className={cn(actionStyles, className)} />;
+return <div className={twMerge(actionStyles, className)} />;
 ```
 
 **Guidelines:**
 
-- MUST use `cn()` from `@/helpers/class-names` when a component accepts `className`.
-- MUST use `cn()` when combining multiple class groups that can override each other.
+- MUST import `twMerge` from `tailwind-merge` when a component accepts `className`.
+- MUST use `twMerge()` when combining multiple class groups that can override each other.
 - MUST keep parent-level spacing, placement, and sizing in the parent that composes the child.
 - MUST keep a child component's internal shape, color, typography, and interaction classes inside the child component.
 - SHOULD avoid manual string concatenation for class names.
@@ -61,9 +62,9 @@ Tailwind class strings can become dense. Small local class maps keep JSX readabl
 
 ```tsx
 const styles = {
-  title: cn(
+  title: twMerge(
     "text-balance text-[clamp(2rem,8vw,3rem)] font-bold leading-[1.08]",
-    "text-[var(--foreground)]",
+    "text-[color:var(--foreground)]",
   ),
 };
 ```
@@ -82,7 +83,7 @@ Responsive behavior should be explicit at the component that owns the layout. Ac
 **Example:**
 
 ```tsx
-const buttonClassName = cn(
+const buttonClassName = twMerge(
   "inline-flex min-h-11 items-center justify-center rounded-md",
   "max-sm:w-full",
 );

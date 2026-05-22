@@ -34,7 +34,7 @@ export function ObsidianSectionPanel({
   className,
   ...props
 }: ComponentPropsWithoutRef<"section">) {
-  return <section className={cn(panelClassName, className)} {...props} />;
+  return <section className={twMerge(panelClassName, className)} {...props} />;
 }
 ```
 

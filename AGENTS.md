@@ -28,7 +28,7 @@ Apply these keywords consistently in agent skills and the documents linked from 
 | [Development Guidelines](.agents/skills/development-guidelines/SKILL.md) | Implementing, refactoring, running commands, or preparing changes |
 | [E2E Test Guidelines](.agents/skills/e2e-test-guidelines/SKILL.md) | Writing, running, reviewing, or maintaining Playwright E2E tests, route coverage, browser traces, or snapshots |
 | [Maintainable Code Guidelines](.agents/skills/maintainable-code-guidelines/SKILL.md) | Evaluating readability, boundaries, naming, comments, or scope discipline |
-| [Observability Guidelines](.agents/skills/observability-guidelines/SKILL.md) | Handling errors, expected invalid links, runtime diagnostics, or logging |
+| [Observability Guidelines](.agents/skills/observability-guidelines/SKILL.md) | Handling errors, expected invalid links, runtime diagnostics, Pino logging, Sentry error tracking, or telemetry |
 | [Project Structure](.agents/skills/project-structure/SKILL.md) | Locating files, placing new code, or choosing import paths |
 | [Quality Assurance Guidelines](.agents/skills/quality-assurance-guidelines/SKILL.md) | Writing tests, checking verification evidence, investigating flaky tests, or reviewing QA coverage |
 | [React Component Guidelines](.agents/skills/react-component-guidelines/SKILL.md) | Writing, reviewing, or refactoring React components, Server/Client boundaries, Tailwind classes, className merging, or test IDs |

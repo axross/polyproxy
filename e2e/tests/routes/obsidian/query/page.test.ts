@@ -9,7 +9,7 @@ import {
 const validBridgePath = buildBridgePath(exampleBridgePayload);
 const expectedObsidianUri = buildObsidianUri(exampleBridgePayload);
 
-test.use({ javaScriptEnabled: false });
+test.use({ colorScheme: "light", javaScriptEnabled: false });
 
 test("Bridge page content", async ({ page }) => {
   await test.step("Navigate to a valid bridge route", async () => {
@@ -29,11 +29,14 @@ test("Bridge page content", async ({ page }) => {
 
   await test.step("Verify the Obsidian open action", async () => {
     const openActions = bridge.getByTestId("open-actions");
+    const openButton = openActions.getByTestId("open-button");
 
-    await expect(openActions.getByTestId("open-button")).toHaveAttribute(
+    await expect(openButton).toHaveAttribute(
       "href",
       expectedObsidianUri,
     );
+    await expect(openButton).toHaveCSS("background-color", "rgb(36, 83, 196)");
+    await expect(openButton).toHaveCSS("color", "rgb(255, 255, 255)");
     await expect(openActions.getByTestId("status")).toContainText(
       "Opening Obsidian",
     );
@@ -53,6 +56,19 @@ test("Bridge page content", async ({ page }) => {
       "href",
       exampleBridgePayload.sourceUrl,
     );
+  });
+});
+
+test.describe("dark color scheme", () => {
+  test.use({ colorScheme: "dark" });
+
+  test("Bridge open action keeps readable contrast", async ({ page }) => {
+    await page.goto(validBridgePath);
+
+    const openButton = page.getByTestId("bridge").getByTestId("open-button");
+
+    await expect(openButton).toHaveCSS("background-color", "rgb(141, 177, 255)");
+    await expect(openButton).toHaveCSS("color", "rgb(16, 19, 26)");
   });
 });
 

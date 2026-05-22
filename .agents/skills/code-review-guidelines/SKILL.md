@@ -68,7 +68,7 @@ Each review lens has a source skill. Link to that source instead of restating lo
 - MUST consult [Application Security Requirements](../application-security-requirements/SKILL.md) for payload decoding, validation, Obsidian URI construction, source URLs, env vars, indexing, or dependencies.
 - MUST consult [Quality Assurance Guidelines](../quality-assurance-guidelines/SKILL.md) for tests, snapshots, flaky behavior, manual verification, or QA evidence.
 - SHOULD consult [Maintainable Code Guidelines](../maintainable-code-guidelines/SKILL.md) for readability, naming, complexity, boundaries, comments, or scope discipline.
-- SHOULD consult [Observability Guidelines](../observability-guidelines/SKILL.md) for expected invalid links, thrown errors, diagnostics, logging, or telemetry.
+- SHOULD consult [Observability Guidelines](../observability-guidelines/SKILL.md) for expected invalid links, thrown errors, diagnostics, logging, Sentry error tracking, or telemetry.
 - SHOULD consult [Development Guidelines](../development-guidelines/SKILL.md) for App Router, command sequence, dependencies, or implementation workflow.
 - SHOULD consult [Project Structure](../project-structure/SKILL.md) for new files, moved files, route structure, or import paths.
 - MUST consult [Agent Skills Best Practices](../agent-skills-best-practices/SKILL.md) for agent skill changes, reference files, or `AGENTS.md` index sync.

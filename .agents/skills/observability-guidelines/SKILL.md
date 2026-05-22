@@ -1,12 +1,12 @@
 ---
 name: observability-guidelines
 description: |
-  Rules for error handling and minimal diagnostics in this stateless Next.js URL proxy. Use when code decodes external payloads, handles expected invalid links, throws route/helper errors, logs runtime diagnostics, or considers adding analytics or telemetry.
+  Rules for error handling, structured logging, and Sentry error tracking in this stateless Next.js URL proxy. Use when code decodes external payloads, handles expected invalid links, throws route/helper errors, logs runtime diagnostics, changes instrumentation files, or considers adding analytics or telemetry.
 ---
 
 # Observability Guidelines
 
-Apply these rules when writing, reviewing, or modifying code that handles errors or emits diagnostics. This project currently has no central logger or telemetry pipeline; keep observability simple and privacy-preserving.
+Apply these rules when writing, reviewing, or modifying code that handles errors, emits diagnostics, or reports exceptions. This project uses Pino for server logs and Sentry for error tracking; keep both channels sparse and privacy-preserving.
 
 ## Error Handling
 
@@ -20,10 +20,20 @@ Error handling distinguishes expected invalid proxy links from unexpected intern
 
 ## Logging
 
-Logging is minimal because this public route may receive invalid links and crawler traffic during normal operation. Diagnostics should be coarse, server-side when possible, and privacy-preserving. The detailed rules live in [logging.md](./references/logging.md).
+Logging is minimal because this public route may receive invalid links and crawler traffic during normal operation. Diagnostics should be coarse, structured through Pino when possible, server-side when possible, and privacy-preserving. The detailed rules live in [logging.md](./references/logging.md).
 
 **Guidelines:**
 
 - SHOULD keep the app quiet during normal invalid-link and custom-protocol behavior.
 - MUST NOT log decoded proxy payloads, generated proxy URLs, or `obsidian://` URIs.
 - SHOULD use [logging.md](./references/logging.md) before adding console diagnostics, analytics, telemetry, or deployment-error logging.
+
+## Error Tracking
+
+Sentry reports unexpected runtime failures through Next.js instrumentation and the global error boundary. Expected malformed bridge URLs should still render deterministic fallback UI rather than become captured exceptions. The detailed rules live in [error-tracking.md](./references/error-tracking.md).
+
+**Guidelines:**
+
+- MUST keep Sentry event scrubbing aligned with the bridge privacy contract before enabling or expanding captured data.
+- MUST NOT manually report expected invalid-link results to Sentry.
+- SHOULD use [error-tracking.md](./references/error-tracking.md) when changing `instrumentation.ts`, `instrumentation-client.ts`, `sentry.*.config.ts`, `app/global-error.tsx`, or Sentry dependencies.

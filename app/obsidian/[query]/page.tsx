@@ -3,7 +3,6 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import type { JSX } from "react";
 
-import { cn } from "@/helpers/class-names";
 import { isBotUserAgent } from "@/helpers/bot-detection";
 import { buildBridgeUrl, getConfiguredBaseUrl } from "@/helpers/bridge-url";
 import { decodeBridgeQuerySafe } from "@/helpers/decode-link";
@@ -22,37 +21,6 @@ import type { PageProps } from "./page-props";
 const siteName = "open.axross.dev";
 const invalidTitle = "Invalid Obsidian Proxy Link";
 const invalidDescription = "This Obsidian proxy link could not be opened.";
-
-const styles = {
-  title: cn(
-    "text-balance text-[clamp(2rem,8vw,3rem)] font-bold leading-[1.08]",
-    "text-[var(--foreground)]",
-  ),
-  summary: cn("mt-4 text-lg leading-[1.7] text-[var(--muted)]"),
-  actions: cn("mt-8"),
-  note: cn("mt-4 text-sm leading-[1.6] text-[var(--muted)]"),
-  details: cn("mt-6 border-t border-[var(--border)] pt-4"),
-  detailsSummary: cn("cursor-pointer font-bold text-[var(--foreground)]"),
-  metaList: cn("mt-4 grid gap-3"),
-  metaTerm: cn(
-    "text-xs font-bold uppercase tracking-[0.06em]",
-    "text-[var(--muted)]",
-  ),
-  metaDescription: cn(
-    "min-w-0 font-mono text-sm text-[var(--foreground)]",
-    "[overflow-wrap:anywhere]",
-  ),
-  sourceLink: cn("text-[var(--link)] underline underline-offset-3"),
-  invalidTitle: cn(
-    "text-[clamp(1.9rem,7vw,2.6rem)] leading-[1.12]",
-    "text-[var(--foreground)]",
-  ),
-  invalidCopy: cn("mt-4 text-base leading-[1.7] text-[var(--muted)]"),
-  homeLink: cn(
-    "mt-7 inline-flex font-bold text-[var(--link)]",
-    "underline underline-offset-3",
-  ),
-};
 
 export async function generateMetadata({
   params,
@@ -105,17 +73,20 @@ export default async function ObsidianBridgePage({
         >
           <ObsidianEyebrow>{siteName}</ObsidianEyebrow>
           <h1
-            className={styles.invalidTitle}
+            className="text-[clamp(1.9rem,7vw,2.6rem)] leading-[1.12] text-[color:var(--foreground)]"
             data-testid="title"
             id="invalid-title"
           >
             {invalidTitle}
           </h1>
-          <p className={styles.invalidCopy} data-testid="description">
+          <p
+            className="mt-4 text-base leading-[1.7] text-[color:var(--muted)]"
+            data-testid="description"
+          >
             {invalidDescription}
           </p>
           <Link
-            className={styles.homeLink}
+            className="mt-7 inline-flex font-bold text-[color:var(--link)] underline underline-offset-3"
             data-testid="overview-link"
             href="/obsidian"
           >
@@ -139,40 +110,64 @@ export default async function ObsidianBridgePage({
     <ObsidianPage>
       <ObsidianArticlePanel aria-labelledby="note-title" data-testid="bridge">
         <ObsidianEyebrow>{siteName}</ObsidianEyebrow>
-        <h1 className={styles.title} data-testid="title" id="note-title">
+        <h1
+          className="text-balance text-[clamp(2rem,8vw,3rem)] font-bold leading-[1.08] text-[color:var(--foreground)]"
+          data-testid="title"
+          id="note-title"
+        >
           {payload.title}
         </h1>
-        <p className={styles.summary} data-testid="summary">
+        <p
+          className="mt-4 text-lg leading-[1.7] text-[color:var(--muted)]"
+          data-testid="summary"
+        >
           {payload.summary}
         </p>
 
-        <OpenActions className={styles.actions} obsidianUri={obsidianUri} />
+        <OpenActions className="mt-8" obsidianUri={obsidianUri} />
 
-        <p className={styles.note}>
+        <p className="mt-4 text-sm leading-[1.6] text-[color:var(--muted)]">
           If Obsidian does not open automatically, use the button above.
         </p>
 
-        <details className={styles.details} data-testid="note-details">
-          <summary className={styles.detailsSummary}>Note details</summary>
-          <dl className={styles.metaList}>
+        <details
+          className="mt-6 border-t border-[var(--border)] pt-4"
+          data-testid="note-details"
+        >
+          <summary className="cursor-pointer font-bold text-[color:var(--foreground)]">
+            Note details
+          </summary>
+          <dl className="mt-4 grid gap-3">
             <div>
-              <dt className={styles.metaTerm}>Vault</dt>
-              <dd className={styles.metaDescription} data-testid="vault">
+              <dt className="text-xs font-bold uppercase tracking-[0.06em] text-[color:var(--muted)]">
+                Vault
+              </dt>
+              <dd
+                className="min-w-0 font-mono text-sm text-[color:var(--foreground)] [overflow-wrap:anywhere]"
+                data-testid="vault"
+              >
                 {payload.vault}
               </dd>
             </div>
             <div>
-              <dt className={styles.metaTerm}>Path</dt>
-              <dd className={styles.metaDescription} data-testid="path">
+              <dt className="text-xs font-bold uppercase tracking-[0.06em] text-[color:var(--muted)]">
+                Path
+              </dt>
+              <dd
+                className="min-w-0 font-mono text-sm text-[color:var(--foreground)] [overflow-wrap:anywhere]"
+                data-testid="path"
+              >
                 {payload.path}
               </dd>
             </div>
             {payload.sourceUrl !== undefined ? (
               <div>
-                <dt className={styles.metaTerm}>Source</dt>
-                <dd className={styles.metaDescription}>
+                <dt className="text-xs font-bold uppercase tracking-[0.06em] text-[color:var(--muted)]">
+                  Source
+                </dt>
+                <dd className="min-w-0 font-mono text-sm text-[color:var(--foreground)] [overflow-wrap:anywhere]">
                   <a
-                    className={styles.sourceLink}
+                    className="text-[color:var(--link)] underline underline-offset-3"
                     data-testid="source-url"
                     href={payload.sourceUrl}
                     target="_blank"

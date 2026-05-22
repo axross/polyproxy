@@ -18,7 +18,7 @@ Setup uses npm and the committed lockfile. Local environment values should start
 
 ## Running the App
 
-The app can run in development mode or as a built production preview. A production preview requires a successful build first.
+The app can run in development mode or as a built production preview. A production preview requires a successful build first. Runtime scripts pipe Next.js output through `pino-pretty`, so pipeline exit status must stay protected by the `bash -o pipefail` wrapper in `package.json`.
 
 | Command | Purpose |
 | ------- | ------- |
@@ -29,6 +29,7 @@ The app can run in development mode or as a built production preview. A producti
 **Guidelines:**
 
 - MUST run `npm run build` before `npm start` when validating production behavior locally.
+- MUST preserve `pipefail` behavior if editing npm scripts that pipe through `pino-pretty`.
 - SHOULD use `npm run dev` for interactive route and UI checks.
 
 ## Code Quality
@@ -52,11 +53,14 @@ The available quality commands are lint, Vitest, Playwright, and build. There is
 
 ## Environment Variables
 
-Runtime configuration is intentionally small. Public base URL configuration affects generated links and metadata; reserved workflow settings must remain documented if they stay present.
+Runtime configuration is intentionally small. Public base URL configuration affects generated links and metadata; Sentry configuration enables scrubbed error tracking; reserved workflow settings must remain documented if they stay present.
 
 | Variable | Purpose |
 | -------- | ------- |
 | `NEXT_PUBLIC_BASE_URL` | Canonical public origin used by proxy URL helpers and metadata. Production uses `https://open.axross.dev`. |
+| `NEXT_PUBLIC_SENTRY_DSN` | Browser-visible Sentry DSN used to enable client and server error tracking. |
+| `SENTRY_ORG` | Sentry organization slug used by `withSentryConfig()` at build time. |
+| `SENTRY_PROJECT` | Sentry project slug used by `withSentryConfig()` at build time. |
 | `DEFAULT_VAULT` | Reserved for notification workflow integration. |
 
 **Guidelines:**
@@ -64,6 +68,7 @@ Runtime configuration is intentionally small. Public base URL configuration affe
 - MUST update `.env.example` when adding, renaming, or removing configuration.
 - SHOULD keep README limited to the local environment-file setup command unless the user explicitly approves public configuration detail.
 - MUST NOT place secrets or decoded note content in public environment variables.
+- MUST NOT add Sentry auth tokens or upload credentials to `.env.example`.
 
 ## E2E Testing
 

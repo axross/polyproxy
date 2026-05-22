@@ -34,14 +34,13 @@ Reusable wrapper components should accept the native props of the element they r
 
 ```tsx
 import type { ComponentProps, JSX } from "react";
-
-import { cn } from "@/helpers/class-names";
+import { twMerge } from "tailwind-merge";
 
 export function ObsidianPage({
   className,
   ...props
 }: ComponentProps<"main">): JSX.Element {
-  return <main className={cn("min-h-full", className)} {...props} />;
+  return <main className={twMerge("min-h-full", className)} {...props} />;
 }
 ```
 
