@@ -6,14 +6,15 @@ It supports private URL proxy workflows behind normal HTTPS pages. Operational d
 
 ## Tech Stack
 
-- Next.js 16 App Router
-- React 19
+- Hono
+- Cloudflare Workers
+- Wrangler
 - TypeScript
-- Tailwind CSS 4 through PostCSS
 - zod
+- Sentry
 - Vitest
 - Playwright
-- ESLint
+- Biome
 
 ## Development
 
@@ -21,10 +22,10 @@ Install dependencies, then create a local environment file when needed:
 
 ```bash
 npm install
-cp .env.example .env.local
+cp .dev.vars.example .dev.vars
 ```
 
-Run the local server:
+Run the Worker locally with Wrangler:
 
 ```bash
 npm run dev
@@ -39,8 +40,25 @@ npm run lint
 npm run build
 ```
 
-Playwright starts the local development server automatically for E2E tests. To test an already running preview or production-like server, set `PLAYWRIGHT_BASE_URL`:
+Playwright starts `wrangler dev` automatically for E2E tests. To test an already
+running preview or production-like server, set `PLAYWRIGHT_BASE_URL`:
 
 ```bash
 PLAYWRIGHT_BASE_URL=<server-url> npm run test:e2e
+```
+
+## Deployment
+
+Deploy the Worker with Wrangler:
+
+```bash
+npm run deploy
+```
+
+`wrangler.jsonc` is the source of truth for Worker configuration, static assets,
+and the production `PUBLIC_BASE_URL`. Configure `SENTRY_DSN` as a Worker secret
+before deploying Sentry-enabled production builds:
+
+```bash
+npx wrangler secret put SENTRY_DSN
 ```

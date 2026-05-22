@@ -62,7 +62,7 @@ await expect(openButton).toHaveAttribute("href", expectedObsidianUri);
 
 ## Accessibility-Aware Queries
 
-Next.js documentation notes that role and label queries filter hidden Activity content more safely than raw selectors. This project still defaults to `data-testid` for app-owned E2E selectors, but accessibility-aware locators remain useful for browser-native controls.
+This project defaults to `data-testid` for app-owned E2E selectors, but accessibility-aware locators remain useful for browser-native controls.
 
 **Example:**
 

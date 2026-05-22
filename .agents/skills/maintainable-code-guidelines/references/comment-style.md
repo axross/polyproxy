@@ -46,5 +46,5 @@ Comments are for local facts a reader cannot infer from the code alone, especial
 **Guidelines:**
 
 - SHOULD comment non-obvious custom-protocol, bot/crawler, browser compatibility, validation, or privacy behavior.
-- SHOULD NOT comment straightforward assignments, React markup, or one-line wrappers.
+- SHOULD NOT comment straightforward assignments, Hono JSX markup, or one-line wrappers.
 - MUST NOT leave commented-out code in the diff.

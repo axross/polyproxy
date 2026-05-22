@@ -41,8 +41,8 @@ Recommended commands should match `package.json`. QA owns the required command g
 **Guidelines:**
 
 - SHOULD consult [lint-and-format-gate.md](../../quality-assurance-guidelines/references/lint-and-format-gate.md) before naming required verification commands.
-- MAY recommend `npm run lint` for ESLint.
+- MAY recommend `npm run lint` for Biome lint.
 - MAY recommend `npm test` for Vitest.
-- MAY recommend `npm run build` for the Next.js production build.
-- MAY recommend `npm test -- 'app/_/helpers/<file>.test.ts'` for a targeted Vitest file.
+- MAY recommend `npm run build` for the TypeScript production build.
+- MAY recommend `npm test -- 'src/helpers/<file>.test.ts'` for a targeted Vitest file.
 - MUST NOT recommend nonexistent scripts such as `npm run typecheck`, `npm run test:native`, or `npm run web` unless they have been added to `package.json`.

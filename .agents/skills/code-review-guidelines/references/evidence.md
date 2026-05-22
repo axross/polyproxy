@@ -11,7 +11,7 @@ A finding without a concrete location forces the author to rediscover the issue.
 ```markdown
 **Major - Unsafe source URL protocol reaches rendered link**
 
-`app/_/helpers/validation.ts:42`
+`src/helpers/validation.ts:42`
 
 ```ts
 sourceUrl: z.string().optional(),

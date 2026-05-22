@@ -8,28 +8,29 @@ Setup uses npm and the committed lockfile. Local environment values should start
 
 | Command | Purpose |
 | ------- | ------- |
-| `cp .env.example .env.local` | Create local environment configuration. |
+| `cp .dev.vars.example .dev.vars` | Create local Wrangler environment configuration. |
 | `npm install` | Install dependencies from `package-lock.json`. |
 
 **Guidelines:**
 
 - MUST install dependencies from `package-lock.json`.
-- SHOULD create local environment configuration from `.env.example`.
+- SHOULD create local environment configuration from `.dev.vars.example`.
 
 ## Running the App
 
-The app can run in development mode or as a built production preview. A production preview requires a successful build first. Runtime scripts pipe Next.js output through `pino-pretty`, so pipeline exit status must stay protected by the `bash -o pipefail` wrapper in `package.json`.
+The app runs locally through Wrangler so development uses the same Worker runtime shape as deployment. Worker runtime and binding types are generated through Wrangler before build checks that depend on TypeScript.
 
 | Command | Purpose |
 | ------- | ------- |
-| `npm run dev` | Start the Next.js development server. |
-| `npm run build` | Create a production build and run Next.js type/build checks. |
-| `npm start` | Serve the production build after `npm run build`. |
+| `npm run dev` | Start the Cloudflare Worker locally with `wrangler dev`. |
+| `npm run types:worker` | Regenerate `worker-configuration.d.ts` from `wrangler.jsonc`. |
+| `npm run build` | Regenerate Worker types, compile TypeScript, and run `wrangler deploy --dry-run`. |
+| `npm run deploy` | Deploy the Worker with Wrangler. |
 
 **Guidelines:**
 
-- MUST run `npm run build` before `npm start` when validating production behavior locally.
-- MUST preserve `pipefail` behavior if editing npm scripts that pipe through `pino-pretty`.
+- MUST use Wrangler scripts for local development and deployment; do not reintroduce a separate Node server script unless the user explicitly asks for a second runtime.
+- MUST run `npm run types:worker` after changing Worker bindings, compatibility flags, or Wrangler module rules.
 - SHOULD use `npm run dev` for interactive route and UI checks.
 
 ## Code Quality
@@ -38,12 +39,12 @@ The available quality commands are lint, Vitest, Playwright, and build. There is
 
 | Command | Purpose |
 | ------- | ------- |
-| `npm run lint` | Run ESLint with Next.js core web vitals and TypeScript rules. |
+| `npm run lint` | Run Biome lint with TypeScript and Hono JSX rules. |
 | `npm test` | Run the Vitest suite once. |
-| `npm test -- 'app/_/helpers/bridge-url.test.ts'` | Run one test file. |
+| `npm test -- 'src/helpers/bridge-url.test.ts'` | Run one test file. |
 | `npm test -- --watch` | Run Vitest in watch mode when iterating locally. |
 | `npm run test:e2e` | Run the Playwright E2E suite. |
-| `npm run test:e2e -- e2e/tests/routes/obsidian/page.test.ts` | Run one Playwright test file. |
+| `npm run test:e2e -- e2e/tests/routes/ob/page.test.ts` | Run one Playwright test file. |
 
 **Guidelines:**
 
@@ -57,39 +58,38 @@ Runtime configuration is intentionally small. Public base URL configuration affe
 
 | Variable | Purpose |
 | -------- | ------- |
-| `NEXT_PUBLIC_BASE_URL` | Canonical public origin used by proxy URL helpers and metadata. Production uses `https://open.axross.dev`. |
-| `NEXT_PUBLIC_SENTRY_DSN` | Browser-visible Sentry DSN used to enable client and server error tracking. |
-| `SENTRY_ORG` | Sentry organization slug used by `withSentryConfig()` at build time. |
-| `SENTRY_PROJECT` | Sentry project slug used by `withSentryConfig()` at build time. |
+| `PUBLIC_BASE_URL` | Canonical public origin used by proxy URL helpers and metadata. Production uses `https://open.axross.dev`. |
+| `SENTRY_DSN` | Sentry DSN used to enable server error tracking. |
 | `DEFAULT_VAULT` | Reserved for notification workflow integration. |
 
 **Guidelines:**
 
-- MUST update `.env.example` when adding, renaming, or removing configuration.
+- MUST update `.env.example` and `.dev.vars.example` when adding, renaming, or removing configuration.
 - SHOULD keep README limited to the local environment-file setup command unless the user explicitly approves public configuration detail.
 - MUST NOT place secrets or decoded note content in public environment variables.
 - MUST NOT add Sentry auth tokens or upload credentials to `.env.example`.
 
 ## E2E Testing
 
-Playwright uses `playwright.config.ts`. By default it starts `npm run dev` on `http://127.0.0.1:3100`; `PLAYWRIGHT_BASE_URL` points the suite at an already running local production server or deployed preview.
+Playwright uses `playwright.config.ts`. By default it starts `npm run dev` on `http://127.0.0.1:3100`; `PLAYWRIGHT_BASE_URL` points the suite at an already running local Wrangler server or deployed preview.
 
 | Command | Purpose |
 | ------- | ------- |
 | `npx playwright install chromium` | Install the required browser binary if Playwright reports one is missing. |
-| `PLAYWRIGHT_BASE_URL=http://localhost:3000 npm run test:e2e` | Run E2E tests against an existing server instead of starting `npm run dev`. |
+| `PLAYWRIGHT_BASE_URL=http://localhost:8787 npm run test:e2e` | Run E2E tests against an existing server instead of starting `npm run dev`. |
 
 **Guidelines:**
 
 - MUST consult [E2E Test Guidelines](../../e2e-test-guidelines/SKILL.md) before adding, changing, or debugging Playwright tests.
 - MUST install Playwright browsers when the local machine lacks the required Chromium executable.
-- SHOULD set `PLAYWRIGHT_BASE_URL` when validating `npm start` output after a production build.
+- SHOULD set `PLAYWRIGHT_BASE_URL` when validating an already-running Wrangler or deployed preview server.
 
-## No Generated-Code Commands
+## Generated-Code Commands
 
-This repository currently has no GraphQL codegen, database migrations, or mobile platform builds. Command guidance should describe the tooling this repo actually has.
+Wrangler-generated Worker types are the only generated source committed for this repository. There are no GraphQL codegen, database migration, or mobile platform build commands.
 
 **Guidelines:**
 
+- MUST keep `worker-configuration.d.ts` generated by Wrangler rather than manually editing it.
 - MUST NOT copy command guidance from other projects unless the corresponding script exists in `package.json`.
 - SHOULD update this reference when a real new workflow command is added.

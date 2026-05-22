@@ -39,8 +39,8 @@ export default defineConfig({
   webServer:
     configuredBaseUrl === undefined
       ? {
-          command: "npm run dev -- --hostname 127.0.0.1 --port 3100",
-          url: `${localBaseUrl}/obsidian`,
+          command: "npm run dev -- --ip 127.0.0.1 --port 3100",
+          url: `${localBaseUrl}/ob`,
           reuseExistingServer: !isCI,
           timeout: 120_000,
         }

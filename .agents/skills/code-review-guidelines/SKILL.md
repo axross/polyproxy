@@ -1,7 +1,7 @@
 ---
 name: code-review-guidelines
 description: |
-  Rules for reviewing diffs in this Next.js URL proxy. Use when reviewing a pull request or local diff: covers review scope, severity, evidence and citation format, tone, escalation boundaries, and routing to security, QA, maintainability, observability, development, and project-structure skills.
+  Rules for reviewing diffs in this Hono URL proxy. Use when reviewing a pull request or local diff: covers review scope, severity, evidence and citation format, tone, escalation boundaries, and routing to security, QA, maintainability, observability, development, and project-structure skills.
 ---
 
 # Code Review Guidelines
@@ -69,6 +69,6 @@ Each review lens has a source skill. Link to that source instead of restating lo
 - MUST consult [Quality Assurance Guidelines](../quality-assurance-guidelines/SKILL.md) for tests, snapshots, flaky behavior, manual verification, or QA evidence.
 - SHOULD consult [Maintainable Code Guidelines](../maintainable-code-guidelines/SKILL.md) for readability, naming, complexity, boundaries, comments, or scope discipline.
 - SHOULD consult [Observability Guidelines](../observability-guidelines/SKILL.md) for expected invalid links, thrown errors, diagnostics, logging, Sentry error tracking, or telemetry.
-- SHOULD consult [Development Guidelines](../development-guidelines/SKILL.md) for App Router, command sequence, dependencies, or implementation workflow.
+- SHOULD consult [Development Guidelines](../development-guidelines/SKILL.md) for Hono route, command sequence, dependencies, or implementation workflow.
 - SHOULD consult [Project Structure](../project-structure/SKILL.md) for new files, moved files, route structure, or import paths.
 - MUST consult [Agent Skills Best Practices](../agent-skills-best-practices/SKILL.md) for agent skill changes, reference files, or `AGENTS.md` index sync.

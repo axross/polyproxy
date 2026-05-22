@@ -1,7 +1,7 @@
 ---
 name: development-guidelines
 description: |
-  Rules for implementing, refactoring, and shipping code in this Next.js URL proxy app. Use for any code change: covers reading local Next.js 16 docs, npm command sequence, App Router/server-client boundaries, import hygiene, dependency rules, verification, and commit message conventions.
+  Rules for implementing, refactoring, and shipping code in this Hono URL proxy app. Use for any code change: covers current Hono/Sentry docs, npm command sequence, route/view/helper boundaries, import hygiene, dependency rules, verification, and commit message conventions.
 ---
 
 # Development Guidelines
@@ -10,12 +10,13 @@ Apply these rules when writing, refactoring, or shipping code in this project.
 
 ## Code Quality
 
-Code quality starts with the local Next.js version, then narrows to the repository's TypeScript, App Router, import, and comment conventions. The detailed rules live in [code-quality.md](./references/code-quality.md).
+Code quality starts with current Hono and Sentry behavior, then narrows to the repository's TypeScript, route/view/helper, import, and comment conventions. The detailed rules live in [code-quality.md](./references/code-quality.md).
 
 **Guidelines:**
 
-- MUST read the relevant local Next.js docs before changing App Router behavior or configuration.
-- MUST keep TypeScript, import, and server/client boundary choices aligned with existing `app/**`, `app/_/**`, and route-local `_components` patterns.
+- MUST read the relevant Hono docs before changing route, middleware, JSX rendering, static asset, or Cloudflare Worker behavior.
+- MUST read the relevant Sentry Hono/Cloudflare docs before changing error tracking initialization or middleware.
+- MUST keep TypeScript, import, and route/view/helper boundary choices aligned with existing `src/**` patterns.
 - SHOULD use [code-quality.md](./references/code-quality.md) as the first reference for implementation hygiene.
 
 ## Change Management
@@ -26,7 +27,7 @@ Change management keeps this small app reviewable by separating behavior, struct
 
 - MUST keep each diff focused on one concern unless the user explicitly asks for a broader change.
 - MUST preserve public proxy behavior during refactors unless the requested change intentionally alters it.
-- SHOULD check existing `app/`, `app/_/helpers/`, colocated test, README, and `.env.example` patterns before adding structure.
+- SHOULD check existing `src/`, `src/helpers/`, colocated test, README, and `.env.example` patterns before adding structure.
 - SHOULD use [change-management.md](./references/change-management.md) when dependencies, public behavior, or refactoring scope are involved.
 
 ## Verification

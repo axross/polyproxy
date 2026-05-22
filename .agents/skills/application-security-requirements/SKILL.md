@@ -1,7 +1,7 @@
 ---
 name: application-security-requirements
 description: |
-  OWASP-framed security and privacy rules for this small Next.js URL proxy. Use when writing or reviewing code that handles proxy payloads, base64url decoding, Obsidian URI construction, source URLs, Open Graph metadata, environment variables, robots/indexing behavior, or npm dependency changes.
+  OWASP-framed security and privacy rules for this small Hono URL proxy. Use when writing or reviewing code that handles proxy payloads, base64url decoding, Obsidian URI construction, source URLs, Open Graph metadata, environment variables, robots/indexing behavior, or npm dependency changes.
 ---
 
 # Application Security Requirements
@@ -40,7 +40,7 @@ Base64url is obfuscation, not access control. Anyone with a proxy URL can decode
 
 ## Supply Chain
 
-This app should stay small. New packages add review, audit, bundle, and runtime-boundary risk, so built-in Web, Node, React, Next.js, and zod APIs are the default.
+This app should stay small. New packages add review, audit, bundle, and runtime-boundary risk, so built-in Web, Node, Hono, and zod APIs are the default.
 
 **Guidelines:**
 

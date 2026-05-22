@@ -8,16 +8,17 @@ Use the changed file as the starting point for verification. Helper changes usua
 
 | Change type | Output surface at risk |
 | ----------- | ---------------------- |
-| `app/_/helpers/base64url.ts` | Accepted/rejected query strings, canonical round trips |
-| `app/_/helpers/validation.ts` | Payload limits, path safety, source URL protocols |
-| `app/_/helpers/obsidian-uri.ts` | Custom protocol URI escaping and vault/path behavior |
-| `app/_/helpers/bridge-url.ts` | Public HTTPS URL shape and max URL length |
-| `app/_/helpers/bot-detection.ts` | Discord/crawler vs human rendering path |
-| `app/obsidian/[query]/page.tsx` | Metadata, invalid-link rendering, crawler HTML, human UI, E2E route behavior |
-| `app/obsidian/[query]/_components/open-actions.tsx` | Client-side custom-protocol launch behavior |
-| Tailwind classes, `globals.css`, or layout files | Visual rendering across desktop and mobile browser widths |
+| `src/helpers/base64url.ts` | Accepted/rejected query strings, canonical round trips |
+| `src/helpers/validation.ts` | Payload limits, path safety, source URL protocols |
+| `src/helpers/obsidian-uri.ts` | Custom protocol URI escaping and vault/path behavior |
+| `src/helpers/bridge-url.ts` | Public HTTPS URL shape and max URL length |
+| `src/helpers/bot-detection.ts` | Discord/crawler vs human rendering path |
+| `src/routes/obsidian.tsx` | Metadata, invalid-link rendering, crawler HTML, human UI, E2E route behavior |
+| `src/views/obsidian.tsx` | Browser-visible route UI and custom-protocol fallback |
+| `src/views/metadata.tsx` | Document title, robots, Open Graph, and Twitter metadata |
+| `public/styles.css` | Visual rendering across desktop and mobile browser widths |
 | `playwright.config.ts` or `e2e/**` | Browser test coverage, server startup, traces, screenshots |
-| `next.config.ts` or dependencies | Build output and deployment behavior |
+| `src/app.tsx`, `src/worker.tsx`, `wrangler.jsonc`, or dependencies | Middleware, static assets, Worker bundle output, and runtime behavior |
 
 **Guidelines:**
 
@@ -43,7 +44,7 @@ Manual checks cover browser behavior that unit tests, E2E tests, and build outpu
 
 - MUST consult [manual-verification.md](../../quality-assurance-guidelines/references/manual-verification.md) for required manual evidence.
 - SHOULD run `npm run test:e2e` for automated browser coverage after visual, routing, metadata, or crawler-rendering changes.
-- SHOULD start `npm run dev` and open a valid generated `/obsidian/[query]` URL when real custom-protocol launch behavior needs manual confirmation.
+- SHOULD start `npm run dev` and open a valid generated `/ob/[query]` URL when real custom-protocol launch behavior needs manual confirmation.
 - SHOULD verify an invalid query renders the invalid-link path and does not throw.
 - SHOULD verify a Discord-like crawler user agent receives simple server-rendered title/summary HTML and no client redirect behavior.
 - SHOULD verify the Open in Obsidian button remains visible when automatic custom-protocol launch fails or is blocked.
@@ -57,8 +58,7 @@ For test authoring and QA evidence rules, consult [quality-assurance-guidelines]
 
 **Guidelines:**
 
-- SHOULD cover pure helpers in `app/_/helpers/**` with unit tests.
+- SHOULD cover pure helpers in `src/helpers/**` with unit tests.
 - MUST include valid and failing payload cases when validation behavior changes.
 - SHOULD include malformed base64url, invalid JSON, unsafe paths, over-limit fields, and unsafe source URL protocols in validation tests when relevant.
-- MUST NOT treat App Router async Server Components as ordinary Vitest units in this setup.
-- SHOULD cover App Router route behavior with Playwright tests under `e2e/tests/routes/**`.
+- SHOULD cover Hono route behavior with Playwright tests under `e2e/tests/routes/**`.

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This repository is `polyproxy`, a small Next.js 16 App Router URL proxy server for `open.axross.dev` designed to host multiple proxy route types over time. The currently implemented proxy is the Obsidian deeplink route: `/obsidian/[query]` decodes a base64url-encoded JSON payload, emits Open Graph metadata for crawlers such as Discord, and gives human visitors a browser-mediated path into `obsidian://open`.
+This repository is `polyproxy`, a small Hono URL proxy Cloudflare Worker for `open.axross.dev` designed to host multiple proxy route types over time. The currently implemented proxy is the Obsidian deeplink route: `/ob/:query` decodes a base64url-encoded JSON payload, emits Open Graph metadata for crawlers such as Discord, and gives human visitors a browser-mediated path into `obsidian://open`.
 
 The app is intentionally stateless. Proxy routes do not store target metadata or host target content. The current Obsidian route treats base64url as obfuscation only.
 
@@ -28,10 +28,9 @@ Apply these keywords consistently in agent skills and the documents linked from 
 | [Development Guidelines](.agents/skills/development-guidelines/SKILL.md) | Implementing, refactoring, running commands, or preparing changes |
 | [E2E Test Guidelines](.agents/skills/e2e-test-guidelines/SKILL.md) | Writing, running, reviewing, or maintaining Playwright E2E tests, route coverage, browser traces, or snapshots |
 | [Maintainable Code Guidelines](.agents/skills/maintainable-code-guidelines/SKILL.md) | Evaluating readability, boundaries, naming, comments, or scope discipline |
-| [Observability Guidelines](.agents/skills/observability-guidelines/SKILL.md) | Handling errors, expected invalid links, runtime diagnostics, Pino logging, Sentry error tracking, or telemetry |
+| [Observability Guidelines](.agents/skills/observability-guidelines/SKILL.md) | Handling errors, expected invalid links, runtime diagnostics, structured Worker logging, Sentry error tracking, or telemetry |
 | [Project Structure](.agents/skills/project-structure/SKILL.md) | Locating files, placing new code, or choosing import paths |
 | [Quality Assurance Guidelines](.agents/skills/quality-assurance-guidelines/SKILL.md) | Writing tests, checking verification evidence, investigating flaky tests, or reviewing QA coverage |
-| [React Component Guidelines](.agents/skills/react-component-guidelines/SKILL.md) | Writing, reviewing, or refactoring React components, Server/Client boundaries, Tailwind classes, className merging, or test IDs |
 
 ## Response Approach
 
@@ -66,7 +65,8 @@ Classify the request before touching files so the right local rules are active. 
 - MUST consult [Development Guidelines](.agents/skills/development-guidelines/SKILL.md) before non-trivial implementation, refactoring, command execution, or release-prep work.
 - MUST identify whether the task is UI-bearing, implementation-only, review-only, skill-maintenance, exploratory, or a mixed workflow.
 - MUST consult the relevant indexed skills when the request touches security, review, maintainability, observability, project structure, QA, or agent-skill rules.
-- MUST consult local Next.js documentation under `node_modules/next/dist/docs/` before changing App Router behavior, metadata, route handlers, server/client boundaries, or Next config.
+- MUST consult current Hono documentation before changing routing, middleware, JSX rendering, static assets, or runtime adapter behavior.
+- MUST consult current Sentry Hono/Cloudflare documentation before changing Sentry initialization, middleware, or source-map/error-capture configuration.
 - SHOULD keep skill loading narrow by opening only the references needed for the classified task.
 
 ### 2. Define Success Criteria
@@ -99,7 +99,7 @@ Execution includes investigation, implementation, refactoring, review, and skill
 **Guidelines:**
 
 - MUST implement within the smallest affected surface that satisfies the acceptance criteria.
-- MUST follow existing `app/**`, `app/_/**`, route-local `_components`, colocated `*.test.ts`, configuration, and skill-directory patterns before adding new structure.
+- MUST follow existing `src/**`, `src/helpers/**`, `src/routes/**`, `src/views/**`, colocated `*.test.ts`, configuration, and skill-directory patterns before adding new structure.
 - MUST preserve public behavior during refactors unless the requested change intentionally modifies it.
 - MUST NOT combine unrelated app behavior, styling, dependency, documentation, and skill-maintenance changes unless the user explicitly asks for that scope.
 - SHOULD keep implementation notes focused on decisions and blockers rather than every local inspection step.
@@ -121,14 +121,14 @@ Quality gates define what "done" means for this project. The agent should calibr
 
 ### 6. Verify the Result
 
-Verification should match the changed surface. Helper changes usually need tests; App Router, metadata, config, dependency, and UI changes usually need build or manual evidence as well.
+Verification should match the changed surface. Helper changes usually need tests; Hono routes, metadata, config, dependency, and UI changes usually need build or manual evidence as well.
 
 **Guidelines:**
 
 - MUST run the relevant verification commands after non-trivial code changes, or report why they could not run.
-- MUST use `npm run lint` for TypeScript, React, route, config, or style-adjacent changes.
-- MUST use `npm test` when `app/_/helpers/**` logic or tests change.
-- MUST use `npm run build` when App Router pages, metadata, route handlers, environment use, config, dependencies, or TypeScript signatures change.
+- MUST use `npm run lint` for TypeScript, Hono JSX, route, config, or style-adjacent changes.
+- MUST use `npm test` when `src/helpers/**` logic or tests change.
+- MUST use `npm run build` when Hono routes, metadata, middleware, environment use, config, dependencies, or TypeScript signatures change.
 - SHOULD perform focused manual checks when browser, crawler, metadata, custom-protocol, or responsive behavior changes.
 - MUST report unverified acceptance criteria and residual risk in the final summary.
 

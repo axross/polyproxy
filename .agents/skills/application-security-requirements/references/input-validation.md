@@ -4,11 +4,11 @@ Apply these rules to verify proxy payloads and URL-derived values are validated 
 
 ## Bridge Query Decoding
 
-The `/obsidian/[query]` segment is opaque user input. It must be syntactically base64url, decode to JSON, and round-trip canonically before any payload field is trusted.
+The `/ob/[query]` segment is opaque user input. It must be syntactically base64url, decode to JSON, and round-trip canonically before any payload field is trusted.
 
 **Guidelines:**
 
-- MUST treat `params.query` from `/obsidian/[query]` as untrusted external input.
+- MUST treat `params.query` from `/ob/[query]` as untrusted external input.
 - MUST validate base64url syntax before decoding.
 - MUST keep canonical round-trip validation in `decodeBase64Url()`.
 - MUST catch decode and JSON parse failures through `decodeBridgeQuerySafe()` on user-facing routes.
@@ -53,6 +53,6 @@ Decoded title and summary may be rendered into HTML metadata and visible page te
 
 **Guidelines:**
 
-- MUST use React, Next metadata APIs, or JSX text nodes so decoded values are escaped by the framework.
+- MUST use Hono JSX text nodes and attributes so decoded values are escaped by the framework.
 - MUST NOT inject decoded title or summary through raw HTML.
 - SHOULD keep bot-facing HTML simple and equivalent to the Open Graph title and description.

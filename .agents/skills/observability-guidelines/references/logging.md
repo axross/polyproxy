@@ -4,18 +4,18 @@ Apply these rules when writing, reviewing, or modifying code that emits diagnost
 
 ## Current Logging Posture
 
-The default posture is quiet. Invalid public links, crawler traffic, and blocked custom-protocol launches are expected operating conditions, not automatic log events. Server diagnostics flow through `rootLogger` from `app/_/logger.ts`; npm development, build, and start scripts pipe JSON logs through `pino-pretty` for local readability.
+The default posture is quiet. Invalid public links, crawler traffic, and blocked custom-protocol launches are expected operating conditions, not automatic log events. Worker diagnostics flow through structured `console.*` objects from `src/logger.ts` so Cloudflare Workers Logs can index fields.
 
 **Guidelines:**
 
 - SHOULD keep the app quiet during normal operation. A public proxy route may receive bot traffic and invalid links; those are not automatically worth logging.
-- SHOULD use `rootLogger.child({ module: "<module-name>" })` for server-side operational logs instead of raw `console.*`.
-- MAY use `console.error` or `console.warn` only for a narrow fallback where importing the logger would create an invalid runtime boundary.
+- SHOULD use the structured logger in `src/logger.ts` for application diagnostics instead of ad hoc string logs.
+- MAY use direct `console.error` or `console.warn` only for a narrow fallback where importing the logger would create an invalid runtime boundary.
 - SHOULD NOT add client-side console logs for normal custom-protocol launch behavior.
 
 ## Sensitive Data
 
-Bridge URLs may encode note metadata. Logs must treat decoded payloads and generated URLs as sensitive even when the data also appears in user-facing page output. Pino redaction in `rootLogger` is a backstop, not permission to pass sensitive values into log objects.
+Bridge URLs may encode note metadata. Logs must treat decoded payloads and generated URLs as sensitive even when the data also appears in user-facing page output. Logger redaction is a backstop, not permission to pass sensitive values into log objects.
 
 **Safe Diagnostic Examples:**
 
@@ -34,7 +34,7 @@ Bridge URLs may encode note metadata. Logs must treat decoded payloads and gener
 - MUST NOT log decoded `BridgePayload` objects.
 - MUST NOT log vault names, note paths, titles, summaries, source URLs, raw base64url query strings, generated proxy URLs, or `obsidian://` URIs.
 - SHOULD log only coarse context such as route name, query length, field name, or validation failure category.
-- MUST extend `rootLogger` redaction paths when introducing a new diagnostic field that may contain bridge metadata or generated URLs.
+- MUST extend `src/logger.ts` redaction when introducing a new diagnostic field that may contain bridge metadata or generated URLs.
 
 ## Diagnostic Shape
 
@@ -44,7 +44,7 @@ When diagnostics are necessary, stable operation names and coarse categories mak
 
 - SHOULD make diagnostic messages stable and searchable.
 - SHOULD include the operation name, such as `decodeBridgeQuerySafe` or `buildBridgeUrl`, when reporting an unexpected internal failure.
-- SHOULD include module names through Pino child loggers rather than repeating module prefixes in every message.
+- SHOULD include stable route, operation, or module fields when they help diagnose unexpected failures without exposing payload data.
 - MUST NOT rely on logs as the primary behavior for expected invalid links; route UI and metadata fallbacks are the behavior.
 
 ## Adding Telemetry

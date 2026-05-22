@@ -20,7 +20,7 @@ export function buildBridgePath(payload: TestBridgePayload): string {
     "base64url",
   );
 
-  return `/obsidian/${query}`;
+  return `/ob/${query}`;
 }
 
 export function buildObsidianUri(

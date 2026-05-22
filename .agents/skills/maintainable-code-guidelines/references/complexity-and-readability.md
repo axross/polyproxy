@@ -2,27 +2,26 @@
 
 Apply these rules to surface code that has grown too complex or hard to read.
 
-## JSX and Branching
+## Hono JSX and Branching
 
-The Obsidian route has distinct invalid-link, crawler, and human experiences. JSX should make those branches obvious instead of hiding them inside nested conditionals.
+The Obsidian route has distinct invalid-link, crawler, and human experiences. Hono JSX should make those branches obvious instead of hiding them inside nested conditionals.
 
 **Guidelines:**
 
-- SHOULD flag JSX that nests more than four levels deep inside one component body.
-- MUST flag nested conditional rendering that obscures invalid-link, bot, and human rendering paths. Prefer early returns or small named components.
+- SHOULD flag JSX that nests more than four levels deep inside one view function body.
+- MUST flag nested conditional rendering that obscures invalid-link, bot, and human rendering paths. Prefer early returns or small named view functions.
 - SHOULD keep crawler-only markup simple enough to audit for accidental redirect behavior.
 
-## Tailwind Class Complexity
+## CSS Complexity
 
-Route-local styling should stay with the component that owns the markup. Tailwind utility strings are preferred over CSS modules, and `twMerge()` from `tailwind-merge` should merge parent-supplied layout classes with component-owned defaults.
+Route styling should stay close to the view that owns the markup. Plain CSS in `public/styles.css` is the current styling surface, with stable classes used by Hono JSX views.
 
 **Guidelines:**
 
-- SHOULD flag long Tailwind class strings that mix unrelated component levels, such as page shell, panel, and button styling in one component.
-- SHOULD flag duplicated Tailwind class groups across sibling route components when a small route-local component would be clearer.
-- MUST use `twMerge()` when a component accepts `className` or combines base classes with caller-provided classes.
-- MUST keep parent-level spacing and layout at the parent component level; child components should own their internal shape, color, and interaction classes.
-- SHOULD verify text still fits at narrow mobile widths when copy or Tailwind classes change.
+- SHOULD flag CSS classes or selectors that mix unrelated view levels, such as page shell, panel, and button styling in one block.
+- SHOULD flag duplicated style groups across sibling views when a small shared class would be clearer.
+- MUST keep page-level spacing and layout separate from child element shape, color, and interaction styles.
+- SHOULD verify text still fits at narrow mobile widths when copy or CSS changes.
 
 ## Control Flow
 
@@ -42,13 +41,13 @@ Dead code makes small apps feel larger than they are and can hide stale assumpti
 **Guidelines:**
 
 - MUST flag commented-out code in the diff.
-- MUST flag unused imports, variables, parameters, components, or exported helpers.
+- MUST flag unused imports, variables, parameters, view functions, or exported helpers.
 - MUST flag helper exports that have no remaining production or test callers after a refactor.
 - MUST flag `${"literal"}` or `${'literal'}` inside a template literal; replace with the bare characters.
 
 ## Type Reuse
 
-Shared types are part of the contract between helpers, route code, and tests. Reusing them prevents small schema differences from accumulating.
+Shared types are part of the contract between helpers, routes, views, and tests. Reusing them prevents small schema differences from accumulating.
 
 **Guidelines:**
 

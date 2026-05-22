@@ -4,7 +4,7 @@ Use these commands when Playwright is the right verification layer for route ren
 
 ## Default Test Run
 
-The default command starts the local Next.js development server on `http://127.0.0.1:3100` through `playwright.config.ts` when `PLAYWRIGHT_BASE_URL` is not set. Its readiness check targets `/obsidian` because `/` intentionally returns not found.
+The default command starts `wrangler dev` on `http://127.0.0.1:3100` through `playwright.config.ts` when `PLAYWRIGHT_BASE_URL` is not set. Its readiness check targets `/ob` because `/` intentionally returns not found.
 
 **Example:**
 
@@ -15,7 +15,7 @@ npm run test:e2e
 **Guidelines:**
 
 - MUST run `npm run test:e2e` for the full E2E suite.
-- SHOULD run a targeted path such as `npm run test:e2e -- e2e/tests/routes/obsidian/page.test.ts` while iterating.
+- SHOULD run a targeted path such as `npm run test:e2e -- e2e/tests/routes/ob/page.test.ts` while iterating.
 - MUST let Playwright own server startup through `webServer` on port `3100` unless a separate production or preview server is intentionally targeted.
 
 ## Browser Installation
@@ -46,9 +46,9 @@ PLAYWRIGHT_BASE_URL=https://open.axross.dev npm run test:e2e
 
 **Guidelines:**
 
-- MUST set `PLAYWRIGHT_BASE_URL` when testing a deployed preview or a separately managed local production server.
-- SHOULD run `npm run build` before testing a local production server with `npm start`.
-- MUST verify that `NEXT_PUBLIC_BASE_URL` matches the tested canonical host when assertions depend on generated absolute metadata URLs.
+- MUST set `PLAYWRIGHT_BASE_URL` when testing a deployed preview or a separately managed local Wrangler server.
+- SHOULD run `npm run build` before testing a deployed or production-like preview.
+- MUST verify that `PUBLIC_BASE_URL` matches the tested canonical host when assertions depend on generated absolute metadata URLs.
 
 ## Artifacts
 

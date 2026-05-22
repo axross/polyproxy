@@ -1,12 +1,12 @@
 ---
 name: quality-assurance-guidelines
 description: |
-  Use when writing, verifying, or reviewing tests and QA evidence for this Next.js URL proxy: covers lint/test/build gates, Vitest helper tests, Playwright E2E route tests, async and matcher hygiene, proxy payload edge cases, snapshot caution, flakiness investigation, and manual checks for browser, crawler, metadata, and Obsidian launch behavior.
+  Use when writing, verifying, or reviewing tests and QA evidence for this Hono URL proxy: covers lint/test/build gates, Vitest helper tests, Playwright E2E route tests, async and matcher hygiene, proxy payload edge cases, snapshot caution, flakiness investigation, and manual checks for browser, crawler, metadata, and Obsidian launch behavior.
 ---
 
 # Quality Assurance Guidelines
 
-Apply these rules when reviewing whether a change has been adequately verified. Unit tests use Vitest in a Node environment; App Router route behavior is covered through Playwright E2E tests, `npm run build`, focused helper tests, and manual checks for real custom-protocol launch behavior.
+Apply these rules when reviewing whether a change has been adequately verified. Unit tests use Vitest in a Node environment; Hono route behavior is covered through Playwright E2E tests, `npm run build`, focused helper tests, and manual checks for real custom-protocol launch behavior.
 
 ## Lint and Build Gate
 
@@ -14,10 +14,10 @@ The standard gate is `npm run lint`, `npm test`, and `npm run build`, selected a
 
 **Guidelines:**
 
-- MUST require `npm run lint` for TypeScript, React, route, config, or style-adjacent changes.
-- MUST require `npm test` when `app/_/helpers/**` logic or tests change.
+- MUST require `npm run lint` for TypeScript, Hono JSX, route, config, or style-adjacent changes.
+- MUST require `npm test` when `src/helpers/**` logic or tests change.
 - MUST require `npm run test:e2e` when route rendering, metadata, crawler branches, fallback UI, responsive layout, or Playwright config changes.
-- MUST require `npm run build` when App Router, metadata, route handler, config, dependency, or TypeScript-signature risk is present.
+- MUST require `npm run build` when Hono routes, metadata, middleware, config, dependency, or TypeScript-signature risk is present.
 - SHOULD use [lint-and-format-gate.md](./references/lint-and-format-gate.md) when deciding whether missing or failed checks block a change.
 
 ## Playwright E2E Coverage
@@ -27,7 +27,7 @@ Playwright verifies the browser-visible proxy route behavior that helper tests c
 **Guidelines:**
 
 - MUST require Playwright coverage for new or changed public route behavior.
-- MUST require crawler and metadata E2E coverage when `/obsidian/[query]` rendering branches change.
+- MUST require crawler and metadata E2E coverage when `/ob/:query` rendering branches change.
 - SHOULD require both desktop and Pixel project evidence for meaningful layout changes.
 - SHOULD use [E2E Test Guidelines](../e2e-test-guidelines/SKILL.md) when writing, reviewing, or debugging Playwright tests.
 

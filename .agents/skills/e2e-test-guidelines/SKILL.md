@@ -1,7 +1,7 @@
 ---
 name: e2e-test-guidelines
 description: |
-  Use when writing, reviewing, running, or maintaining Playwright end-to-end tests in this Next.js URL proxy app. Covers `playwright.config.ts`, `npm run test:e2e`, `PLAYWRIGHT_BASE_URL`, browser installation, `e2e/tests/routes/**` placement, `.test.ts` naming, `test.step()` structure, chained `getByTestId()` locators, metadata assertions, custom-protocol redirect constraints, snapshots, traces, flakiness, and when E2E evidence is required for route, metadata, crawler, responsive, or UI behavior.
+  Use when writing, reviewing, running, or maintaining Playwright end-to-end tests in this Hono URL proxy app. Covers `playwright.config.ts`, `npm run test:e2e`, `PLAYWRIGHT_BASE_URL`, browser installation, `e2e/tests/routes/**` placement, `.test.ts` naming, `test.step()` structure, chained `getByTestId()` locators, metadata assertions, custom-protocol redirect constraints, snapshots, traces, flakiness, and when E2E evidence is required for route, metadata, crawler, responsive, or UI behavior.
 ---
 
 # E2E Test Guidelines
@@ -10,7 +10,7 @@ Apply this skill when browser-level behavior needs Playwright coverage or when a
 
 ## Commands
 
-Playwright runs through the repository script and can either start the local Next.js development server or target an already deployed URL through `PLAYWRIGHT_BASE_URL`.
+Playwright runs through the repository script and can either start the local Hono development server or target an already deployed URL through `PLAYWRIGHT_BASE_URL`.
 
 **Guidelines:**
 
@@ -37,7 +37,7 @@ Tests should use stable, scoped selectors for app-owned UI and Playwright-native
 - SHOULD read [locators-and-assertions.md](./references/locators-and-assertions.md) before adding selectors, `data-testid` attributes, or DOM assertions.
 - MUST use chained `getByTestId()` locators for app-owned UI regions and controls.
 - MUST use locator-native assertions before pulling DOM state into `evaluate()`.
-- SHOULD consult [React Component Guidelines](../react-component-guidelines/SKILL.md) before adding component test IDs.
+- SHOULD keep `data-testid` attributes stable and scoped to app-owned route regions before adding new selectors.
 
 ## Maintenance
 

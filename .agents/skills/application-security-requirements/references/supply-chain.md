@@ -1,6 +1,6 @@
 # Supply Chain
 
-Apply these rules to verify new npm dependencies are justified, trustworthy, and appropriate for this small Next.js app.
+Apply these rules to verify new npm dependencies are justified, trustworthy, and appropriate for this small Hono app.
 
 ## Dependency Justification
 
@@ -11,7 +11,7 @@ For review severity labels, consult [code-review severity](../../code-review-gui
 **Guidelines:**
 
 - MUST require justification when a diff adds a direct dependency.
-- MUST compare the dependency against built-in Web APIs, Node APIs, React, Next.js, zod, and existing local helpers.
+- MUST compare the dependency against built-in Web APIs, Node APIs, Hono, zod, and existing local helpers.
 - MUST reject dependencies that duplicate existing functionality unless the user accepts the trade-off.
 - SHOULD question thin wrappers around one or two standard-library calls.
 
@@ -35,11 +35,11 @@ Quality checks reduce the risk of abandoned, vulnerable, or incompatible package
 - SHOULD verify no recent unaddressed security advisories for the introduced version.
 - SHOULD verify built-in TypeScript types or maintained `@types/*` coverage.
 - SHOULD verify a license compatible with this project.
-- MUST verify compatibility with the import environment: client component, server component, Route Handler, or test-only Node code.
+- MUST verify compatibility with the import environment: Cloudflare Worker entry code, Hono route/view code, browser script snippets, or test-only code.
 
 ## Install Scripts and Runtime Boundaries
 
-Install scripts and wrong-side imports can execute unexpected code or break Next.js server/client bundling.
+Install scripts and wrong-side imports can execute unexpected code or break the Worker runtime or browser script snippets.
 
 **Guidelines:**
 

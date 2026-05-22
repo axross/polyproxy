@@ -1,32 +1,31 @@
 # Code Quality
 
-Apply these rules to keep the codebase consistent, correctly typed, and aligned with the local Next.js version.
+Apply these rules to keep the codebase consistent, correctly typed, and aligned with the Hono runtime.
 
-## Next.js 16 Docs Gate
+## Hono and Sentry Docs Gate
 
-This project explicitly treats the installed Next.js documentation as the source of truth because the local version may differ from common training-data assumptions.
+Hono and Sentry integration details can change, so use current primary documentation before changing framework or observability behavior.
 
-Useful local docs for common changes:
+Useful docs for common changes:
 
-- `node_modules/next/dist/docs/01-app/01-getting-started/03-layouts-and-pages.md`
-- `node_modules/next/dist/docs/01-app/01-getting-started/05-server-and-client-components.md`
-- `node_modules/next/dist/docs/01-app/01-getting-started/14-metadata-and-og-images.md`
-- `node_modules/next/dist/docs/01-app/01-getting-started/15-route-handlers.md`
-- `node_modules/next/dist/docs/01-app/02-guides/testing/vitest.md`
+- Hono Cloudflare Workers docs
+- Hono JSX docs
+- Hono middleware docs
+- Sentry Hono/Cloudflare setup docs
 
 **Guidelines:**
 
-- MUST read the relevant guide in `node_modules/next/dist/docs/` before changing App Router pages, layouts, route handlers, metadata, server/client component boundaries, or Next config.
-- SHOULD cite the local doc path in your working notes or final summary when a Next.js API choice depends on it.
-- MUST NOT rely on older Next.js App Router assumptions when the local docs disagree.
+- MUST read current Hono docs before changing route registration, middleware order, JSX rendering, static asset serving, or Cloudflare Worker adapter behavior.
+- MUST read current Sentry Hono/Cloudflare docs before changing `src/worker.tsx`, Sentry middleware wiring, or Sentry dependencies.
+- SHOULD cite the external docs used in your final summary when a framework or Sentry API choice depends on them.
 
 ## Check Sequence
 
 Verification should scale with the changed surface. This sequence is the normal local order; [quality-assurance-guidelines](../../quality-assurance-guidelines/SKILL.md) owns the canonical command gate rules and evidence requirements.
 
-1. `npm run lint` for ESLint.
+1. `npm run lint` for Biome lint.
 2. `npm test` when pure logic, validation, URL building, bot detection, or helpers changed.
-3. `npm run build` when App Router pages, metadata, route handlers, config, or TypeScript signatures changed.
+3. `npm run build` when Hono routes, metadata, middleware, config, or TypeScript signatures changed.
 
 **Guidelines:**
 
@@ -41,21 +40,21 @@ The shared helper layer depends on narrow, explicit types so proxy payloads, val
 **Guidelines:**
 
 - MUST NOT introduce `any`, `as any`, or `as unknown as <T>` unless the boundary is genuinely unknowable and the rationale is documented.
-- SHOULD declare return types on exported helpers in `app/_/helpers/**`.
+- SHOULD declare return types on exported helpers in `src/helpers/**`.
 - SHOULD use `import type { ... }` for symbols used only as types.
 - MUST NOT use `// @ts-ignore`. Use `// @ts-expect-error <reason>` only when the upstream type issue is real and temporary.
-- MUST keep `BridgePayload` and `Result<T>` centralized in `app/_/helpers/types.ts`; do not redeclare those shapes in route files or tests.
+- MUST keep `BridgePayload` and `Result<T>` centralized in `src/helpers/types.ts`; do not redeclare those shapes in route files or tests.
 
-## App Router Boundaries
+## Hono Route Boundaries
 
-App Router files should separate server work from browser work. Server-rendered routes decode, validate, and generate metadata; client components own custom-protocol launch behavior.
+Hono route modules should orchestrate request handling while helpers own reusable bridge logic and views own rendered HTML. Browser-only custom-protocol launch behavior should stay in inert HTML attributes plus narrow client script snippets.
 
 **Guidelines:**
 
-- MUST keep browser APIs (`window`, `navigator`, custom-protocol redirects) inside `"use client"` components.
-- MUST keep decoding, validation, metadata, and bot decisions in server-rendered route code or pure `app/_/helpers/**` helpers.
-- MUST NOT import server-only helpers into a client component if they pull in Node-only APIs such as `Buffer`, `process.env`, or `next/headers`.
-- SHOULD pass only already-built strings and simple serializable props from server components to client components.
+- MUST keep decoding, validation, URL construction, and bot decisions in `src/routes/**` orchestration or pure `src/helpers/**` helpers.
+- MUST keep browser APIs (`window`, `document`, custom-protocol redirects) inside static client script snippets rendered by Hono JSX, not inside shared helpers.
+- MUST NOT import Node-only helpers into browser script snippets.
+- SHOULD pass already-built strings and validated payloads into Hono JSX views.
 
 ## Imports and Comments
 
@@ -63,8 +62,8 @@ Imports should make ownership obvious without inventing new aliases. Comments sh
 
 **Guidelines:**
 
-- SHOULD use `@/helpers/...` imports from route files.
-- SHOULD keep short relative imports inside `app/_/helpers/**` and route-local files when they are clearer.
+- SHOULD keep short relative imports inside `src/**` when they are clearer.
+- MUST include explicit `.js` extensions for relative TypeScript imports that emit to Node ESM.
 - MUST NOT invent unconfigured aliases; see [project-structure](../../project-structure/SKILL.md).
 - MUST NOT leave commented-out code in the diff.
 - SHOULD write comments for non-obvious browser, crawler, or custom-protocol behavior, not for code that is self-explanatory.

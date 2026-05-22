@@ -14,7 +14,7 @@ e2e/
 │   └── bridge-payload.ts
 └── tests/
     └── routes/
-        └── obsidian/
+        └── ob/
             ├── page.test.ts
             └── query/
                 └── page.test.ts
@@ -38,7 +38,7 @@ import { expect, test } from "@playwright/test";
 
 test("Overview content", async ({ page }) => {
   await test.step("Navigate to the bridge overview route", async () => {
-    await page.goto("/obsidian");
+    await page.goto("/ob");
   });
 
   const overview = page.getByTestId("page").getByTestId("overview");

@@ -47,10 +47,10 @@ Scopes should be coarse enough to stay stable as files move. Prefer the broad re
 
 | Scope | Use for |
 | ----- | ------- |
-| `app` | User-facing app behavior, App Router files, route UI, `app/_/helpers/**`, and CSS |
+| `app` | User-facing app behavior, Hono routes, route UI, `src/helpers/**`, and CSS |
 | `skills` | `.agents/skills/**` and agent workflow guidance in `AGENTS.md` |
 | `docs` | README, PRDs, and non-skill documentation |
-| `config` | Next.js, Vitest, TypeScript, lint, environment examples, and project configuration |
+| `config` | Hono runtime, Vitest, TypeScript, lint, environment examples, and project configuration |
 | `deps` | npm manifest and lockfile dependency changes |
 | `tests` | Test-only changes in colocated `*.test.ts` or `*.test.tsx` files |
 | `ci` | Continuous-integration workflow configuration |

@@ -9,9 +9,9 @@ Tests in this repository use Vitest in Node and live next to the helper files th
 **Guidelines:**
 
 - MUST use Vitest APIs (`describe`, `it`, `expect`, `vi`) rather than Jest globals.
-- MUST keep pure helper tests next to the target helper as `app/_/helpers/<helper>.test.ts` unless a different layout is introduced deliberately.
+- MUST keep pure helper tests next to the target helper as `src/helpers/<helper>.test.ts` unless a different layout is introduced deliberately.
 - SHOULD mirror the existing assertion style in nearby tests before adding a new pattern.
-- MUST NOT add React Testing Library or browser environment tests without first justifying the dependency and environment change.
+- MUST NOT add DOM test harness dependencies without first justifying the dependency and environment change.
 
 ## Bridge Helper Coverage
 
@@ -21,20 +21,20 @@ Bridge helper tests should cover both successful behavior and malformed external
 
 - SHOULD cover UTF-8 round trips, URL-safe output, malformed characters, impossible padding length, and non-canonical encodings in `base64url` tests.
 - SHOULD cover required fields, field limits, whitespace normalization, null-byte rejection, vault-relative path rules, parent segment rejection, and `sourceUrl` protocol filtering in `validation` tests.
-- SHOULD cover base URL normalization, payload validation, `/obsidian/[query]` path shape, and max URL length errors in `bridge-url` tests.
+- SHOULD cover base URL normalization, payload validation, `/ob/[query]` path shape, and max URL length errors in `bridge-url` tests.
 - SHOULD cover empty query, invalid base64url, invalid JSON, schema failure, and valid payload success in `decode-link` tests.
 - SHOULD cover `encodeURIComponent` behavior for vault and path without double-encoding in `obsidian-uri` tests.
 - SHOULD cover known crawler user agents and ordinary browser user agents in `bot-detection` tests.
 
 ## Route and Component Testing
 
-Route behavior should be pushed into pure helpers when practical. Async App Router pages and metadata are better validated here with Playwright E2E tests and build checks than direct Node unit tests.
+Route behavior should be pushed into pure helpers when practical. Integrated Hono route rendering and metadata are better validated here with Playwright E2E tests and build checks than direct Node unit tests.
 
 **Guidelines:**
 
-- SHOULD factor route behavior into pure helpers when possible; test the helper instead of trying to unit test an async Server Component directly.
-- SHOULD use `npm run test:e2e` plus `npm run build` for `generateMetadata()` and async App Router page behavior in this setup.
-- MUST keep browser APIs in client components and avoid importing those components into Node-only helper tests unless a browser test harness is added.
+- SHOULD factor route behavior into pure helpers when possible; test the helper instead of trying to unit test an integrated Hono route directly.
+- SHOULD use `npm run test:e2e` plus `npm run build` for route metadata and Hono JSX behavior in this setup.
+- MUST keep browser APIs in client script snippets and avoid testing them with Node-only helper tests unless a browser test harness is added.
 - SHOULD consult [E2E Test Guidelines](../../e2e-test-guidelines/SKILL.md) before adding route-level browser tests.
 
 ## Labels and Assertions

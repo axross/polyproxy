@@ -25,9 +25,9 @@ Some issue categories have a minimum severity because their impact is already kn
 
 **Guidelines:**
 
-- MUST classify hardcoded secrets, committed private env files, `NEXT_PUBLIC_*` secrets, raw decoded payload logging, invalid-route crashes, build errors, and manifest/lockfile drift as at least Critical.
+- MUST classify hardcoded secrets, committed private env files, public configuration secrets, raw decoded payload logging, invalid-route crashes, build errors, and manifest/lockfile drift as at least Critical.
 - MUST classify unsafe Obsidian paths, unsafe `sourceUrl` protocols, and risky npm install scripts as at least Critical.
-- MUST classify missing payload validation, server-only imports crossing client boundaries, client-bundled Node-only dependencies, production imports from `devDependencies`, bot paths that trigger redirects, public behavior changes without docs/tests, missing helper tests, and duplicative dependencies as at least Major.
+- MUST classify missing payload validation, Node-only code leaking into browser script snippets, production imports from `devDependencies`, bot paths that trigger redirects, public behavior changes without docs/tests, missing helper tests, and duplicative dependencies as at least Major.
 - MUST classify committed `.only()` as Critical.
 - MUST classify unexplained `.skip()`, sleep/retry-based flaky-test workarounds, missing required manual evidence, introduced `any`, unsafe casts, or unjustified `@ts-expect-error` as at least Major.
 - SHOULD classify introduced lint warnings in changed files according to their correctness, maintainability, or review-signal impact.

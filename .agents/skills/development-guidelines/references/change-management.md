@@ -26,9 +26,9 @@ A refactor is behavior-preserving by definition.
 
 Before introducing a new pattern, MUST verify that no existing pattern already covers the use case.
 
-- Check `app/_/helpers/` before creating a new shared helper.
+- Check `src/helpers/` before creating a new shared helper.
 - Check nearby `*.test.ts` files before choosing assertion style or fixture shape.
-- Check the owning route under `app/obsidian/` before adding route-local UI or CSS.
+- Check the owning route under `src/routes/` and view under `src/views/` before adding route UI or CSS.
 - Check `README.md` and `.env.example` before adding configuration.
 
 **Guidelines:**
@@ -39,17 +39,17 @@ Before introducing a new pattern, MUST verify that no existing pattern already c
 
 ## npm Dependencies
 
-Dependency changes affect bundle size, supply-chain risk, runtime boundaries, and lockfile reproducibility. Prefer built-in Web, Node, React, Next.js, zod, and local helpers when they already cover the need.
+Dependency changes affect bundle size, supply-chain risk, runtime boundaries, and lockfile reproducibility. Prefer built-in Web, Node, Hono, zod, and local helpers when they already cover the need.
 
 **Guidelines:**
 
-- MUST consider built-in Web APIs, Node APIs, React, Next.js, zod, and existing packages before adding a dependency.
+- MUST consider built-in Web APIs, Node APIs, Hono, zod, and existing packages before adding a dependency.
 - MUST verify a new dependency is maintained, typed, licensed appropriately, and compatible with the import environment.
 - MUST NOT add a dependency for base64url, URL parsing, simple user-agent substring checks, or small validation transforms already covered locally.
 - MUST commit `package.json` and `package-lock.json` together for dependency changes.
 - MUST read the relevant changelog or release notes before upgrading a dependency.
 - MUST run `npm run lint`, `npm test`, and `npm run build` after upgrading or removing runtime or build dependencies.
-- SHOULD re-check local Next.js docs when upgrading `next`.
+- SHOULD re-check current Hono or Sentry docs when upgrading framework or observability packages.
 - MUST search all usages before removing a dependency.
 - MUST NOT leave unused dependencies in `package.json`.
 
