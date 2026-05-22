@@ -1,7 +1,7 @@
 ---
 name: development-guidelines
 description: |
-  Rules for implementing, refactoring, and shipping code in this Next.js Obsidian bridge. Use for any code change: covers reading local Next.js 16 docs, npm command sequence, App Router/server-client boundaries, import hygiene, dependency rules, verification, and commit message conventions.
+  Rules for implementing, refactoring, and shipping code in this Next.js URL proxy app. Use for any code change: covers reading local Next.js 16 docs, npm command sequence, App Router/server-client boundaries, import hygiene, dependency rules, verification, and commit message conventions.
 ---
 
 # Development Guidelines
@@ -25,7 +25,7 @@ Change management keeps this small app reviewable by separating behavior, struct
 **Guidelines:**
 
 - MUST keep each diff focused on one concern unless the user explicitly asks for a broader change.
-- MUST preserve public bridge behavior during refactors unless the requested change intentionally alters it.
+- MUST preserve public proxy behavior during refactors unless the requested change intentionally alters it.
 - SHOULD check existing `app/`, `app/_/helpers/`, colocated test, README, and `.env.example` patterns before adding structure.
 - SHOULD use [change-management.md](./references/change-management.md) when dependencies, public behavior, or refactoring scope are involved.
 
@@ -46,7 +46,7 @@ Development commands are intentionally few and should match `package.json`; this
 **Guidelines:**
 
 - MUST use only commands that exist in this repository or are explicitly documented by local tooling.
-- MUST keep `.env.example` and README configuration instructions synchronized when environment variables change.
+- MUST keep `.env.example` synchronized when environment variables change; README should only point to the example file for local setup.
 - SHOULD use [dev-commands.md](./references/dev-commands.md) for setup, local server, lint, test, build, and targeted test examples.
 
 ## Commit Messages

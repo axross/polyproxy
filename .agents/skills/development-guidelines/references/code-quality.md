@@ -36,7 +36,7 @@ Verification should scale with the changed surface. This sequence is the normal 
 
 ## TypeScript
 
-The shared helper layer depends on narrow, explicit types so bridge payloads, validation results, and URL builders remain predictable across route code and tests.
+The shared helper layer depends on narrow, explicit types so proxy payloads, validation results, and URL builders remain predictable across route code and tests.
 
 **Guidelines:**
 

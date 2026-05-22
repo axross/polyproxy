@@ -19,9 +19,9 @@ import {
 import { OpenActions } from "./_components/open-actions";
 import type { PageProps } from "./page-props";
 
-const siteName = "Obsidian Link Bridge";
-const invalidTitle = "Invalid Obsidian Link";
-const invalidDescription = "This Obsidian bridge link could not be opened.";
+const siteName = "open.axross.dev";
+const invalidTitle = "Invalid Obsidian Proxy Link";
+const invalidDescription = "This Obsidian proxy link could not be opened.";
 
 const styles = {
   title: cn(

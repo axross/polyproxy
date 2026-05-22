@@ -8,7 +8,7 @@ The default posture is quiet. Invalid public links, crawler traffic, and blocked
 
 **Guidelines:**
 
-- SHOULD keep the app quiet during normal operation. A public bridge route may receive bot traffic and invalid links; those are not automatically worth logging.
+- SHOULD keep the app quiet during normal operation. A public proxy route may receive bot traffic and invalid links; those are not automatically worth logging.
 - MAY use `console.error` or `console.warn` on the server for unexpected deployment or integration failures when the message excludes decoded bridge data.
 - SHOULD NOT add client-side console logs for normal custom-protocol launch behavior.
 
@@ -31,7 +31,7 @@ Bridge URLs may encode note metadata. Logs must treat decoded payloads and gener
 **Guidelines:**
 
 - MUST NOT log decoded `BridgePayload` objects.
-- MUST NOT log vault names, note paths, titles, summaries, source URLs, raw base64url query strings, generated bridge URLs, or `obsidian://` URIs.
+- MUST NOT log vault names, note paths, titles, summaries, source URLs, raw base64url query strings, generated proxy URLs, or `obsidian://` URIs.
 - SHOULD log only coarse context such as route name, query length, field name, or validation failure category.
 
 ## Diagnostic Shape

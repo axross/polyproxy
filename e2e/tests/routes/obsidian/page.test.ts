@@ -11,7 +11,7 @@ test("Overview content", async ({ page }) => {
 
   await test.step("Verify the page title", async () => {
     await expect(overview.getByTestId("title")).toHaveText(
-      "Open Obsidian notes from Discord links.",
+      "Proxy Obsidian deeplinks through HTTPS.",
     );
   });
 
@@ -30,13 +30,13 @@ test("Overview content", async ({ page }) => {
 
 test("Overview metadata", async ({ page }) => {
   await test.step("Verify the document title", async () => {
-    await expect(page).toHaveTitle("Obsidian Link Bridge");
+    await expect(page).toHaveTitle("open.axross.dev");
   });
 
   await test.step("Verify the description metadata", async () => {
     await expect(page.locator('meta[name="description"]')).toHaveAttribute(
       "content",
-      "HTTPS bridge pages for opening local Obsidian notes from Discord previews.",
+      "Multi-purpose URL proxy server with an Obsidian deeplink bridge.",
     );
   });
 

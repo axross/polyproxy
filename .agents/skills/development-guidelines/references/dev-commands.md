@@ -56,12 +56,13 @@ Runtime configuration is intentionally small. Public base URL configuration affe
 
 | Variable | Purpose |
 | -------- | ------- |
-| `NEXT_PUBLIC_BASE_URL` | Canonical public base URL used by bridge URL helpers and metadata. |
+| `NEXT_PUBLIC_BASE_URL` | Canonical public origin used by proxy URL helpers and metadata. Production uses `https://open.axross.dev`. |
 | `DEFAULT_VAULT` | Reserved for notification workflow integration. |
 
 **Guidelines:**
 
-- MUST update `.env.example` and README when adding, renaming, or removing configuration.
+- MUST update `.env.example` when adding, renaming, or removing configuration.
+- SHOULD keep README limited to the local environment-file setup command unless the user explicitly approves public configuration detail.
 - MUST NOT place secrets or decoded note content in public environment variables.
 
 ## E2E Testing

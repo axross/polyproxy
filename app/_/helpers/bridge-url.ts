@@ -27,7 +27,7 @@ export function buildBridgeUrl(baseUrl: string, payload: BridgePayload): string 
 }
 
 export function getConfiguredBaseUrl(): string {
-  return process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
+  return process.env.NEXT_PUBLIC_BASE_URL ?? "https://open.axross.dev";
 }
 
 function normalizeBaseUrl(baseUrl: string): string {

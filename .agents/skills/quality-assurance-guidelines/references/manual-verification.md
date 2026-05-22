@@ -8,11 +8,11 @@ Manual evidence should target the user-visible surface touched by the diff. Use 
 
 | Diff touches | Required manual check |
 | ------------ | --------------------- |
-| `app/obsidian/[query]/page.tsx` | Run Playwright route tests, then manually open a valid bridge URL when custom-protocol launch behavior changed |
+| `app/obsidian/[query]/page.tsx` | Run Playwright route tests, then manually open a valid proxy URL when custom-protocol launch behavior changed |
 | `app/obsidian/[query]/_components/open-actions.tsx` | Confirm the Open in Obsidian button remains visible when automatic launch is blocked |
 | Metadata or bot detection | Run Playwright metadata/crawler tests or request the route with a Discord-like user agent |
 | Tailwind classes, global CSS, or route UI | Run desktop and Pixel Playwright projects, then manually inspect only when the visual change is hard to assert |
-| Environment/base URL behavior | Verify generated canonical bridge URLs use `NEXT_PUBLIC_BASE_URL` as expected |
+| Environment/base URL behavior | Verify generated canonical proxy URLs use `NEXT_PUBLIC_BASE_URL` as expected |
 
 **Guidelines:**
 
@@ -28,7 +28,7 @@ Local checks should be specific enough to reproduce the behavior without relying
 | ----- | ------- |
 | `npm run test:e2e` | Exercise route, metadata, crawler, and responsive behavior through Playwright. |
 | `npm run dev` then open the affected route in a browser | Exercise local route behavior interactively. |
-| Use a generated bridge URL from `buildBridgeUrl()` or an existing test fixture | Avoid hand-written payload drift. |
+| Use a generated proxy URL from `buildBridgeUrl()` or an existing test fixture | Avoid hand-written payload drift. |
 | `curl -A "Discordbot"` or an equivalent request | Exercise crawler handling when bot detection changes. |
 
 **Guidelines:**

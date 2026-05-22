@@ -4,7 +4,7 @@ Apply these rules to keep new code minimal, focused, and free of speculative abs
 
 ## YAGNI
 
-This bridge has a narrow job: transform a public bridge URL into metadata, a browser page, and an Obsidian launch path. Future-product scaffolding should not enter the code before the product need exists.
+The current Obsidian proxy route has a narrow job: transform a public proxy URL into metadata, a browser page, and an Obsidian launch path. Future proxy scaffolding should not enter the code before the product need exists.
 
 **Guidelines:**
 
@@ -24,7 +24,7 @@ Duplication is only harmful when it obscures shared behavior. A little explicit 
 
 ## KISS
 
-Prefer direct code that reveals the bridge flow over clever helpers that require type gymnastics or mental backtracking.
+Prefer direct code that reveals the proxy flow over clever helpers that require type gymnastics or mental backtracking.
 
 **Guidelines:**
 

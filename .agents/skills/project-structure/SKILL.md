@@ -1,7 +1,7 @@
 ---
 name: project-structure
 description: |
-  Navigation reference for this Next.js Obsidian Link Bridge repo. Use when writing, reviewing, or navigating code: covers the App Router files under app/, private helper modules under app/_/, route-local _components, co-located page-props.ts route contracts, colocated unit tests, agent skills under .agents/, the @/* path alias, and where configuration, docs, and static assets belong.
+  Navigation reference for this Next.js URL proxy repo. Use when writing, reviewing, or navigating code: covers the App Router files under app/, private helper modules under app/_/, route-local _components, co-located page-props.ts route contracts, colocated unit tests, agent skills under .agents/, the @/* path alias, and where configuration, docs, and static assets belong.
 ---
 
 # Project Structure
@@ -38,8 +38,8 @@ app/
 │   │   ├── _components/
 │   │   │   └── open-actions.tsx
 │   │   ├── page-props.ts      # dynamic route params contract
-│   │   └── page.tsx           # dynamic bridge route and metadata generation
-│   └── page.tsx               # bridge overview / help page
+│   │   └── page.tsx           # dynamic Obsidian proxy route and metadata generation
+│   └── page.tsx               # Obsidian proxy overview / help page
 ├── page.tsx                   # root route that currently returns notFound()
 └── favicon.ico
 e2e/
@@ -50,7 +50,7 @@ e2e/
         └── obsidian/
             ├── page.test.ts       # overview route E2E tests
             └── query/
-                └── page.test.ts   # dynamic bridge route E2E tests
+                └── page.test.ts   # dynamic Obsidian proxy route E2E tests
 ```
 
 **Guidelines:**
@@ -79,7 +79,7 @@ Support files carry workflow, documentation, configuration, and agent guidance a
 | ---- | ------- |
 | `AGENTS.md` | Repository-level agent routing, response approach, and skill index |
 | `.agents/skills/**` | Agent skills and reference files |
-| `README.md` | User-facing setup, behavior, and examples |
+| `README.md` | Public overview, tech stack, and development/test instructions only |
 | `.env.example` | Documented environment variables |
 | `next.config.ts` | Next.js configuration |
 | `playwright.config.ts` | Playwright E2E configuration |
@@ -91,7 +91,8 @@ Support files carry workflow, documentation, configuration, and agent guidance a
 
 - MUST update `AGENTS.md` when skill discoverability or the skill index changes.
 - MUST place agent guidance under `.agents/skills/**` unless it is repository-wide routing that belongs in `AGENTS.md`.
-- MUST keep user-facing setup and behavior documentation in `README.md`.
+- MUST keep public overview, tech stack, and development/test documentation in `README.md`.
+- MUST NOT document proxy usage, route payload formats, URL examples, or private workflow details in `README.md`.
 - MUST keep environment variable examples in `.env.example`.
 - SHOULD keep tool configuration in root-level config files unless the tool requires a different location.
 
@@ -125,4 +126,4 @@ For naming and export conventions inside these directories, consult [maintainabl
 - MUST place unit tests next to the target file and mirror the target filename, such as `app/_/helpers/bridge-url.test.ts` for `app/_/helpers/bridge-url.ts`.
 - MUST place Playwright route tests under `e2e/tests/routes/<route>/` and shared Playwright fixtures under `e2e/helpers/`.
 - MUST place static files in `public/`.
-- MUST document environment configuration in `.env.example` and `README.md`.
+- MUST document environment variable details in `.env.example`; README may only point developers to the example file.

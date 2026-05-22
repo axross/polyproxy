@@ -93,10 +93,10 @@ test("Invalid bridge link", async ({ page }) => {
 
   await test.step("Verify the invalid-link state", async () => {
     await expect(invalidBridge.getByTestId("title")).toHaveText(
-      "Invalid Obsidian Link",
+      "Invalid Obsidian Proxy Link",
     );
     await expect(invalidBridge.getByTestId("description")).toHaveText(
-      "This Obsidian bridge link could not be opened.",
+      "This Obsidian proxy link could not be opened.",
     );
   });
 

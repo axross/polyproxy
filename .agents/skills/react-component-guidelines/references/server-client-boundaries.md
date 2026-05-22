@@ -9,7 +9,7 @@ Server Components keep browser bundles small and can read server-only inputs. Cl
 | Need | Component boundary |
 | ---- | ------------------ |
 | Read `params`, `headers()`, metadata inputs, or environment-derived helpers | Server Component |
-| Decode bridge payloads, build metadata, or call pure helper modules | Server Component |
+| Decode proxy payloads, build metadata, or call pure helper modules | Server Component |
 | Use `window`, `document`, `navigator`, `useEffect`, state, or DOM event handlers | Client Component |
 | Attempt `obsidian://` custom-protocol launch in the browser | Client Component |
 
@@ -56,7 +56,7 @@ export default function OpenActions({ obsidianUri }: { obsidianUri: string }) {
 
 ## Suspense and Loading
 
-Suspense is useful when an async Server Component can stream independently or has a meaningful loading state. This bridge app is small, so loading/loaded splits should be introduced only when they reduce user-visible waiting or clarify async behavior.
+Suspense is useful when an async Server Component can stream independently or has a meaningful loading state. This URL proxy app is small, so loading/loaded splits should be introduced only when they reduce user-visible waiting or clarify async behavior.
 
 **Example:**
 

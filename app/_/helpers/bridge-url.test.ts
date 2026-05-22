@@ -1,7 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { decodeBase64Url } from "./base64url";
-import { buildBridgeUrl } from "./bridge-url";
+import { buildBridgeUrl, getConfiguredBaseUrl } from "./bridge-url";
 import type { BridgePayload } from "./types";
 
 const payload: BridgePayload = {
@@ -11,6 +11,10 @@ const payload: BridgePayload = {
   summary:
     "An article about Google's effort to make the web easier for agents to navigate.",
 };
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
 
 describe("buildBridgeUrl", () => {
   it("builds a deterministic /obsidian/[query] URL", () => {
@@ -64,6 +68,20 @@ describe("buildBridgeUrl", () => {
         sourceUrl: `https://example.com/${"x".repeat(980)}`,
       }),
     ).toThrow("Bridge URL exceeds the practical length limit");
+  });
+});
+
+describe("getConfiguredBaseUrl", () => {
+  it("defaults to the production origin", () => {
+    vi.stubEnv("NEXT_PUBLIC_BASE_URL", undefined);
+
+    expect(getConfiguredBaseUrl()).toBe("https://open.axross.dev");
+  });
+
+  it("uses NEXT_PUBLIC_BASE_URL when configured", () => {
+    vi.stubEnv("NEXT_PUBLIC_BASE_URL", "https://preview.example.com");
+
+    expect(getConfiguredBaseUrl()).toBe("https://preview.example.com");
   });
 });
 

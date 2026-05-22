@@ -55,10 +55,11 @@ Dependency changes affect bundle size, supply-chain risk, runtime boundaries, an
 
 ## Public Behavior Changes
 
-Public behavior includes bridge URL shape, payload fields, accepted protocols, metadata output, route paths, and client launch behavior. These changes can invalidate existing links and require docs and tests to move together.
+Public behavior includes proxy URL shape, payload fields, accepted protocols, metadata output, route paths, and client launch behavior. These changes can invalidate existing links and require docs and tests to move together.
 
 **Guidelines:**
 
-- MUST update README examples when bridge URL shape, payload fields, environment variables, or route paths change.
+- MUST NOT add README examples for proxy URL shape, payload fields, route paths, or private workflow usage.
+- MUST update tests and internal guidance when proxy URL shape, payload fields, environment variables, or route paths change.
 - MUST update tests when validation limits, accepted URL protocols, or Obsidian URI construction changes.
-- SHOULD preserve backwards compatibility for generated bridge links unless the user accepts invalidating old URLs.
+- SHOULD preserve backwards compatibility for generated proxy links unless the user accepts invalidating old URLs.

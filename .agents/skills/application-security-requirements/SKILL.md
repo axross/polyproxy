@@ -1,12 +1,12 @@
 ---
 name: application-security-requirements
 description: |
-  OWASP-framed security and privacy rules for this small Next.js Obsidian bridge. Use when writing or reviewing code that handles bridge payloads, base64url decoding, Obsidian URI construction, source URLs, Open Graph metadata, environment variables, robots/indexing behavior, or npm dependency changes.
+  OWASP-framed security and privacy rules for this small Next.js URL proxy. Use when writing or reviewing code that handles proxy payloads, base64url decoding, Obsidian URI construction, source URLs, Open Graph metadata, environment variables, robots/indexing behavior, or npm dependency changes.
 ---
 
 # Application Security Requirements
 
-Apply these rules when reviewing the security implications of any code change in this project. The app is public and stateless; most risk comes from treating encoded URL data as trusted, leaking note metadata, or adding unnecessary dependencies.
+Apply these rules when reviewing the security implications of any code change in this project. The app is public and stateless; most risk comes from treating encoded URL data as trusted, leaking target metadata, or adding unnecessary dependencies.
 
 ## Secret and Environment-Variable Handling
 
@@ -16,11 +16,11 @@ Configuration is intentionally small. Public base URL configuration is safe to e
 
 - SHOULD read [secret-handling.md](./references/secret-handling.md) when a change touches environment variables, logging, diagnostics, or configuration docs.
 - MUST keep literal secrets, private environment files, decoded note metadata, and generated Obsidian URIs out of the repository and logs.
-- MUST keep `.env.example` and README configuration notes in sync when configuration changes.
+- MUST keep `.env.example` configuration details current when configuration changes; README may only point developers to the example file.
 
 ## Input Validation
 
-Every bridge URL is attacker-controlled input until it passes base64url, JSON, and schema validation. Validated payloads are the only values that may reach metadata, UI, or custom-protocol URI construction.
+Every proxy URL is attacker-controlled input until it passes the route's decoding and validation rules. Validated payloads are the only values that may reach metadata, UI, or custom-protocol URI construction.
 
 **Guidelines:**
 
@@ -30,12 +30,12 @@ Every bridge URL is attacker-controlled input until it passes base64url, JSON, a
 
 ## Privacy and Exposure Control
 
-Base64url is obfuscation, not access control. Anyone with a bridge URL can decode its vault, path, title, summary, and optional source URL.
+Base64url is obfuscation, not access control. Anyone with a proxy URL can decode its vault, path, title, summary, and optional source URL.
 
 **Guidelines:**
 
 - SHOULD read [access-control.md](./references/access-control.md) when changing public route behavior, crawler behavior, indexing metadata, UI exposure, storage, or auth assumptions.
-- MUST NOT claim bridge URLs are private, encrypted, authenticated, or secure.
+- MUST NOT claim proxy URLs are private, encrypted, authenticated, or secure.
 - MUST keep the app stateless unless the user explicitly accepts a product-scope change.
 
 ## Supply Chain

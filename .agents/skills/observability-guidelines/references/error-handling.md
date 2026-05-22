@@ -8,7 +8,7 @@ Malformed query strings and invalid payloads are normal public input. They shoul
 
 **Guidelines:**
 
-- MUST treat malformed bridge URLs as expected external input, not as exceptional server crashes.
+- MUST treat malformed proxy URLs as expected external input, not as exceptional server crashes.
 - MUST use `decodeBridgeQuerySafe()` in route rendering and metadata generation so invalid links render a stable invalid-link response.
 - SHOULD use the throwing `decodeBridgeQuery()` only in contexts where an exception is the desired API.
 - MUST NOT expose raw malformed query strings or decoded partial payloads in invalid-link UI.
@@ -45,7 +45,7 @@ Browser launch attempts can fail silently or be blocked by the browser. The manu
 
 ## Error Messages
 
-Internal error messages should identify the failure category without embedding the user’s decoded note metadata or raw bridge URL.
+Internal error messages should identify the failure category without embedding the user's decoded target metadata or raw proxy URL.
 
 **Guidelines:**
 

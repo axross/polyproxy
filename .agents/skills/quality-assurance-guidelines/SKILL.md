@@ -1,7 +1,7 @@
 ---
 name: quality-assurance-guidelines
 description: |
-  Use when writing, verifying, or reviewing tests and QA evidence for this Next.js bridge: covers lint/test/build gates, Vitest helper tests, Playwright E2E route tests, async and matcher hygiene, bridge payload edge cases, snapshot caution, flakiness investigation, and manual checks for browser, crawler, metadata, and Obsidian launch behavior.
+  Use when writing, verifying, or reviewing tests and QA evidence for this Next.js URL proxy: covers lint/test/build gates, Vitest helper tests, Playwright E2E route tests, async and matcher hygiene, proxy payload edge cases, snapshot caution, flakiness investigation, and manual checks for browser, crawler, metadata, and Obsidian launch behavior.
 ---
 
 # Quality Assurance Guidelines
@@ -22,7 +22,7 @@ The standard gate is `npm run lint`, `npm test`, and `npm run build`, selected a
 
 ## Playwright E2E Coverage
 
-Playwright verifies the browser-visible bridge route behavior that helper tests cannot see: rendered pages, metadata tags, crawler-specific HTML, and responsive fallback UI. The authoring rules live in [E2E Test Guidelines](../e2e-test-guidelines/SKILL.md).
+Playwright verifies the browser-visible proxy route behavior that helper tests cannot see: rendered pages, metadata tags, crawler-specific HTML, and responsive fallback UI. The authoring rules live in [E2E Test Guidelines](../e2e-test-guidelines/SKILL.md).
 
 **Guidelines:**
 

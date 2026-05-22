@@ -1,6 +1,6 @@
 ---
 name: react-component-guidelines
-description: Apply this skill when writing, reviewing, or refactoring React components in this Next.js 16 Obsidian bridge. Covers route-local _components placement, kebab-case component files, named exports for non-page components, explicit JSX return types, interface props, typed DOM props, Server vs Client Component boundaries, "use client" placement, Suspense/loading splits, Tailwind utility styling, cn()/tailwind-merge class isolation, and testable data-testid patterns. Use when the user says component, React, RSC, use client, Suspense, Tailwind, className, cn, or data-testid.
+description: Apply this skill when writing, reviewing, or refactoring React components in this Next.js 16 URL proxy app. Covers route-local _components placement, kebab-case component files, named exports for non-page components, explicit JSX return types, interface props, typed DOM props, Server vs Client Component boundaries, "use client" placement, Suspense/loading splits, Tailwind utility styling, cn()/tailwind-merge class isolation, and testable data-testid patterns. Use when the user says component, React, RSC, use client, Suspense, Tailwind, className, cn, or data-testid.
 ---
 
 # React Component Guidelines

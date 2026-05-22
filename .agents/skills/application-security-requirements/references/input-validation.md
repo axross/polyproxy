@@ -1,6 +1,6 @@
 # Input Validation
 
-Apply these rules to verify bridge payloads and URL-derived values are validated before they affect metadata, links, redirects, or UI.
+Apply these rules to verify proxy payloads and URL-derived values are validated before they affect metadata, links, redirects, or UI.
 
 ## Bridge Query Decoding
 
@@ -15,7 +15,7 @@ The `/obsidian/[query]` segment is opaque user input. It must be syntactically b
 
 ## Payload Schema
 
-The schema is the single source of truth for accepted bridge payload fields and limits. Route code should not reimplement it.
+The schema is the single source of truth for accepted proxy payload fields and limits. Route code should not reimplement it.
 
 **Guidelines:**
 

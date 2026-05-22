@@ -29,8 +29,8 @@ Some decisions are product or architecture calls, not review verdicts.
 
 **Guidelines:**
 
-- MUST defer product decisions such as adding authentication, analytics, storage, or a new bridge URL format.
-- MUST defer compatibility decisions that invalidate existing bridge URLs.
+- MUST defer product decisions such as adding authentication, analytics, storage, or a new proxy URL format.
+- MUST defer compatibility decisions that invalidate existing proxy URLs.
 - SHOULD present trade-offs for dependency choices where two supported options are viable.
 - SHOULD ask about visual design choices not covered by an existing requirement.
 

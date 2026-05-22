@@ -41,7 +41,7 @@ npx playwright install chromium
 **Example:**
 
 ```bash
-PLAYWRIGHT_BASE_URL=https://obsidian-link.example.com npm run test:e2e
+PLAYWRIGHT_BASE_URL=https://open.axross.dev npm run test:e2e
 ```
 
 **Guidelines:**

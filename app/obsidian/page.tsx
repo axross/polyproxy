@@ -9,9 +9,9 @@ import {
   ObsidianSectionPanel,
 } from "./_components/page-frame";
 
-const siteName = "Obsidian Link Bridge";
+const siteName = "open.axross.dev";
 const overviewDescription =
-  "HTTPS bridge pages for opening local Obsidian notes from Discord previews.";
+  "Multi-purpose URL proxy server with an Obsidian deeplink bridge.";
 
 const styles = {
   intro: cn("flex flex-col items-start gap-6"),
@@ -73,11 +73,12 @@ export default function ObsidianOverviewPage(): JSX.Element {
             data-testid="title"
             id="overview-title"
           >
-            Open Obsidian notes from Discord links.
+            Proxy Obsidian deeplinks through HTTPS.
           </h1>
           <p className={styles.description} data-testid="description">
-            This service turns a Base64url-encoded JSON payload into a normal
-            HTTPS page with Open Graph preview data and an Obsidian open action.
+            open.axross.dev is a multi-purpose URL proxy server. This route
+            turns a Base64url-encoded Obsidian payload into Open Graph preview
+            data and an Obsidian open action.
           </p>
         </div>
 
@@ -88,7 +89,7 @@ export default function ObsidianOverviewPage(): JSX.Element {
 
         <p className={styles.notice} data-testid="privacy-notice">
           Base64url is only obfuscation. Do not put sensitive note content in
-          bridge URLs.
+          proxy URLs.
         </p>
       </ObsidianSectionPanel>
     </ObsidianPage>

@@ -44,7 +44,7 @@ Certain change types have predictable context needs. Use these as triggers for t
 
 - MUST read `app/_/helpers/validation.ts`, `app/_/helpers/decode-link.ts`, and relevant tests for validation changes.
 - MUST read `app/obsidian/[query]/page.tsx` and related helpers for route changes.
-- SHOULD read bridge URL construction and base URL behavior for metadata changes.
+- SHOULD read proxy URL construction and base URL behavior for metadata changes.
 - SHOULD inspect package purpose, import environment, lockfile size, and scripts for dependency changes.
 
 ## Out-of-Scope Findings

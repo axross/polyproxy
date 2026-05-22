@@ -1,7 +1,7 @@
 ---
 name: e2e-test-guidelines
 description: |
-  Use when writing, reviewing, running, or maintaining Playwright end-to-end tests in this Next.js Obsidian bridge. Covers `playwright.config.ts`, `npm run test:e2e`, `PLAYWRIGHT_BASE_URL`, browser installation, `e2e/tests/routes/**` placement, `.test.ts` naming, `test.step()` structure, chained `getByTestId()` locators, metadata assertions, custom-protocol redirect constraints, snapshots, traces, flakiness, and when E2E evidence is required for route, metadata, crawler, responsive, or UI behavior.
+  Use when writing, reviewing, running, or maintaining Playwright end-to-end tests in this Next.js URL proxy app. Covers `playwright.config.ts`, `npm run test:e2e`, `PLAYWRIGHT_BASE_URL`, browser installation, `e2e/tests/routes/**` placement, `.test.ts` naming, `test.step()` structure, chained `getByTestId()` locators, metadata assertions, custom-protocol redirect constraints, snapshots, traces, flakiness, and when E2E evidence is required for route, metadata, crawler, responsive, or UI behavior.
 ---
 
 # E2E Test Guidelines

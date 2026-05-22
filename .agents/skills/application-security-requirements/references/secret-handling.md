@@ -4,7 +4,7 @@ Apply these rules to verify no secret is committed and environment configuration
 
 ## Committed Secrets
 
-Private credentials should never be needed to render bridge links. If one appears in the diff, treat it as a security incident.
+Private credentials should never be needed to render proxy links. If one appears in the diff, treat it as a security incident.
 
 For review severity labels, consult [code-review severity](../../code-review-guidelines/references/severity.md).
 
@@ -22,9 +22,10 @@ For review severity labels, consult [code-review severity](../../code-review-gui
 
 - MUST treat every `NEXT_PUBLIC_*` value as browser-visible.
 - MUST NOT put secrets in `NEXT_PUBLIC_BASE_URL` or future `NEXT_PUBLIC_*` variables.
-- MUST update `.env.example` and README configuration notes when an environment variable changes.
+- MUST update `.env.example` when an environment variable changes.
+- SHOULD keep README limited to the local environment-file setup command unless the user explicitly approves public configuration detail.
 - SHOULD keep configuration reads near their use until repetition justifies a helper.
-- MUST NOT require a private server-side secret for ordinary bridge-link rendering.
+- MUST NOT require a private server-side secret for ordinary proxy-link rendering.
 
 ## Bridge Payload Privacy
 
@@ -35,4 +36,5 @@ Decoded payloads contain personal note metadata. Diagnostics may report categori
 - MUST NOT log decoded `BridgePayload`, vault name, note path, title, summary, source URL, or generated `obsidian://` URI.
 - SHOULD log only coarse diagnostics such as query length, validation failure category, or route name.
 - MUST NOT add analytics or third-party telemetry that receives decoded note metadata without explicit approval.
-- MUST keep README and UI copy clear that base64url obfuscates but does not secure payload data.
+- MUST keep public README content free of proxy usage details, route payload formats, generated URLs, and private workflow specifics.
+- MUST keep UI copy clear that base64url obfuscates but does not secure payload data when encoded data is mentioned.

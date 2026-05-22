@@ -45,7 +45,7 @@ test("Overview content", async ({ page }) => {
 
   await test.step("Verify the page title", async () => {
     await expect(overview.getByTestId("title")).toHaveText(
-      "Open Obsidian notes from Discord links.",
+      "Proxy Obsidian deeplinks through HTTPS.",
     );
   });
 });
@@ -61,7 +61,7 @@ test("Overview content", async ({ page }) => {
 
 ## Custom-Protocol Routes
 
-The bridge page automatically attempts `obsidian://` navigation for human visitors, which browser automation cannot complete reliably.
+The current Obsidian proxy page automatically attempts `obsidian://` navigation for human visitors, which browser automation cannot complete reliably.
 
 **Example:**
 
@@ -71,6 +71,6 @@ test.use({ javaScriptEnabled: false });
 
 **Guidelines:**
 
-- MUST disable JavaScript for tests that need to inspect the human bridge page without triggering the custom-protocol redirect.
+- MUST disable JavaScript for tests that need to inspect the human proxy page without triggering the custom-protocol redirect.
 - SHOULD test the `href` of the fallback button instead of trying to launch Obsidian from Playwright.
 - SHOULD use a crawler user agent when verifying Discord-style simple HTML rendering.

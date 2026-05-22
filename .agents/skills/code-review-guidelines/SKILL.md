@@ -1,7 +1,7 @@
 ---
 name: code-review-guidelines
 description: |
-  Rules for reviewing diffs in this Next.js Obsidian bridge. Use when reviewing a pull request or local diff: covers review scope, severity, evidence and citation format, tone, escalation boundaries, and routing to security, QA, maintainability, observability, development, and project-structure skills.
+  Rules for reviewing diffs in this Next.js URL proxy. Use when reviewing a pull request or local diff: covers review scope, severity, evidence and citation format, tone, escalation boundaries, and routing to security, QA, maintainability, observability, development, and project-structure skills.
 ---
 
 # Code Review Guidelines

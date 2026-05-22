@@ -1,21 +1,21 @@
 # Privacy and Exposure Control
 
-Apply these rules to verify the public bridge does not claim security properties it does not provide or leak more note metadata than intended.
+Apply these rules to verify the public proxy routes do not claim security properties they do not provide or leak more target metadata than intended.
 
 ## No Authentication Boundary
 
-The bridge URL itself is the access token. The app has no account, session, cookie, or server-side authorization boundary.
+The proxy URL itself is the access token. The app has no account, session, cookie, or server-side authorization boundary.
 
 **Guidelines:**
 
-- MUST NOT describe the bridge URL as private, authenticated, encrypted, or access-controlled.
-- MUST treat possession of a bridge URL as possession of the decoded payload.
+- MUST NOT describe the proxy URL as private, authenticated, encrypted, or access-controlled.
+- MUST treat possession of a proxy URL as possession of the decoded payload.
 - MUST NOT add user accounts, sessions, cookies, or server-side storage as an incidental part of another change.
 - SHOULD surface any need for real access control as a product decision.
 
 ## No Stored Note Metadata
 
-The bridge is a decoder and redirect helper, not a note-hosting service. Persistence changes the privacy model.
+The app is a decoder and redirect helper, not a target-content hosting service. Persistence changes the privacy model.
 
 **Guidelines:**
 
@@ -26,11 +26,11 @@ The bridge is a decoder and redirect helper, not a note-hosting service. Persist
 
 ## Crawler and Indexing Behavior
 
-Crawler support exists for previews, not search indexing. Valid bridge pages should preview cleanly without making note metadata discoverable by search engines.
+Crawler support exists for previews, not search indexing. Valid proxy pages should preview cleanly without making target metadata discoverable by search engines.
 
 **Guidelines:**
 
-- MUST keep bridge pages `noindex` and `nofollow` unless the product explicitly changes its privacy model.
+- MUST keep proxy pages `noindex` and `nofollow` unless the product explicitly changes its privacy model.
 - MUST preserve bot handling that gives crawlers simple title and summary HTML without triggering client-side custom-protocol redirects.
 - SHOULD verify Open Graph and Twitter metadata use decoded title and summary only after validation succeeds.
 

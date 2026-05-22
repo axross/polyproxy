@@ -1,7 +1,7 @@
 ---
 name: maintainable-code-guidelines
 description: |
-  Rules for keeping this small Next.js bridge readable and easy to evolve. Use when writing or reviewing code for boundaries, server/client separation, pure helper placement, validation centralization, JSX and Tailwind class complexity, dead code, type reuse, btnopen-style kebab-case file naming, page-props.ts route contracts, camelCase constants, interface-vs-type choices, and scope discipline.
+  Rules for keeping this small Next.js URL proxy readable and easy to evolve. Use when writing or reviewing code for boundaries, server/client separation, pure helper placement, validation centralization, JSX and Tailwind class complexity, dead code, type reuse, btnopen-style kebab-case file naming, page-props.ts route contracts, camelCase constants, interface-vs-type choices, and scope discipline.
 ---
 
 # Maintainable Code Guidelines
@@ -20,7 +20,7 @@ Maintainability depends on keeping route rendering, validation, URL construction
 
 ## Complexity and Readability
 
-Readable code makes the bridge's three main rendering paths easy to audit: invalid link, crawler preview, and human redirect UI. The detailed complexity rules live in [complexity-and-readability.md](./references/complexity-and-readability.md). For React component mechanics and Tailwind class composition, consult [React Component Guidelines](../react-component-guidelines/SKILL.md).
+Readable code makes the current Obsidian proxy route's three main rendering paths easy to audit: invalid link, crawler preview, and human redirect UI. The detailed complexity rules live in [complexity-and-readability.md](./references/complexity-and-readability.md). For React component mechanics and Tailwind class composition, consult [React Component Guidelines](../react-component-guidelines/SKILL.md).
 
 **Guidelines:**
 

@@ -1,5 +1,5 @@
 {
-  "name": "obsidian-deeplink-proxy",
+  "name": "polyproxy",
   "version": "0.1.0",
   "private": true,
   "scripts": {

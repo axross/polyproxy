@@ -20,7 +20,7 @@ This repo's tests are currently targeted helper and Playwright route tests. Snap
 **Guidelines:**
 
 - SHOULD prefer targeted assertions over snapshots for base64url, validation, URL construction, and Obsidian URI behavior.
-- SHOULD prefer targeted Playwright assertions over full-page screenshots for bridge route behavior.
+- SHOULD prefer targeted Playwright assertions over full-page screenshots for proxy route behavior.
 - MUST NOT use snapshots as the only coverage for security-sensitive validation behavior.
 
 ## Snapshot Update Commands

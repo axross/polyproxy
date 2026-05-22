@@ -39,7 +39,7 @@ Bridge payloads and URLs have one canonical construction path. Duplicating that 
 **Guidelines:**
 
 - MUST use `buildObsidianUri()` for `obsidian://open` links.
-- MUST use `buildBridgeUrl()` for public HTTPS bridge links.
+- MUST use `buildBridgeUrl()` for public HTTPS proxy links.
 - MUST keep field limits in `app/_/helpers/validation.ts` rather than scattering constants across routes and tests.
 - SHOULD add tests beside any helper behavior change before changing route code that depends on it.
 

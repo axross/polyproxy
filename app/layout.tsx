@@ -3,7 +3,7 @@ import type { JSX, ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "proxy.axross.dev",
+  title: "open.axross.dev",
   robots: {
     index: false,
     follow: false,
