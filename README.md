@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Obsidian Link Bridge
 
-## Getting Started
+A small Next.js app that turns encoded Obsidian note targets into HTTPS pages Discord can click and preview.
 
-First, run the development server:
+The bridge route is:
+
+```text
+/obsidian/BASE64URL_JSON
+```
+
+The JSON payload contains `vault`, `path`, `title`, `summary`, and optional `sourceUrl`. The page decodes that payload server-side, emits Open Graph metadata for Discord, and redirects human visitors to an `obsidian://open` URL with a visible open button as fallback. Known crawlers such as Discord, Twitter/X, Facebook, and Google receive simple server-rendered HTML with an `<h1>` title and `<p>` description instead of the redirect UI. It does not store decoded note metadata.
+
+## Configuration
+
+Create an environment file from the example when running locally:
+
+```bash
+cp .env.example .env.local
+```
+
+Environment variables:
+
+- `NEXT_PUBLIC_BASE_URL`: canonical public base URL used by bridge URL helpers and metadata.
+- `DEFAULT_VAULT`: reserved for notification workflow integration.
+
+Base64url is only obfuscation, not security. Do not include sensitive note content or private personal data in bridge URLs.
+
+## Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm test
+npm run test:e2e
+npm run lint
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Playwright starts the local development server automatically for E2E tests. To
+test an already running preview or production-like server, set
+`PLAYWRIGHT_BASE_URL`:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+PLAYWRIGHT_BASE_URL=http://localhost:3000 npm run test:e2e
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Do not deploy from this repository until the production domain and Vercel project are intentionally configured.
 
-## Learn More
+## Example
 
-To learn more about Next.js, take a look at the following resources:
+```ts
+import { buildBridgeUrl } from "@/helpers/bridge-url";
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+const url = buildBridgeUrl("https://obsidian-link.example.com", {
+  vault: "Personal",
+  path: "Articles/Google wants to make the web agent-ready",
+  title: "Google wants to make the web agent-ready",
+  summary:
+    "An article about Google's effort to make the web easier for agents to navigate.",
+});
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The bridge page builds:
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```text
+obsidian://open?vault=Personal&file=Articles%2FGoogle%20wants%20to%20make%20the%20web%20agent-ready
+```
