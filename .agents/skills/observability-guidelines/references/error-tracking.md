@@ -4,18 +4,18 @@ Apply these rules when changing Sentry setup, Hono error handling, event scrubbi
 
 ## Sentry Entry Points
 
-Error tracking is initialized through `src/worker.tsx`, which wires `@sentry/hono/cloudflare` middleware around the shared Hono app. Hono request context is connected through the Sentry middleware before normal route middleware runs.
+Error tracking is initialized through `src/common/worker.tsx`, which wires `@sentry/hono/cloudflare` middleware around the shared Hono app. Hono request context is connected through the Sentry middleware before normal route middleware runs.
 
 **Guidelines:**
 
-- MUST keep Cloudflare Sentry middleware setup in `src/worker.tsx`, not route modules, view modules, or helper modules.
+- MUST keep Cloudflare Sentry middleware setup in `src/common/worker.tsx`, not route modules, view modules, or helper modules.
 - MUST keep Hono Sentry middleware wired immediately after Worker app creation.
 - MUST keep `nodejs_compat` enabled in `wrangler.jsonc` while using `@sentry/hono/cloudflare`.
 - SHOULD use `SENTRY_DSN` as the enablement switch for Sentry initialization.
 
 ## Event Privacy
 
-Sentry events leave the process, so they must satisfy the same privacy standard as logs. The current privacy boundary is `scrubSentryEvent()` in `src/helpers/sentry-privacy.ts`, covered by `src/helpers/sentry-privacy.test.ts`.
+Sentry events leave the process, so they must satisfy the same privacy standard as logs. The current privacy boundary is `scrubSentryEvent()` in `src/obsidian/helpers/sentry-privacy.ts`, covered by `src/obsidian/helpers/sentry-privacy.test.ts`.
 
 **Guidelines:**
 
@@ -43,6 +43,6 @@ Error tracking touches Hono middleware, Worker bundling, dependencies, and helpe
 **Guidelines:**
 
 - MUST run `npm run lint` after changing Sentry, logging, or Worker entry TypeScript.
-- MUST run `npm test -- src/helpers/sentry-privacy.test.ts` after changing event scrubbing.
+- MUST run `npm test -- src/obsidian/helpers/sentry-privacy.test.ts` after changing event scrubbing.
 - MUST run `npm test` after changing shared observability helpers.
-- MUST run `npm run build` after changing `src/worker.tsx`, `src/app.tsx`, Wrangler config, runtime scripts, or observability dependencies.
+- MUST run `npm run build` after changing `src/common/worker.tsx`, `src/common/app.tsx`, Wrangler config, runtime scripts, or observability dependencies.

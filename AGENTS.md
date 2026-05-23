@@ -99,7 +99,7 @@ Execution includes investigation, implementation, refactoring, review, and skill
 **Guidelines:**
 
 - MUST implement within the smallest affected surface that satisfies the acceptance criteria.
-- MUST follow existing `src/**`, `src/helpers/**`, `src/routes/**`, `src/views/**`, colocated `*.test.ts`, configuration, and skill-directory patterns before adding new structure.
+- MUST follow existing `src/common/**`, `src/obsidian/**`, colocated `*.test.ts`, configuration, and skill-directory patterns before adding new structure.
 - MUST preserve public behavior during refactors unless the requested change intentionally modifies it.
 - MUST NOT combine unrelated app behavior, styling, dependency, documentation, and skill-maintenance changes unless the user explicitly asks for that scope.
 - SHOULD keep implementation notes focused on decisions and blockers rather than every local inspection step.
@@ -127,7 +127,7 @@ Verification should match the changed surface. Helper changes usually need tests
 
 - MUST run the relevant verification commands after non-trivial code changes, or report why they could not run.
 - MUST use `npm run lint` for TypeScript, Hono JSX, route, config, or style-adjacent changes.
-- MUST use `npm test` when `src/helpers/**` logic or tests change.
+- MUST use `npm test` when helper logic or tests under `src/common/helpers/**` or `src/obsidian/helpers/**` change.
 - MUST use `npm run build` when Hono routes, metadata, middleware, environment use, config, dependencies, or TypeScript signatures change.
 - SHOULD perform focused manual checks when browser, crawler, metadata, custom-protocol, or responsive behavior changes.
 - MUST report unverified acceptance criteria and residual risk in the final summary.

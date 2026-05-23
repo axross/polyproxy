@@ -1,7 +1,7 @@
 ---
 name: project-structure
 description: |
-  Navigation reference for this Hono URL proxy repo. Use when writing, reviewing, or navigating code: covers the Cloudflare Worker entry under src/worker.tsx, source files under src/, helper modules under src/helpers/, route registration under src/routes/, Hono JSX views under src/views/, colocated unit tests, agent skills under .agents/, the @/* path alias, and where Wrangler configuration, docs, and static assets belong.
+  Navigation reference for this Hono URL proxy repo. Use when writing, reviewing, or navigating code: covers the Cloudflare Worker entry under src/common/worker.tsx, common/core source under src/common/, Obsidian route modules under src/obsidian/, colocated unit tests, agent skills under .agents/, the @/* path alias, and where Wrangler configuration, docs, and static assets belong.
 ---
 
 # Project Structure
@@ -10,36 +10,36 @@ Apply this skill when writing, creating, or navigating files in this project. Th
 
 ## Source Tree
 
-Use this tree to decide where code belongs before adding files. Cloudflare Worker-specific middleware and bindings live in `src/worker.tsx`; shared Hono bootstrap, route wiring, and error handlers live in `src/app.tsx`; shared bridge helpers live under `src/helpers/`; public route registration lives under `src/routes/`; server-rendered Hono JSX lives under `src/views/`; unit tests live next to the files they verify.
+Use this tree to decide where code belongs before adding files. Common Worker/runtime code and generic helpers live under `src/common/`; Obsidian-specific bridge helpers, public route registration, and server-rendered Hono JSX live under `src/obsidian/`; unit tests live next to the files they verify.
 
 ```
 src/
-├── app.tsx                  # shared Hono app, route wiring, 404/500 handlers
-├── hono-env.ts              # shared Hono Env interface over generated Worker bindings
-├── worker.tsx               # Cloudflare Worker entry, bindings, Sentry middleware
-├── helpers/
-│   ├── base64url.ts
-│   ├── base64url.test.ts
-│   ├── bot-detection.ts
-│   ├── bot-detection.test.ts
-│   ├── bridge-url.ts
-│   ├── bridge-url.test.ts
-│   ├── decode-link.ts
-│   ├── decode-link.test.ts
-│   ├── obsidian-uri.ts
-│   ├── obsidian-uri.test.ts
-│   ├── sentry-privacy.ts
-│   ├── sentry-privacy.test.ts
-│   ├── short-bridge-link.ts
-│   ├── short-bridge-link.test.ts
-│   ├── types.ts
-│   └── validation.ts
-├── logger.ts                # structured Worker console logger
-├── routes/
-│   └── obsidian.tsx         # /ob and /ob/:query route registration
-└── views/
-    ├── metadata.tsx         # document metadata helpers
-    └── obsidian.tsx         # Hono JSX route views
+├── common/
+│   ├── app.tsx              # shared Hono app, route wiring, 404/500 handlers
+│   ├── helpers/
+│   │   ├── base64url.ts
+│   │   ├── base64url.test.ts
+│   │   ├── bot-detection.ts
+│   │   └── bot-detection.test.ts
+│   ├── hono-env.ts          # shared Hono Env interface over generated Worker bindings
+│   ├── logger.ts            # structured Worker console logger
+│   ├── styles.css           # Tailwind input compiled to public/styles.css
+│   └── worker.tsx           # Cloudflare Worker entry, bindings, Sentry middleware
+└── obsidian/
+    ├── helpers/
+    │   ├── bridge-route.ts
+    │   ├── bridge-url.ts
+    │   ├── decode-link.ts
+    │   ├── obsidian-uri.ts
+    │   ├── sentry-privacy.ts
+    │   ├── short-bridge-link.ts
+    │   ├── types.ts
+    │   └── validation.ts
+    ├── routes/
+    │   └── obsidian.tsx     # /ob and /ob/:query route registration
+    └── views/
+        ├── metadata.tsx     # document metadata helpers
+        └── obsidian.tsx     # Hono JSX route views
 e2e/
 ├── helpers/
 │   └── bridge-payload.ts
@@ -53,17 +53,17 @@ e2e/
 
 **Guidelines:**
 
-- MUST prefer the existing flat structure before adding feature, component, or source-root folders.
+- MUST prefer the existing `common` and `obsidian` ownership roots before adding more source-root folders.
 - SHOULD update this tree when a durable new top-level file or directory becomes part of the project structure.
 - MUST keep the tree descriptive rather than exhaustive when generated, dependency, build, or cache directories are involved.
 
 ## Routing Conventions
 
-Routing follows Hono's grouping pattern. Route modules should expose top-level grouped Hono sub-app instances mounted from `src/app.tsx` with `app.route(basePath, routes)` while leaving reusable parsing, validation, URL construction, and rendered view structure in their owning helper/view modules.
+Routing follows Hono's grouping pattern. Route modules should expose top-level grouped Hono sub-app instances mounted from `src/common/app.tsx` with `app.route(basePath, routes)` while leaving reusable parsing, validation, URL construction, and rendered view structure in their owning helper/view modules.
 
 **Guidelines:**
 
-- MUST define grouped public route modules under `src/routes/**` and mount them from `src/app.tsx`.
+- MUST define grouped public route modules under `src/obsidian/routes/**` and mount them from `src/common/app.tsx`.
 - MUST define grouped route handlers at module scope with `routes.get()`, `routes.post()`, or the equivalent Hono route methods instead of route factory functions.
 - MUST keep the root route as a 404 unless the user explicitly changes the public route contract.
 - MUST keep `GET /ob` as the overview route, `POST /ob` as the short-link creation route, and `GET /ob/:query` as the Obsidian bridge resolver for short keys with legacy encoded-query fallback.
@@ -83,7 +83,7 @@ Support files carry workflow, documentation, configuration, and agent guidance a
 | `.env.example` | Documented environment variables |
 | `biome.jsonc` | Biome lint and format configuration |
 | `playwright.config.ts` | Playwright E2E configuration |
-| `public/**` | Static assets served by Cloudflare Workers Assets |
+| `public/**` | Static assets served by Cloudflare Workers Assets, including generated Tailwind CSS |
 | `tsconfig.json` | TypeScript configuration |
 | `vitest.config.mts` | Vitest configuration |
 | `worker-configuration.d.ts` | Generated Wrangler Worker runtime and `CloudflareBindings` types |
@@ -116,19 +116,20 @@ The only configured path alias points to the app source root. Wrangler bundles t
 
 ## Placement Rules
 
-Placement should follow ownership: Cloudflare Worker entry and bindings in `src/worker.tsx`, route registration in `src/routes`, shared bridge logic in `src/helpers`, server-rendered markup in `src/views`, global stylesheet/static files in `public`, unit tests next to their target files, Playwright route tests under `e2e/tests/routes`, and configuration docs next to user-facing setup instructions.
+Placement should follow ownership: Cloudflare Worker entry and bindings in `src/common/worker.tsx`, shared app wiring in `src/common/app.tsx`, generic helpers in `src/common/helpers`, Obsidian bridge logic in `src/obsidian/helpers`, Obsidian route registration in `src/obsidian/routes`, Obsidian route markup in `src/obsidian/views`, Tailwind source CSS in `src/common/styles.css`, compiled stylesheet/static files in `public`, unit tests next to their target files, Playwright route tests under `e2e/tests/routes`, and configuration docs next to user-facing setup instructions.
 
 For naming and export conventions inside these directories, consult [maintainable-code-guidelines](../maintainable-code-guidelines/SKILL.md).
 
 **Guidelines:**
 
-- MUST place shared parsing, validation, URL, and detection logic in `src/helpers/`.
-- MUST place Hono route registration in `src/routes/`.
-- MUST place shared route views and document metadata helpers in `src/views/`.
-- MUST keep Worker entry and binding-specific setup in `src/worker.tsx`.
-- MUST keep shared structured logging helpers in `src/logger.ts`.
-- MUST keep Sentry event scrubbing under `src/helpers/` with colocated Vitest coverage.
-- MUST place unit tests next to the target file and mirror the target filename, such as `src/helpers/bridge-url.test.ts` for `src/helpers/bridge-url.ts`.
+- MUST place generic shared helpers in `src/common/helpers/`.
+- MUST place Obsidian bridge parsing, validation, URL, storage, URI, and privacy logic in `src/obsidian/helpers/`.
+- MUST place Obsidian Hono route registration in `src/obsidian/routes/`.
+- MUST place Obsidian route views and document metadata helpers in `src/obsidian/views/`.
+- MUST keep Worker entry and binding-specific setup in `src/common/worker.tsx`.
+- MUST keep shared structured logging helpers in `src/common/logger.ts`.
+- MUST keep Tailwind source CSS in `src/common/styles.css` and the compiled `/styles.css` asset in `public/styles.css`.
+- MUST place unit tests next to the target file and mirror the target filename, such as `src/obsidian/helpers/bridge-url.test.ts` for `src/obsidian/helpers/bridge-url.ts`.
 - MUST place Playwright route tests under `e2e/tests/routes/<route>/` and shared Playwright fixtures under `e2e/helpers/`.
 - MUST place static files in `public/`.
 - MUST document environment variable details in `.env.example` and `.dev.vars.example`; README may only point developers to the example file.

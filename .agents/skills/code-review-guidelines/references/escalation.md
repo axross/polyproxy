@@ -44,5 +44,5 @@ Recommended commands should match `package.json`. QA owns the required command g
 - MAY recommend `npm run lint` for Biome lint.
 - MAY recommend `npm test` for Vitest.
 - MAY recommend `npm run build` for the TypeScript production build.
-- MAY recommend `npm test -- 'src/helpers/<file>.test.ts'` for a targeted Vitest file.
+- MAY recommend `npm test -- 'src/obsidian/helpers/<file>.test.ts'` or `npm test -- 'src/common/helpers/<file>.test.ts'` for a targeted Vitest file.
 - MUST NOT recommend nonexistent scripts such as `npm run typecheck`, `npm run test:native`, or `npm run web` unless they have been added to `package.json`.

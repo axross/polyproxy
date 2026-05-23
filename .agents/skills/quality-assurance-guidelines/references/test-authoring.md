@@ -9,7 +9,7 @@ Tests in this repository use Vitest in Node and live next to the helper files th
 **Guidelines:**
 
 - MUST use Vitest APIs (`describe`, `it`, `expect`, `vi`) rather than Jest globals.
-- MUST keep pure helper tests next to the target helper as `src/helpers/<helper>.test.ts` unless a different layout is introduced deliberately.
+- MUST keep pure helper tests next to the target helper under `src/common/helpers/**` or `src/obsidian/helpers/**`.
 - SHOULD mirror the existing assertion style in nearby tests before adding a new pattern.
 - MUST NOT add DOM test harness dependencies without first justifying the dependency and environment change.
 

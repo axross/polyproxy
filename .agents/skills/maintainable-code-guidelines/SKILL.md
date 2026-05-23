@@ -14,9 +14,10 @@ Maintainability depends on keeping route registration, validation, URL construct
 
 **Guidelines:**
 
-- MUST keep reusable parsing, validation, URL building, and user-agent detection in `src/helpers/**`.
-- MUST keep Hono route registration and request branching in `src/routes/**`.
-- MUST keep server-rendered markup and document metadata helpers in `src/views/**`.
+- MUST keep generic reusable helpers in `src/common/helpers/**`.
+- MUST keep Obsidian parsing, validation, URL building, storage, URI, and privacy helpers in `src/obsidian/helpers/**`.
+- MUST keep Obsidian Hono route registration and request branching in `src/obsidian/routes/**`.
+- MUST keep Obsidian server-rendered markup and document metadata helpers in `src/obsidian/views/**`.
 - MUST keep browser-only custom-protocol behavior in narrow client script snippets rendered by Hono JSX.
 - SHOULD use [abstraction-boundaries.md](./references/abstraction-boundaries.md) when a change crosses routes, helpers, views, static assets, or import-boundary concerns.
 
@@ -46,8 +47,8 @@ Names should make ownership clear without adding framework folders this app does
 
 **Guidelines:**
 
-- MUST follow the established `src/helpers`, `src/routes`, and `src/views` layout for app source files.
-- SHOULD keep pure helpers flat under `src/helpers/**` until a real subdomain justifies more structure.
+- MUST follow the established `src/common/**` and `src/obsidian/**` layout for app source files.
+- SHOULD keep pure helpers flat under the owning `helpers/**` directory until a real subdomain justifies more structure.
 - SHOULD use [naming-and-organization.md](./references/naming-and-organization.md) when creating, moving, or renaming files and symbols.
 
 ## Scope Discipline

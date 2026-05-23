@@ -13,6 +13,7 @@ It supports private URL proxy workflows behind normal HTTPS pages. Operational d
 - TypeScript
 - zod
 - Sentry
+- Tailwind CSS
 - Vitest
 - Playwright
 - Biome
@@ -30,6 +31,13 @@ Run the Worker locally with Wrangler:
 
 ```bash
 npm run dev
+```
+
+When iterating on Tailwind classes, run the stylesheet compiler in a separate
+terminal:
+
+```bash
+npm run styles:watch
 ```
 
 Use these checks before handing off changes:

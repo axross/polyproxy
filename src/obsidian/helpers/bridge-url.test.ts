@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { decodeBase64Url } from "./base64url";
+import { decodeBase64Url } from "../../common/helpers/base64url";
 import {
 	buildBridgeUrl,
 	buildShortBridgeUrl,

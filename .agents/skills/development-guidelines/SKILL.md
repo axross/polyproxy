@@ -27,7 +27,7 @@ Change management keeps this small app reviewable by separating behavior, struct
 
 - MUST keep each diff focused on one concern unless the user explicitly asks for a broader change.
 - MUST preserve public proxy behavior during refactors unless the requested change intentionally alters it.
-- SHOULD check existing `src/`, `src/helpers/`, colocated test, README, and `.env.example` patterns before adding structure.
+- SHOULD check existing `src/common/`, `src/obsidian/`, colocated test, README, and `.env.example` patterns before adding structure.
 - SHOULD use [change-management.md](./references/change-management.md) when dependencies, public behavior, or refactoring scope are involved.
 
 ## Verification

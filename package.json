@@ -4,10 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "WRANGLER_LOG_PATH=.wrangler/logs wrangler dev",
+    "styles:build": "tailwindcss -i ./src/common/styles.css -o ./public/styles.css --minify",
+    "styles:watch": "tailwindcss -i ./src/common/styles.css -o ./public/styles.css --watch",
+    "dev": "npm run styles:build && WRANGLER_LOG_PATH=.wrangler/logs wrangler dev",
     "types:worker": "WRANGLER_LOG_PATH=.wrangler/logs wrangler types worker-configuration.d.ts --env-interface CloudflareBindings",
-    "build": "npm run types:worker && tsc -p tsconfig.json && WRANGLER_LOG_PATH=.wrangler/logs wrangler deploy --dry-run",
-    "deploy": "WRANGLER_LOG_PATH=.wrangler/logs wrangler deploy",
+    "build": "npm run styles:build && npm run types:worker && tsc -p tsconfig.json && WRANGLER_LOG_PATH=.wrangler/logs wrangler deploy --dry-run",
+    "deploy": "npm run styles:build && WRANGLER_LOG_PATH=.wrangler/logs wrangler deploy",
     "lint": "biome lint .",
     "test": "vitest run",
     "test:e2e": "playwright test"
@@ -21,7 +23,9 @@
   "devDependencies": {
     "@biomejs/biome": "^2.4.10",
     "@playwright/test": "^1.60.0",
+    "@tailwindcss/cli": "^4.3.0",
     "@types/node": "^20",
+    "tailwindcss": "^4.3.0",
     "typescript": "^5",
     "vitest": "^4.1.7",
     "wrangler": "^4.94.0"

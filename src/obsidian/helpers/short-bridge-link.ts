@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { encodeBase64Url } from "./base64url";
+import { encodeBase64Url } from "../../common/helpers/base64url";
 import { decodeBridgeQuerySafe } from "./decode-link";
 import type { Result } from "./types";
 import { maxBridgeUrlLength } from "./validation";

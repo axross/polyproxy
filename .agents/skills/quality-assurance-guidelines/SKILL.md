@@ -15,7 +15,7 @@ The standard gate is `npm run lint`, `npm test`, and `npm run build`, selected a
 **Guidelines:**
 
 - MUST require `npm run lint` for TypeScript, Hono JSX, route, config, or style-adjacent changes.
-- MUST require `npm test` when `src/helpers/**` logic or tests change.
+- MUST require `npm test` when helper logic or tests under `src/common/helpers/**` or `src/obsidian/helpers/**` change.
 - MUST require `npm run test:e2e` when route rendering, metadata, crawler branches, fallback UI, responsive layout, or Playwright config changes.
 - MUST require `npm run build` when Hono routes, metadata, middleware, config, dependency, or TypeScript-signature risk is present.
 - SHOULD use [lint-and-format-gate.md](./references/lint-and-format-gate.md) when deciding whether missing or failed checks block a change.

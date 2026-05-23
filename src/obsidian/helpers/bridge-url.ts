@@ -1,4 +1,4 @@
-import { encodeBase64Url } from "./base64url";
+import { encodeBase64Url } from "../../common/helpers/base64url";
 import { bridgeRoutePath } from "./bridge-route";
 import { isShortBridgeKey } from "./short-bridge-link";
 import type { BridgePayload } from "./types";

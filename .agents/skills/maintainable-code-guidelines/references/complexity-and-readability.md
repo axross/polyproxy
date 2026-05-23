@@ -12,16 +12,16 @@ The Obsidian route has distinct invalid-link, crawler, and human experiences. Ho
 - MUST flag nested conditional rendering that obscures invalid-link, bot, and human rendering paths. Prefer early returns or small named view functions.
 - SHOULD keep crawler-only markup simple enough to audit for accidental redirect behavior.
 
-## CSS Complexity
+## Tailwind Styling Complexity
 
-Route styling should stay close to the view that owns the markup. Plain CSS in `public/styles.css` is the current styling surface, with stable classes used by Hono JSX views.
+Route styling should stay close to the view that owns the markup. Tailwind utilities in Hono JSX are the current styling surface; `src/common/styles.css` is only the Tailwind input, and `public/styles.css` is the generated static asset.
 
 **Guidelines:**
 
-- SHOULD flag CSS classes or selectors that mix unrelated view levels, such as page shell, panel, and button styling in one block.
-- SHOULD flag duplicated style groups across sibling views when a small shared class would be clearer.
+- SHOULD flag Tailwind class constants that mix unrelated view levels, such as page shell, panel, and button styling in one value.
+- SHOULD flag duplicated utility groups across sibling views when a small shared class constant would be clearer.
 - MUST keep page-level spacing and layout separate from child element shape, color, and interaction styles.
-- SHOULD verify text still fits at narrow mobile widths when copy or CSS changes.
+- SHOULD verify text still fits at narrow mobile widths when copy or Tailwind classes change.
 
 ## Control Flow
 

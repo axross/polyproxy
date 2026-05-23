@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { encodeBase64Url } from "./base64url";
+import { encodeBase64Url } from "../../common/helpers/base64url";
 import {
 	bridgeQueryTtlSeconds,
 	type BridgeQueryStore,

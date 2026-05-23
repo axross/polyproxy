@@ -36,4 +36,4 @@ Sentry reports unexpected runtime failures through Hono/Cloudflare middleware. E
 
 - MUST keep Sentry event scrubbing aligned with the bridge privacy contract before enabling or expanding captured data.
 - MUST NOT manually report expected invalid-link results to Sentry.
-- SHOULD use [error-tracking.md](./references/error-tracking.md) when changing `src/worker.tsx`, Sentry middleware wiring, `src/app.tsx` error handling, or Sentry dependencies.
+- SHOULD use [error-tracking.md](./references/error-tracking.md) when changing `src/common/worker.tsx`, Sentry middleware wiring, `src/common/app.tsx` error handling, or Sentry dependencies.

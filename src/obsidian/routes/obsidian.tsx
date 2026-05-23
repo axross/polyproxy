@@ -1,5 +1,6 @@
 import { Hono } from "hono";
-import { isBotUserAgent } from "../helpers/bot-detection";
+import { isBotUserAgent } from "../../common/helpers/bot-detection";
+import type { HonoEnv } from "../../common/hono-env";
 import {
 	buildBridgeUrl,
 	buildShortBridgeUrl,
@@ -16,7 +17,6 @@ import {
 	storeShortBridgeQuery,
 } from "../helpers/short-bridge-link";
 import type { Result } from "../helpers/types";
-import type { HonoEnv } from "../hono-env";
 import {
 	Document,
 	invalidBridgeMetadata,

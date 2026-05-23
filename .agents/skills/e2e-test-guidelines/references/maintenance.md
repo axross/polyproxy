@@ -8,9 +8,9 @@ E2E tests are valuable when the behavior crosses server rendering, browser rende
 
 | Changed surface | Expected E2E evidence |
 | --------------- | --------------------- |
-| `src/routes/obsidian.tsx` | Overview, valid, invalid, metadata, and crawler rendering route tests |
-| `src/views/obsidian.tsx` | Fallback button `href`, visible status, and page content tests |
-| `public/styles.css` | Desktop and Pixel project run evidence |
+| `src/obsidian/routes/obsidian.tsx` | Overview, valid, invalid, metadata, and crawler rendering route tests |
+| `src/obsidian/views/obsidian.tsx` | Fallback button `href`, visible status, and page content tests |
+| `src/common/styles.css` or `public/styles.css` | Desktop and Pixel project run evidence |
 | `playwright.config.ts` | Full `npm run test:e2e` run or documented blocker |
 
 **Guidelines:**

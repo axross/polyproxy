@@ -14,6 +14,7 @@
       "!coverage",
       "!dist",
       "!build",
+      "!public/styles.css",
       "!worker-configuration.d.ts"
     ]
   },
@@ -26,6 +27,11 @@
     "globals": [
       "CloudflareBindings"
     ]
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
   },
   "linter": {
     "enabled": true,
@@ -362,8 +368,8 @@
     },
     {
       "includes": [
-        "src/app.tsx",
-        "src/worker.tsx"
+        "src/common/app.tsx",
+        "src/common/worker.tsx"
       ],
       "linter": {
         "rules": {
@@ -376,7 +382,7 @@
     },
     {
       "includes": [
-        "src/views/**/*.tsx"
+        "src/obsidian/views/**/*.tsx"
       ],
       "linter": {
         "rules": {
@@ -439,7 +445,7 @@
     },
     {
       "includes": [
-        "src/logger.ts"
+        "src/common/logger.ts"
       ],
       "linter": {
         "rules": {
@@ -452,9 +458,9 @@
     },
     {
       "includes": [
-        "src/hono-env.ts",
-        "src/helpers/sentry-privacy.ts",
-        "src/helpers/sentry-privacy.test.ts"
+        "src/common/hono-env.ts",
+        "src/obsidian/helpers/sentry-privacy.ts",
+        "src/obsidian/helpers/sentry-privacy.test.ts"
       ],
       "linter": {
         "rules": {

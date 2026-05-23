@@ -47,7 +47,7 @@ Scopes should be coarse enough to stay stable as files move. Prefer the broad re
 
 | Scope | Use for |
 | ----- | ------- |
-| `app` | User-facing app behavior, Hono routes, route UI, `src/helpers/**`, and CSS |
+| `app` | User-facing app behavior, Hono routes, route UI, `src/common/**`, `src/obsidian/**`, and CSS |
 | `skills` | `.agents/skills/**` and agent workflow guidance in `AGENTS.md` |
 | `docs` | README, PRDs, and non-skill documentation |
 | `config` | Hono runtime, Vitest, TypeScript, lint, environment examples, and project configuration |

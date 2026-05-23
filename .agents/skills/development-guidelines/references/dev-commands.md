@@ -23,6 +23,8 @@ The app runs locally through Wrangler so development uses the same Worker runtim
 | Command | Purpose |
 | ------- | ------- |
 | `npm run dev` | Start the Cloudflare Worker locally with `wrangler dev`. |
+| `npm run styles:build` | Compile Tailwind utilities from `src/common/styles.css` to `public/styles.css`. |
+| `npm run styles:watch` | Watch Tailwind sources and refresh the generated stylesheet while editing UI classes. |
 | `npm run types:worker` | Regenerate `worker-configuration.d.ts` from `wrangler.jsonc`. |
 | `npm run build` | Regenerate Worker types, compile TypeScript, and run `wrangler deploy --dry-run`. |
 | `npm run deploy` | Deploy the Worker with Wrangler. |
@@ -30,6 +32,7 @@ The app runs locally through Wrangler so development uses the same Worker runtim
 **Guidelines:**
 
 - MUST use Wrangler scripts for local development and deployment; do not reintroduce a separate Node server script unless the user explicitly asks for a second runtime.
+- MUST regenerate `public/styles.css` with `npm run styles:build` after changing Tailwind classes or `src/common/styles.css`.
 - MUST run `npm run types:worker` after changing Worker bindings, compatibility flags, or Wrangler module rules.
 - SHOULD use `npm run dev` for interactive route and UI checks.
 
@@ -41,7 +44,7 @@ The available quality commands are lint, Vitest, Playwright, and build. There is
 | ------- | ------- |
 | `npm run lint` | Run Biome lint with TypeScript and Hono JSX rules. |
 | `npm test` | Run the Vitest suite once. |
-| `npm test -- 'src/helpers/bridge-url.test.ts'` | Run one test file. |
+| `npm test -- 'src/obsidian/helpers/bridge-url.test.ts'` | Run one test file. |
 | `npm test -- --watch` | Run Vitest in watch mode when iterating locally. |
 | `npm run test:e2e` | Run the Playwright E2E suite. |
 | `npm run test:e2e -- e2e/tests/routes/ob/page.test.ts` | Run one Playwright test file. |

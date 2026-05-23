@@ -8,20 +8,21 @@ Route files should orchestrate Hono request handling and metadata while pure hel
 
 ```mermaid
 flowchart LR
-  Query["/ob/:query"] --> Route["src/routes/obsidian.tsx"]
-  Route --> Decode["src/helpers/decode-link.ts"]
-  Decode --> Validate["src/helpers/validation.ts"]
-  Validate --> Metadata["src/views/metadata.tsx"]
-  Validate --> Uri["src/helpers/obsidian-uri.ts"]
-  Uri --> View["src/views/obsidian.tsx"]
+  Query["/ob/:query"] --> Route["src/obsidian/routes/obsidian.tsx"]
+  Route --> Decode["src/obsidian/helpers/decode-link.ts"]
+  Decode --> Validate["src/obsidian/helpers/validation.ts"]
+  Validate --> Metadata["src/obsidian/views/metadata.tsx"]
+  Validate --> Uri["src/obsidian/helpers/obsidian-uri.ts"]
+  Uri --> View["src/obsidian/views/obsidian.tsx"]
 ```
 
 **Guidelines:**
 
-- MUST keep reusable parsing, validation, URL building, and user-agent detection in `src/helpers/**`.
-- MUST keep route registration and request branching under `src/routes/**`.
-- MUST keep Hono JSX view markup and document metadata helpers under `src/views/**`.
-- SHOULD keep `src/routes/obsidian.tsx` as orchestration glue over helpers and views, not the place where base64, schema, or URI logic is reimplemented.
+- MUST keep generic reusable helpers in `src/common/helpers/**`.
+- MUST keep Obsidian parsing, validation, URL building, storage, URI, and privacy helpers in `src/obsidian/helpers/**`.
+- MUST keep Obsidian route registration and request branching under `src/obsidian/routes/**`.
+- MUST keep Obsidian Hono JSX view markup and document metadata helpers under `src/obsidian/views/**`.
+- SHOULD keep `src/obsidian/routes/obsidian.tsx` as orchestration glue over helpers and views, not the place where base64, schema, or URI logic is reimplemented.
 - MUST NOT duplicate `BridgePayload` validation in routes or views; use `validateBridgePayload()` or `decodeBridgeQuerySafe()`.
 
 ## Server vs Browser Boundaries
@@ -42,7 +43,7 @@ Bridge payloads and URLs have one canonical construction path. Duplicating that 
 
 - MUST use `buildObsidianUri()` for `obsidian://open` links.
 - MUST use `buildBridgeUrl()` for public HTTPS proxy links.
-- MUST keep field limits in `src/helpers/validation.ts` rather than scattering constants across routes, views, and tests.
+- MUST keep field limits in `src/obsidian/helpers/validation.ts` rather than scattering constants across routes, views, and tests.
 - SHOULD add tests beside any helper behavior change before changing route code that depends on it.
 
 ## Imports

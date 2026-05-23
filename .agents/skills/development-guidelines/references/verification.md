@@ -8,18 +8,18 @@ Use the changed file as the starting point for verification. Helper changes usua
 
 | Change type | Output surface at risk |
 | ----------- | ---------------------- |
-| `src/helpers/base64url.ts` | Accepted/rejected query strings, canonical round trips |
-| `src/helpers/validation.ts` | Payload limits, path safety, source URL protocols |
-| `src/helpers/obsidian-uri.ts` | Custom protocol URI escaping and vault/path behavior |
-| `src/helpers/bridge-url.ts` | Public HTTPS URL shape and max URL length |
-| `src/helpers/short-bridge-link.ts` | Short-key generation, KV key shape, TTL, and stored-query validation |
-| `src/helpers/bot-detection.ts` | Discord/crawler vs human rendering path |
-| `src/routes/obsidian.tsx` | Metadata, invalid-link rendering, crawler HTML, human UI, E2E route behavior |
-| `src/views/obsidian.tsx` | Browser-visible route UI and custom-protocol fallback |
-| `src/views/metadata.tsx` | Document title, robots, Open Graph, and Twitter metadata |
-| `public/styles.css` | Visual rendering across desktop and mobile browser widths |
+| `src/common/helpers/base64url.ts` | Accepted/rejected query strings, canonical round trips |
+| `src/obsidian/helpers/validation.ts` | Payload limits, path safety, source URL protocols |
+| `src/obsidian/helpers/obsidian-uri.ts` | Custom protocol URI escaping and vault/path behavior |
+| `src/obsidian/helpers/bridge-url.ts` | Public HTTPS URL shape and max URL length |
+| `src/obsidian/helpers/short-bridge-link.ts` | Short-key generation, KV key shape, TTL, and stored-query validation |
+| `src/common/helpers/bot-detection.ts` | Discord/crawler vs human rendering path |
+| `src/obsidian/routes/obsidian.tsx` | Metadata, invalid-link rendering, crawler HTML, human UI, E2E route behavior |
+| `src/obsidian/views/obsidian.tsx` | Browser-visible route UI and custom-protocol fallback |
+| `src/obsidian/views/metadata.tsx` | Document title, robots, Open Graph, and Twitter metadata |
+| `src/common/styles.css` or `public/styles.css` | Tailwind generation and visual rendering across desktop and mobile browser widths |
 | `playwright.config.ts` or `e2e/**` | Browser test coverage, server startup, traces, screenshots |
-| `src/app.tsx`, `src/worker.tsx`, `wrangler.jsonc`, or dependencies | Middleware, static assets, Worker bundle output, and runtime behavior |
+| `src/common/app.tsx`, `src/common/worker.tsx`, `wrangler.jsonc`, or dependencies | Middleware, static assets, Worker bundle output, and runtime behavior |
 
 **Guidelines:**
 
@@ -59,7 +59,7 @@ For test authoring and QA evidence rules, consult [quality-assurance-guidelines]
 
 **Guidelines:**
 
-- SHOULD cover pure helpers in `src/helpers/**` with unit tests.
+- SHOULD cover pure helpers in `src/common/helpers/**` and `src/obsidian/helpers/**` with unit tests.
 - MUST include valid and failing payload cases when validation behavior changes.
 - SHOULD include malformed base64url, invalid JSON, unsafe paths, over-limit fields, and unsafe source URL protocols in validation tests when relevant.
 - SHOULD cover Hono route behavior with Playwright tests under `e2e/tests/routes/**`.

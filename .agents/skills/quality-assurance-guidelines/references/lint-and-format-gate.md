@@ -9,7 +9,7 @@ Required commands map to the changed surface. Helper changes need Vitest, route/
 **Guidelines:**
 
 - MUST run `npm run lint` for TypeScript, Hono JSX, route, config, or style-adjacent changes.
-- MUST run `npm test` when `src/helpers/**` logic or tests change.
+- MUST run `npm test` when helper logic or tests under `src/common/helpers/**` or `src/obsidian/helpers/**` change.
 - MUST run `npm run test:e2e` when `e2e/**`, `playwright.config.ts`, route rendering, metadata, crawler behavior, responsive layout, or browser fallback UI changes.
 - MUST run `npm run build` when Hono routes, metadata, middleware, config, dependencies, or TypeScript signatures change.
 - SHOULD run lint, Vitest, Playwright, and build before handing off a broad change that touches both helper logic and route behavior.

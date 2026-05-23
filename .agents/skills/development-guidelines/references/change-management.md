@@ -26,9 +26,9 @@ A refactor is behavior-preserving by definition.
 
 Before introducing a new pattern, MUST verify that no existing pattern already covers the use case.
 
-- Check `src/helpers/` before creating a new shared helper.
+- Check `src/common/helpers/` and `src/obsidian/helpers/` before creating a new helper.
 - Check nearby `*.test.ts` files before choosing assertion style or fixture shape.
-- Check the owning route under `src/routes/` and view under `src/views/` before adding route UI or CSS.
+- Check the owning route under `src/obsidian/routes/` and view under `src/obsidian/views/` before adding route UI or CSS.
 - Check `README.md` and `.env.example` before adding configuration.
 
 **Guidelines:**

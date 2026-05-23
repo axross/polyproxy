@@ -16,7 +16,7 @@ Useful docs for common changes:
 **Guidelines:**
 
 - MUST read current Hono docs before changing route registration, middleware order, JSX rendering, static asset serving, or Cloudflare Worker adapter behavior.
-- MUST read current Sentry Hono/Cloudflare docs before changing `src/worker.tsx`, Sentry middleware wiring, or Sentry dependencies.
+- MUST read current Sentry Hono/Cloudflare docs before changing `src/common/worker.tsx`, Sentry middleware wiring, or Sentry dependencies.
 - SHOULD cite the external docs used in your final summary when a framework or Sentry API choice depends on them.
 
 ## Check Sequence
@@ -40,10 +40,10 @@ The shared helper layer depends on narrow, explicit types so proxy payloads, val
 **Guidelines:**
 
 - MUST NOT introduce `any`, `as any`, or `as unknown as <T>` unless the boundary is genuinely unknowable and the rationale is documented.
-- SHOULD declare return types on exported helpers in `src/helpers/**`.
+- SHOULD declare return types on exported helpers in `src/common/helpers/**` and `src/obsidian/helpers/**`.
 - SHOULD use `import type { ... }` for symbols used only as types.
 - MUST NOT use `// @ts-ignore`. Use `// @ts-expect-error <reason>` only when the upstream type issue is real and temporary.
-- MUST keep `BridgePayload` and `Result<T>` centralized in `src/helpers/types.ts`; do not redeclare those shapes in route files or tests.
+- MUST keep `BridgePayload` and `Result<T>` centralized in `src/obsidian/helpers/types.ts`; do not redeclare those shapes in route files or tests.
 
 ## Hono Route Boundaries
 
@@ -51,7 +51,7 @@ Hono route modules should orchestrate request handling while helpers own reusabl
 
 **Guidelines:**
 
-- MUST keep decoding, validation, URL construction, and bot decisions in `src/routes/**` orchestration or pure `src/helpers/**` helpers.
+- MUST keep decoding, validation, URL construction, and bot decisions in `src/obsidian/routes/**` orchestration or pure helpers under `src/common/helpers/**` and `src/obsidian/helpers/**`.
 - MUST keep browser APIs (`window`, `document`, custom-protocol redirects) inside static client script snippets rendered by Hono JSX, not inside shared helpers.
 - MUST NOT import Node-only helpers into browser script snippets.
 - SHOULD pass already-built strings and validated payloads into Hono JSX views.

@@ -47,7 +47,7 @@ Before adding new code, check whether the repository, platform, or existing depe
 
 **Guidelines:**
 
-- MUST check whether a helper already exists in `src/helpers/**`.
+- MUST check whether a helper already exists in `src/common/helpers/**` or `src/obsidian/helpers/**`.
 - MUST check whether a colocated test pattern already exists next to related code.
 - SHOULD prefer built-in Web, Node, Hono, or zod APIs when they solve the problem cleanly.
 - SHOULD check whether the change requires README, `.env.example`, or skill guidance updates.

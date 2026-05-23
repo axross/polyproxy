@@ -4,12 +4,12 @@ Apply these rules when writing, reviewing, or modifying code that emits diagnost
 
 ## Current Logging Posture
 
-The default posture is quiet. Invalid public links, crawler traffic, and blocked custom-protocol launches are expected operating conditions, not automatic log events. Worker diagnostics flow through structured `console.*` objects from `src/logger.ts` so Cloudflare Workers Logs can index fields.
+The default posture is quiet. Invalid public links, crawler traffic, and blocked custom-protocol launches are expected operating conditions, not automatic log events. Worker diagnostics flow through structured `console.*` objects from `src/common/logger.ts` so Cloudflare Workers Logs can index fields.
 
 **Guidelines:**
 
 - SHOULD keep the app quiet during normal operation. A public proxy route may receive bot traffic and invalid links; those are not automatically worth logging.
-- SHOULD use the structured logger in `src/logger.ts` for application diagnostics instead of ad hoc string logs.
+- SHOULD use the structured logger in `src/common/logger.ts` for application diagnostics instead of ad hoc string logs.
 - MAY use direct `console.error` or `console.warn` only for a narrow fallback where importing the logger would create an invalid runtime boundary.
 - SHOULD NOT add client-side console logs for normal custom-protocol launch behavior.
 
@@ -34,7 +34,7 @@ Bridge URLs may encode note metadata. Logs must treat decoded payloads and gener
 - MUST NOT log decoded `BridgePayload` objects.
 - MUST NOT log vault names, note paths, titles, summaries, source URLs, raw base64url query strings, generated proxy URLs, or `obsidian://` URIs.
 - SHOULD log only coarse context such as route name, query length, field name, or validation failure category.
-- MUST extend `src/logger.ts` redaction when introducing a new diagnostic field that may contain bridge metadata or generated URLs.
+- MUST extend `src/common/logger.ts` redaction when introducing a new diagnostic field that may contain bridge metadata or generated URLs.
 
 ## Diagnostic Shape
 
