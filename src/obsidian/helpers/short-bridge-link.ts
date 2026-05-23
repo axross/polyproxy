@@ -1,4 +1,4 @@
-import { z } from "zod";
+import z from "zod";
 
 import { encodeBase64Url } from "../../common/helpers/base64url";
 import { decodeBridgeQuerySafe } from "./decode-link";
@@ -14,14 +14,12 @@ const storageKeyPrefix = "ob:";
 
 export const bridgeQueryTtlSeconds = bridgeQueryTtlDays * secondsPerDay;
 
-const shortenBridgeRequestSchema = z
-	.object({
-		query: z
-			.string()
-			.min(1, "query is required")
-			.max(maxBridgeUrlLength, "query is too long"),
-	})
-	.strict();
+const ShortenBridgeRequest = z.strictObject({
+	query: z
+		.string()
+		.min(1, "query is required")
+		.max(maxBridgeUrlLength, "query is too long"),
+});
 
 export interface BridgeQueryStore {
 	get(key: string): Promise<string | null>;
@@ -40,7 +38,7 @@ export class ShortBridgeLinkError extends Error {
 }
 
 export function parseShortenBridgeRequest(body: unknown): Result<string> {
-	const request = shortenBridgeRequestSchema.safeParse(body);
+	const request = ShortenBridgeRequest.safeParse(body);
 
 	if (!request.success) {
 		return {

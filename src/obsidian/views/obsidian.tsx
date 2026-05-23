@@ -4,7 +4,7 @@ import {
 	bridgeRouteDisplayPath,
 	bridgeRoutePath,
 } from "../helpers/bridge-route";
-import type { BridgePayload } from "../helpers/types";
+import type { BridgePayload } from "../helpers/validation";
 import { invalidDescription, invalidTitle, siteName } from "./metadata";
 
 const focusRingClass =

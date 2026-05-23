@@ -1,6 +1,6 @@
-import { z } from "zod";
+import z from "zod";
 
-import type { BridgePayload, Result } from "./types";
+import type { Result } from "./types";
 
 export const fieldLimits = {
 	vault: 100,
@@ -19,19 +19,53 @@ export class BridgeValidationError extends Error {
 	}
 }
 
-export const bridgePayloadSchema = z
+export interface BridgePayload {
+	vault: string;
+	path: string;
+	title: string;
+	summary: string;
+	sourceUrl?: string;
+}
+
+type RequiredTextField = "path" | "summary" | "title" | "vault";
+
+const SourceUrl = z.preprocess(
+	(value) => {
+		if (typeof value !== "string") {
+			return value;
+		}
+
+		const trimmed = value.trim();
+		return trimmed.length === 0 ? undefined : trimmed;
+	},
+	z
+		.string()
+		.max(fieldLimits.sourceUrl, "sourceUrl is too long")
+		.refine(hasNoNullByte, {
+			error: "sourceUrl contains a null byte",
+		})
+		.pipe(
+			z.url({
+				error: "sourceUrl must be http or https",
+				protocol: /^https?$/,
+			}),
+		)
+		.optional(),
+);
+
+export const BridgePayload = z
 	.object({
-		vault: trimmedField("vault", fieldLimits.vault),
-		path: trimmedField("path", fieldLimits.path)
+		vault: requiredTrimmedText("vault", fieldLimits.vault),
+		path: requiredTrimmedText("path", fieldLimits.path)
 			.refine((path) => !path.startsWith("/") && !path.startsWith("\\"), {
-				message: "path must be vault-relative",
+				error: "path must be vault-relative",
 			})
 			.refine((path) => !path.split("/").some((segment) => segment === ".."), {
-				message: "path contains a parent segment",
+				error: "path contains a parent segment",
 			}),
-		title: metadataField("title", fieldLimits.title),
-		summary: metadataField("summary", fieldLimits.summary),
-		sourceUrl: sourceUrlField(),
+		title: metadataText("title", fieldLimits.title),
+		summary: metadataText("summary", fieldLimits.summary),
+		sourceUrl: SourceUrl,
 	})
 	.transform(({ sourceUrl, ...payload }) =>
 		sourceUrl === undefined
@@ -39,7 +73,7 @@ export const bridgePayloadSchema = z
 			: {
 					...payload,
 					sourceUrl,
-				},
+		},
 	);
 
 export function validateBridgePayload(payload: unknown): BridgePayload {
@@ -55,7 +89,7 @@ export function validateBridgePayload(payload: unknown): BridgePayload {
 export function validateBridgePayloadSafe(
 	payload: unknown,
 ): Result<BridgePayload> {
-	const result = bridgePayloadSchema.safeParse(payload);
+	const result = BridgePayload.safeParse(payload);
 
 	if (!result.success) {
 		return {
@@ -74,22 +108,18 @@ export function normalizeMetadataText(value: string): string {
 	return value.trim().replace(/\s+/g, " ");
 }
 
-function trimmedField(field: "vault" | "path", maxLength: number) {
+function requiredTrimmedText(field: RequiredTextField, maxLength: number) {
 	return z
 		.string()
-		.transform((value) => value.trim())
-		.pipe(
-			z
-				.string()
-				.min(1, `${field} is required`)
-				.max(maxLength, `${field} is too long`)
-				.refine((value) => !value.includes("\0"), {
-					message: `${field} contains a null byte`,
-				}),
-		);
+		.trim()
+		.min(1, `${field} is required`)
+		.max(maxLength, `${field} is too long`)
+		.refine(hasNoNullByte, {
+			error: `${field} contains a null byte`,
+		});
 }
 
-function metadataField(field: "title" | "summary", maxLength: number) {
+function metadataText(field: "summary" | "title", maxLength: number) {
 	return z
 		.string()
 		.transform(normalizeMetadataText)
@@ -98,40 +128,12 @@ function metadataField(field: "title" | "summary", maxLength: number) {
 				.string()
 				.min(1, `${field} is required`)
 				.max(maxLength, `${field} is too long`)
-				.refine((value) => !value.includes("\0"), {
-					message: `${field} contains a null byte`,
+				.refine(hasNoNullByte, {
+					error: `${field} contains a null byte`,
 				}),
 		);
 }
 
-function sourceUrlField() {
-	return z.preprocess(
-		(value) => {
-			if (typeof value !== "string") {
-				return value;
-			}
-
-			const trimmed = value.trim();
-			return trimmed.length === 0 ? undefined : trimmed;
-		},
-		z
-			.string()
-			.max(fieldLimits.sourceUrl, "sourceUrl is too long")
-			.refine((value) => !value.includes("\0"), {
-				message: "sourceUrl contains a null byte",
-			})
-			.refine(isHttpUrl, {
-				message: "sourceUrl must be http or https",
-			})
-			.optional(),
-	);
-}
-
-function isHttpUrl(value: string): boolean {
-	try {
-		const url = new URL(value);
-		return url.protocol === "https:" || url.protocol === "http:";
-	} catch {
-		return false;
-	}
+function hasNoNullByte(value: string): boolean {
+	return !value.includes("\0");
 }

@@ -1,8 +1,11 @@
 import { encodeBase64Url } from "../../common/helpers/base64url";
 import { bridgeRoutePath } from "./bridge-route";
 import { isShortBridgeKey } from "./short-bridge-link";
-import type { BridgePayload } from "./types";
-import { maxBridgeUrlLength, validateBridgePayload } from "./validation";
+import {
+	type BridgePayload,
+	maxBridgeUrlLength,
+	validateBridgePayload,
+} from "./validation";
 
 export class BridgeUrlError extends Error {
 	constructor(message: string) {

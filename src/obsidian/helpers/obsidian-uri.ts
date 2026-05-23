@@ -1,4 +1,4 @@
-import type { BridgePayload } from "./types";
+import type { BridgePayload } from "./validation";
 
 export function buildObsidianUri(
 	payload: Pick<BridgePayload, "vault" | "path">,

@@ -1,6 +1,6 @@
 import { decodeBase64Url } from "../../common/helpers/base64url";
-import type { BridgePayload, Result } from "./types";
-import { validateBridgePayload } from "./validation";
+import type { Result } from "./types";
+import { type BridgePayload, validateBridgePayload } from "./validation";
 
 export class BridgeDecodeError extends Error {
 	constructor(message: string) {

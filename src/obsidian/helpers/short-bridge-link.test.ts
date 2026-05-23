@@ -10,7 +10,7 @@ import {
 	storeShortBridgeQuery,
 	toShortBridgeStorageKey,
 } from "./short-bridge-link";
-import type { BridgePayload } from "./types";
+import type { BridgePayload } from "./validation";
 
 const payload: BridgePayload = {
 	vault: "Personal",

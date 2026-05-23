@@ -6,7 +6,7 @@ import {
 	buildShortBridgeUrl,
 	getConfiguredBaseUrl,
 } from "./bridge-url";
-import type { BridgePayload } from "./types";
+import type { BridgePayload } from "./validation";
 
 const payload: BridgePayload = {
 	vault: "Personal",

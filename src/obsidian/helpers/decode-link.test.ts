@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { encodeBase64Url } from "../../common/helpers/base64url";
 import { decodeBridgeQuery, decodeBridgeQuerySafe } from "./decode-link";
-import type { BridgePayload } from "./types";
+import type { BridgePayload } from "./validation";
 
 const payload: BridgePayload = {
 	vault: "Personal",
