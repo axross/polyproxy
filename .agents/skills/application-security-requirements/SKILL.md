@@ -1,12 +1,12 @@
 ---
 name: application-security-requirements
 description: |
-  OWASP-framed security and privacy rules for this small Hono URL proxy. Use when writing or reviewing code that handles proxy payloads, base64url decoding, Obsidian URI construction, source URLs, Open Graph metadata, environment variables, robots/indexing behavior, or npm dependency changes.
+  OWASP-framed security and privacy rules for this small Hono URL proxy. Use when writing or reviewing code that handles proxy payloads, base64url decoding, KV short-link storage, Obsidian URI construction, source URLs, Open Graph metadata, environment variables, robots/indexing behavior, or npm dependency changes.
 ---
 
 # Application Security Requirements
 
-Apply these rules when reviewing the security implications of any code change in this project. The app is public and stateless; most risk comes from treating encoded URL data as trusted, leaking target metadata, or adding unnecessary dependencies.
+Apply these rules when reviewing the security implications of any code change in this project. The app is public and stores short Obsidian bridge links in Workers KV for 30 days; most risk comes from treating encoded URL data as trusted, leaking target metadata, omitting expiry, or adding unnecessary dependencies.
 
 ## Secret and Environment-Variable Handling
 
@@ -30,13 +30,13 @@ Every proxy URL is attacker-controlled input until it passes the route's decodin
 
 ## Privacy and Exposure Control
 
-Base64url is obfuscation, not access control. Anyone with a proxy URL can decode its vault, path, title, summary, and optional source URL.
+Base64url and short keys are obfuscation, not access control. Anyone with a live short URL can resolve its vault, path, title, summary, and optional source URL through the proxy until the KV entry expires.
 
 **Guidelines:**
 
 - SHOULD read [access-control.md](./references/access-control.md) when changing public route behavior, crawler behavior, indexing metadata, UI exposure, storage, or auth assumptions.
 - MUST NOT claim proxy URLs are private, encrypted, authenticated, or secure.
-- MUST keep the app stateless unless the user explicitly accepts a product-scope change.
+- MUST keep short-link persistence limited to validated Obsidian bridge queries with the configured 30-day KV TTL unless the user explicitly accepts a product-scope change.
 
 ## Supply Chain
 

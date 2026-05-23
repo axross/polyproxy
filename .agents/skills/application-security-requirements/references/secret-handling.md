@@ -35,7 +35,7 @@ Decoded payloads contain personal note metadata. Diagnostics may report categori
 **Guidelines:**
 
 - MUST NOT log decoded `BridgePayload`, vault name, note path, title, summary, source URL, or generated `obsidian://` URI.
-- MUST NOT send decoded bridge metadata, raw `/ob/[query]` values, generated proxy URLs, request headers, cookies, request bodies, or `obsidian://` URIs to Sentry.
+- MUST NOT send decoded bridge metadata, raw `/ob/[key]` or legacy `/ob/[query]` values, generated proxy URLs, request headers, cookies, request bodies, or `obsidian://` URIs to Sentry.
 - MUST keep Sentry scrubbing tests aligned with any new captured field that can carry bridge metadata.
 - SHOULD log only coarse diagnostics such as query length, validation failure category, or route name.
 - MUST NOT add analytics or third-party telemetry that receives decoded note metadata without explicit approval.

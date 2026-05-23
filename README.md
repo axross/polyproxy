@@ -1,6 +1,6 @@
 # polyproxy
 
-`polyproxy` is a small, stateless URL proxy server for `open.axross.dev`.
+`polyproxy` is a small URL proxy server for `open.axross.dev`.
 
 It supports private URL proxy workflows behind normal HTTPS pages. Operational details are intentionally not documented here.
 
@@ -8,6 +8,7 @@ It supports private URL proxy workflows behind normal HTTPS pages. Operational d
 
 - Hono
 - Cloudflare Workers
+- Cloudflare Workers KV
 - Wrangler
 - TypeScript
 - zod

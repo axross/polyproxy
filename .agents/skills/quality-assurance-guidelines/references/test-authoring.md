@@ -21,7 +21,7 @@ Bridge helper tests should cover both successful behavior and malformed external
 
 - SHOULD cover UTF-8 round trips, URL-safe output, malformed characters, impossible padding length, and non-canonical encodings in `base64url` tests.
 - SHOULD cover required fields, field limits, whitespace normalization, null-byte rejection, vault-relative path rules, parent segment rejection, and `sourceUrl` protocol filtering in `validation` tests.
-- SHOULD cover base URL normalization, payload validation, `/ob/[query]` path shape, and max URL length errors in `bridge-url` tests.
+- SHOULD cover base URL normalization, payload validation, `/ob/[query]` legacy path shape, `/ob/[key]` short-link path shape, and max URL length errors in `bridge-url` tests.
 - SHOULD cover empty query, invalid base64url, invalid JSON, schema failure, and valid payload success in `decode-link` tests.
 - SHOULD cover `encodeURIComponent` behavior for vault and path without double-encoding in `obsidian-uri` tests.
 - SHOULD cover known crawler user agents and ordinary browser user agents in `bot-detection` tests.

@@ -1,7 +1,7 @@
 ---
 name: observability-guidelines
 description: |
-  Rules for error handling, structured logging, and Sentry error tracking in this stateless Hono URL proxy. Use when code decodes external payloads, handles expected invalid links, throws route/helper errors, logs runtime diagnostics, changes instrumentation files, or considers adding analytics or telemetry.
+  Rules for error handling, structured logging, and Sentry error tracking in this Hono URL proxy. Use when code decodes external payloads, handles expected invalid links, touches KV-backed bridge resolution, throws route/helper errors, logs runtime diagnostics, changes instrumentation files, or considers adding analytics or telemetry.
 ---
 
 # Observability Guidelines

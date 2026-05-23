@@ -2,9 +2,9 @@
 
 ## Project Overview
 
-This repository is `polyproxy`, a small Hono URL proxy Cloudflare Worker for `open.axross.dev` designed to host multiple proxy route types over time. The currently implemented proxy is the Obsidian deeplink route: `/ob/:query` decodes a base64url-encoded JSON payload, emits Open Graph metadata for crawlers such as Discord, and gives human visitors a browser-mediated path into `obsidian://open`.
+This repository is `polyproxy`, a small Hono URL proxy Cloudflare Worker for `open.axross.dev` designed to host multiple proxy route types over time. The currently implemented proxy is the Obsidian deeplink route: `POST /ob` stores a validated base64url-encoded JSON payload in Workers KV for 30 days, and `GET /ob/:query` resolves short keys or legacy base64url payloads, emits Open Graph metadata for crawlers such as Discord, and gives human visitors a browser-mediated path into `obsidian://open`.
 
-The app is intentionally stateless. Proxy routes do not store target metadata or host target content. The current Obsidian route treats base64url as obfuscation only.
+The app stores only validated encoded Obsidian bridge queries needed for short links, with a 30-day KV TTL. It does not store or host target note content. Short keys and base64url payloads are obfuscation only, not access control.
 
 ## Requirement Level Keywords
 
@@ -23,7 +23,7 @@ Apply these keywords consistently in agent skills and the documents linked from 
 | Skill | When to apply |
 | ----- | ------------- |
 | [Agent Skills Best Practices](.agents/skills/agent-skills-best-practices/SKILL.md) | Creating, refining, splitting, or auditing agent skills |
-| [Application Security Requirements](.agents/skills/application-security-requirements/SKILL.md) | Reviewing secrets, proxy payload validation, URL handling, privacy exposure, or npm dependency risk |
+| [Application Security Requirements](.agents/skills/application-security-requirements/SKILL.md) | Reviewing secrets, proxy payload validation, URL handling, KV short-link storage, privacy exposure, or npm dependency risk |
 | [Code Review Guidelines](.agents/skills/code-review-guidelines/SKILL.md) | Reviewing a diff or pull request |
 | [Development Guidelines](.agents/skills/development-guidelines/SKILL.md) | Implementing, refactoring, running commands, or preparing changes |
 | [E2E Test Guidelines](.agents/skills/e2e-test-guidelines/SKILL.md) | Writing, running, reviewing, or maintaining Playwright E2E tests, route coverage, browser traces, or snapshots |

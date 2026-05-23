@@ -30,6 +30,8 @@ src/
 │   ├── obsidian-uri.test.ts
 │   ├── sentry-privacy.ts
 │   ├── sentry-privacy.test.ts
+│   ├── short-bridge-link.ts
+│   ├── short-bridge-link.test.ts
 │   ├── types.ts
 │   └── validation.ts
 ├── logger.ts                # structured Worker console logger
@@ -64,7 +66,7 @@ Routing follows Hono's grouping pattern. Route modules should expose top-level g
 - MUST define grouped public route modules under `src/routes/**` and mount them from `src/app.tsx`.
 - MUST define grouped route handlers at module scope with `routes.get()`, `routes.post()`, or the equivalent Hono route methods instead of route factory functions.
 - MUST keep the root route as a 404 unless the user explicitly changes the public route contract.
-- MUST keep `/ob` as the overview route and `/ob/:query` as the encoded Obsidian bridge route.
+- MUST keep `GET /ob` as the overview route, `POST /ob` as the short-link creation route, and `GET /ob/:query` as the Obsidian bridge resolver for short keys with legacy encoded-query fallback.
 - SHOULD keep route modules as orchestration glue over helpers and views, not as a place to reimplement base64, schema, bot detection, or URI logic.
 - SHOULD keep metadata generation in the route/view path that owns the URL.
 

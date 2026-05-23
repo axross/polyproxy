@@ -52,7 +52,7 @@ Names should make ownership clear without adding framework folders this app does
 
 ## Scope Discipline
 
-The app is intentionally small and stateless, so speculative options, unused abstractions, and copied project structure add more cost than value. The detailed scope rules live in [scope-discipline.md](./references/scope-discipline.md).
+The app is intentionally small, with narrow KV persistence only for short Obsidian bridge links, so speculative options, unused abstractions, and copied project structure add more cost than value. The detailed scope rules live in [scope-discipline.md](./references/scope-discipline.md).
 
 **Guidelines:**
 

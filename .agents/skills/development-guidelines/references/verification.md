@@ -12,6 +12,7 @@ Use the changed file as the starting point for verification. Helper changes usua
 | `src/helpers/validation.ts` | Payload limits, path safety, source URL protocols |
 | `src/helpers/obsidian-uri.ts` | Custom protocol URI escaping and vault/path behavior |
 | `src/helpers/bridge-url.ts` | Public HTTPS URL shape and max URL length |
+| `src/helpers/short-bridge-link.ts` | Short-key generation, KV key shape, TTL, and stored-query validation |
 | `src/helpers/bot-detection.ts` | Discord/crawler vs human rendering path |
 | `src/routes/obsidian.tsx` | Metadata, invalid-link rendering, crawler HTML, human UI, E2E route behavior |
 | `src/views/obsidian.tsx` | Browser-visible route UI and custom-protocol fallback |
@@ -44,7 +45,7 @@ Manual checks cover browser behavior that unit tests, E2E tests, and build outpu
 
 - MUST consult [manual-verification.md](../../quality-assurance-guidelines/references/manual-verification.md) for required manual evidence.
 - SHOULD run `npm run test:e2e` for automated browser coverage after visual, routing, metadata, or crawler-rendering changes.
-- SHOULD start `npm run dev` and open a valid generated `/ob/[query]` URL when real custom-protocol launch behavior needs manual confirmation.
+- SHOULD start `npm run dev` and open a valid generated `/ob/[key]` URL when real custom-protocol launch behavior needs manual confirmation.
 - SHOULD verify an invalid query renders the invalid-link path and does not throw.
 - SHOULD verify a Discord-like crawler user agent receives simple server-rendered title/summary HTML and no client redirect behavior.
 - SHOULD verify the Open in Obsidian button remains visible when automatic custom-protocol launch fails or is blocked.

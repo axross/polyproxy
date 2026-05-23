@@ -65,7 +65,7 @@ Each review lens has a source skill. Link to that source instead of restating lo
 
 **Guidelines:**
 
-- MUST consult [Application Security Requirements](../application-security-requirements/SKILL.md) for payload decoding, validation, Obsidian URI construction, source URLs, env vars, indexing, or dependencies.
+- MUST consult [Application Security Requirements](../application-security-requirements/SKILL.md) for payload decoding, validation, KV short-link storage, Obsidian URI construction, source URLs, env vars, indexing, or dependencies.
 - MUST consult [Quality Assurance Guidelines](../quality-assurance-guidelines/SKILL.md) for tests, snapshots, flaky behavior, manual verification, or QA evidence.
 - SHOULD consult [Maintainable Code Guidelines](../maintainable-code-guidelines/SKILL.md) for readability, naming, complexity, boundaries, comments, or scope discipline.
 - SHOULD consult [Observability Guidelines](../observability-guidelines/SKILL.md) for expected invalid links, thrown errors, diagnostics, logging, Sentry error tracking, or telemetry.

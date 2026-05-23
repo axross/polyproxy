@@ -1,6 +1,6 @@
 # Privacy and Exposure Control
 
-Apply these rules to verify the public proxy routes do not claim security properties they do not provide or leak more target metadata than intended.
+Apply these rules to verify the public proxy routes do not claim security properties they do not provide, persist bridge data longer than intended, or leak more target metadata than intended.
 
 ## No Authentication Boundary
 
@@ -9,17 +9,20 @@ The proxy URL itself is the access token. The app has no account, session, cooki
 **Guidelines:**
 
 - MUST NOT describe the proxy URL as private, authenticated, encrypted, or access-controlled.
-- MUST treat possession of a proxy URL as possession of the decoded payload.
-- MUST NOT add user accounts, sessions, cookies, or server-side storage as an incidental part of another change.
+- MUST treat possession of a proxy URL as possession of the decoded payload while the encoded query is present or the short KV entry is live.
+- MUST NOT add user accounts, sessions, cookies, or new server-side storage as an incidental part of another change.
 - SHOULD surface any need for real access control as a product decision.
 
-## No Stored Note Metadata
+## Limited KV Bridge Storage
 
-The app is a decoder and redirect helper, not a target-content hosting service. Persistence changes the privacy model.
+Short Obsidian links store validated base64url bridge queries in Workers KV for 30 days. The stored value is encoded rather than decoded, but it still carries note metadata and must be treated as sensitive proxy payload data.
 
 **Guidelines:**
 
-- MUST NOT persist decoded payloads in a database, cache, log stream, analytics event, or third-party service.
+- MUST write short-link entries only to the `OBSIDIAN_QUERIES` KV binding.
+- MUST validate and canonicalize the bridge query through the short-link helper before writing to KV.
+- MUST set the configured 30-day `expirationTtl` on every short-link KV write.
+- MUST NOT persist decoded payloads in a database, log stream, analytics event, or third-party service.
 - MUST NOT fetch or host Obsidian note content.
 - SHOULD keep invalid-link handling generic.
 - MUST NOT echo malformed input back to the user.
