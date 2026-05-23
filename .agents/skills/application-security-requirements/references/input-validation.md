@@ -2,17 +2,16 @@
 
 Apply these rules to verify proxy payloads and URL-derived values are validated before they affect metadata, links, redirects, or UI.
 
-## Bridge Query Decoding and Resolution
+## Bridge Key Decoding and Resolution
 
-The `GET /ob/[query]` segment is opaque user input. It may be a short KV key or a legacy base64url query; either way, the resolved bridge query must decode to JSON and round-trip canonically before any payload field is trusted.
+The `GET /ob/[key]` segment is opaque user input. It must be a UUIDv5 hex short KV key that resolves to a stored JSON payload before any payload field is trusted.
 
 **Guidelines:**
 
-- MUST treat `params.query` from `GET /ob/[query]` as untrusted external input.
+- MUST treat `params.key` from `GET /ob/[key]` as untrusted external input.
 - MUST validate short keys with the short-link helper before reading from KV.
-- MUST validate base64url syntax before decoding any posted, stored, or legacy bridge query.
-- MUST keep canonical round-trip validation in `decodeBase64Url()`.
-- MUST catch decode and JSON parse failures through `decodeBridgeQuerySafe()` on user-facing routes.
+- MUST validate stored JSON payloads through the canonical validation helpers after reading from KV.
+- MUST catch key, JSON parse, and payload validation failures on user-facing routes so invalid links render deterministic fallback UI.
 
 ## Payload Schema
 

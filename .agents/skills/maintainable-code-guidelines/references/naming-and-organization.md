@@ -21,7 +21,7 @@ File names follow the source ownership layout: use kebab-case for source files w
 **Guidelines:**
 
 - MUST use kebab-case for `.ts`, `.tsx`, and `.css` source files when the exported concept is a phrase.
-- MUST use kebab-case for pure helper files under the owning `helpers/` directory, e.g. `bridge-url.ts`, `decode-link.ts`, and `obsidian-uri.ts`.
+- MUST use kebab-case for pure helper files under the owning `helpers/` directory, e.g. `bridge-url.ts`, `short-bridge-link.ts`, and `obsidian-uri.ts`.
 - MAY use generic names such as `types.ts` for shared type-only files when the containing directory is already specific.
 - MUST end test files in `.test.ts` or `.test.tsx`.
 - SHOULD mirror the helper being tested in the test filename.
@@ -77,7 +77,7 @@ Symbol names should use normal TypeScript conventions while preserving this app'
 - MAY use `type` for unions, intersections, mapped types, and utility-type aliases.
 - MAY use camelCase for local configuration.
 - SHOULD start boolean values with `is`, `has`, `should`, or `can`.
-- SHOULD use bridge-domain vocabulary consistently: `bridge`, `payload`, `query`, `obsidianUri`, `sourceUrl`, `vault`, and `path`.
+- SHOULD use bridge-domain vocabulary consistently: `bridge`, `payload`, `key`, `obsidianUri`, `sourceUrl`, `vault`, and `path`.
 
 ## File-to-Symbol Correspondence
 
@@ -87,4 +87,4 @@ When one file has one primary concept, the filename and export should point to t
 
 - SHOULD make the primary helper obvious from the filename when a file exports one main helper.
 - MUST NOT export a differently named primary symbol from a file when it would surprise a reader.
-- SHOULD keep tests named after the target file or behavior surface they verify, such as `bridge-url.test.ts` for `bridge-url.ts` and `buildBridgeUrl()`.
+- SHOULD keep tests named after the target file or behavior surface they verify, such as `bridge-url.test.ts` for `bridge-url.ts` and `buildShortBridgeUrl()`.

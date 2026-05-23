@@ -21,7 +21,7 @@ Sentry events leave the process, so they must satisfy the same privacy standard 
 
 - MUST keep `sendDefaultPii: false` unless the user explicitly accepts a broader privacy model.
 - MUST run Sentry events through `scrubSentryEvent()` before sending them.
-- MUST scrub raw `/ob/[key]` and legacy `/ob/[query]` path values, generated proxy URLs, `obsidian://` URIs, bridge payload fields, request query strings, request headers, request cookies, and request bodies.
+- MUST scrub raw `/ob/[key]` path values, generated proxy URLs, `obsidian://` URIs, bridge payload fields, request query strings, request headers, request cookies, and request bodies.
 - MUST update `sentry-privacy.test.ts` when adding a new Sentry field, breadcrumb, tag, context, or integration that can carry URL or bridge data.
 - SHOULD prefer route names, module names, runtime type, and coarse failure categories over raw request details.
 
@@ -31,7 +31,7 @@ Malformed bridge links are normal public input. Sentry is for unexpected applica
 
 **Guidelines:**
 
-- MUST NOT report `decodeBridgeQuerySafe()` invalid results to Sentry.
+- MUST NOT report `readShortBridgePayload()` invalid results to Sentry.
 - MUST NOT report normal custom-protocol launch blocking to Sentry.
 - SHOULD allow unexpected thrown errors to flow through Hono's error path and Sentry middleware.
 - SHOULD add explicit `captureException()` calls only when a recoverable unexpected failure would otherwise be invisible and the captured scope contains no bridge metadata.

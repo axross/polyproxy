@@ -4,7 +4,7 @@ Apply these rules to verify new npm dependencies are justified, trustworthy, and
 
 ## Dependency Justification
 
-A dependency should earn its place. Small URL, base64url, validation, and string helpers are usually already covered by platform APIs or local code.
+A dependency should earn its place. Small URL, UUID, validation, and string helpers are usually already covered by platform APIs or local code.
 
 For review severity labels, consult [code-review severity](../../code-review-guidelines/references/severity.md).
 

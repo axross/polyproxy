@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { encodeBase64Url } from "../../common/helpers/base64url";
 import {
-	bridgeQueryTtlSeconds,
-	type BridgeQueryStore,
+	bridgePayloadTtlSeconds,
+	type BridgePayloadStore,
+	createShortBridgeKey,
 	isShortBridgeKey,
 	parseShortenBridgeRequest,
-	readShortBridgeQuery,
-	storeShortBridgeQuery,
+	readShortBridgePayload,
+	storeShortBridgePayload,
 	toShortBridgeStorageKey,
 } from "./short-bridge-link";
 import type { BridgePayload } from "./validation";
@@ -19,132 +19,173 @@ const payload: BridgePayload = {
 	summary:
 		"An article about Google's effort to make the web easier for agents to navigate.",
 };
+const payloadKey = "d80025792a1b57e5a235462ea488de44";
 
 describe("parseShortenBridgeRequest", () => {
-	it("accepts a valid bridge query and returns a canonical query", () => {
+	it("accepts a valid bridge payload and returns a canonical payload", () => {
 		const result = parseShortenBridgeRequest({
-			query: toQuery({
+			payload: {
 				...payload,
 				title: "  Google\nwants   the web  ",
 				summary: "  Summary\twith\nspace  ",
-			}),
+			},
 		});
 
 		expect(result).toEqual({
 			ok: true,
-			value: toQuery({
+			value: {
 				...payload,
 				title: "Google wants the web",
 				summary: "Summary with space",
-			}),
+			},
 		});
 	});
 
 	it("rejects malformed request bodies", () => {
 		expect(parseShortenBridgeRequest({}).ok).toBe(false);
-		expect(parseShortenBridgeRequest({ query: "" }).ok).toBe(false);
-		expect(parseShortenBridgeRequest({ query: "not valid" }).ok).toBe(false);
+		expect(parseShortenBridgeRequest({ payload: undefined }).ok).toBe(false);
+		expect(parseShortenBridgeRequest({ key: "" }).ok).toBe(false);
 	});
 
 	it("rejects invalid bridge payloads", () => {
 		const result = parseShortenBridgeRequest({
-			query: toQuery({
+			payload: {
 				...payload,
 				sourceUrl: "javascript:alert(1)",
-			}),
+			},
 		});
 
 		expect(result.ok).toBe(false);
 	});
 });
 
-describe("storeShortBridgeQuery", () => {
-	it("stores the query with a 30-day TTL and returns the short key", async () => {
-		const store = new MemoryBridgeQueryStore();
-		const key = "Abc123_-Abc123_-";
+describe("storeShortBridgePayload", () => {
+	it("stores the payload as JSON with a 30-day TTL and returns the short key", async () => {
+		const store = new MemoryBridgePayloadStore();
+		const sourcePayload = {
+			...payload,
+			title: "  Google\nwants   the web  ",
+			summary: "  Summary\twith\nspace  ",
+		};
+		const storedPayload = {
+			...payload,
+			title: "Google wants the web",
+			summary: "Summary with space",
+		};
 
 		await expect(
-			storeShortBridgeQuery(store, toQuery(payload), () => key),
-		).resolves.toBe(key);
+			storeShortBridgePayload(store, sourcePayload, () => payloadKey),
+		).resolves.toBe(payloadKey);
 
 		expect(store.puts).toEqual([
 			{
-				key: toShortBridgeStorageKey(key),
-				value: toQuery(payload),
-				options: { expirationTtl: bridgeQueryTtlSeconds },
+				key: toShortBridgeStorageKey(payloadKey),
+				value: JSON.stringify(storedPayload),
+				options: { expirationTtl: bridgePayloadTtlSeconds },
 			},
 		]);
 	});
 
-	it("retries key generation when a generated key already exists", async () => {
-		const store = new MemoryBridgeQueryStore();
-		const firstKey = "FirstKeyFirstK__";
-		const secondKey = "SecondKeySecond_";
+	it("uses a deterministic UUIDv5 hex key derived from vault and path", async () => {
+		const store = new MemoryBridgePayloadStore();
+		const key = await storeShortBridgePayload(store, payload);
 
-		store.values.set(toShortBridgeStorageKey(firstKey), "existing-query");
-
-		const keys = [
-			firstKey,
-			secondKey,
-			"ThirdKeyThirdK__",
-			"FourthKeyFourth_",
-			"FifthKeyFifthK__",
-		];
-		const key = await storeShortBridgeQuery(store, toQuery(payload), () => {
-			const value = keys.shift();
-
-			if (value === undefined) {
-				throw new Error("missing test key");
-			}
-
-			return value;
-		});
-
-		expect(key).toBe(secondKey);
-		expect(store.values.get(toShortBridgeStorageKey(secondKey))).toBe(
-			toQuery(payload),
+		expect(key).toBe(payloadKey);
+		expect(store.values.get(toShortBridgeStorageKey(payloadKey))).toBe(
+			JSON.stringify(payload),
 		);
 	});
 });
 
-describe("readShortBridgeQuery", () => {
-	it("reads stored bridge queries by short key", async () => {
-		const store = new MemoryBridgeQueryStore();
-		const key = "Abc123_-Abc123_-";
+describe("readShortBridgePayload", () => {
+	it("reads stored bridge payloads by short key", async () => {
+		const store = new MemoryBridgePayloadStore();
 
-		store.values.set(toShortBridgeStorageKey(key), toQuery(payload));
+		store.values.set(
+			toShortBridgeStorageKey(payloadKey),
+			JSON.stringify(payload),
+		);
 
-		await expect(readShortBridgeQuery(store, key)).resolves.toEqual({
+		await expect(readShortBridgePayload(store, payloadKey)).resolves.toEqual({
 			ok: true,
-			value: toQuery(payload),
+			value: payload,
 		});
 	});
 
 	it("rejects invalid and missing short keys", async () => {
-		const store = new MemoryBridgeQueryStore();
+		const store = new MemoryBridgePayloadStore();
 
-		await expect(readShortBridgeQuery(store, "not-valid")).resolves.toEqual({
+		await expect(readShortBridgePayload(store, "not-valid")).resolves.toEqual({
 			ok: false,
 			reason: "short key is invalid",
 		});
-		await expect(
-			readShortBridgeQuery(store, "Abc123_-Abc123_-"),
-		).resolves.toEqual({
+		await expect(readShortBridgePayload(store, payloadKey)).resolves.toEqual({
 			ok: false,
 			reason: "short key was not found",
 		});
 	});
-});
 
-describe("isShortBridgeKey", () => {
-	it("accepts 16-character Base64url keys only", () => {
-		expect(isShortBridgeKey("Abc123_-Abc123_-")).toBe(true);
-		expect(isShortBridgeKey("abc123")).toBe(false);
-		expect(isShortBridgeKey("Abc123+/Abc123+/")).toBe(false);
+	it("rejects malformed stored JSON", async () => {
+		const store = new MemoryBridgePayloadStore();
+
+		store.values.set(toShortBridgeStorageKey(payloadKey), "not json");
+
+		await expect(readShortBridgePayload(store, payloadKey)).resolves.toEqual({
+			ok: false,
+			reason: "stored bridge payload is invalid",
+		});
+	});
+
+	it("rejects invalid stored payloads", async () => {
+		const store = new MemoryBridgePayloadStore();
+
+		store.values.set(
+			toShortBridgeStorageKey(payloadKey),
+			JSON.stringify({
+				...payload,
+				sourceUrl: "javascript:alert(1)",
+			}),
+		);
+
+		await expect(readShortBridgePayload(store, payloadKey)).resolves.toEqual({
+			ok: false,
+			reason: "stored bridge payload is invalid",
+		});
 	});
 });
 
-class MemoryBridgeQueryStore implements BridgeQueryStore {
+describe("createShortBridgeKey", () => {
+	it("returns a UUIDv5 hex key from the payload vault and path", async () => {
+		const differentMetadataPayload: BridgePayload = {
+			...payload,
+			title: "Different title",
+			summary: "Different summary",
+		};
+
+		await expect(createShortBridgeKey(payload)).resolves.toBe(payloadKey);
+		await expect(createShortBridgeKey(differentMetadataPayload)).resolves.toBe(
+			payloadKey,
+		);
+		await expect(
+			createShortBridgeKey({
+				...payload,
+				path: "Articles/Another note",
+			}),
+		).resolves.not.toBe(payloadKey);
+	});
+});
+
+describe("isShortBridgeKey", () => {
+	it("accepts canonical UUIDv5 hex keys only", () => {
+		expect(isShortBridgeKey(payloadKey)).toBe(true);
+		expect(isShortBridgeKey(payloadKey.toUpperCase())).toBe(false);
+		expect(isShortBridgeKey("0123456789abcdef0123456789abcdef")).toBe(false);
+		expect(isShortBridgeKey("0123456789ab4def8123456789abcdef")).toBe(false);
+		expect(isShortBridgeKey("0123456789ab5def7123456789abcdef")).toBe(false);
+	});
+});
+
+class MemoryBridgePayloadStore implements BridgePayloadStore {
 	readonly puts: Array<{
 		key: string;
 		options: { expirationTtl: number };
@@ -165,8 +206,4 @@ class MemoryBridgeQueryStore implements BridgeQueryStore {
 		this.puts.push({ key, options, value });
 		this.values.set(key, value);
 	}
-}
-
-function toQuery(source: BridgePayload) {
-	return encodeBase64Url(JSON.stringify(source));
 }

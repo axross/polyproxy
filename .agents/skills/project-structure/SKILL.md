@@ -17,8 +17,6 @@ src/
 ├── common/
 │   ├── app.tsx              # shared Hono app, route wiring, 404/500 handlers
 │   ├── helpers/
-│   │   ├── base64url.ts
-│   │   ├── base64url.test.ts
 │   │   ├── bot-detection.ts
 │   │   └── bot-detection.test.ts
 │   ├── hono-env.ts          # shared Hono Env interface over generated Worker bindings
@@ -29,14 +27,13 @@ src/
     ├── helpers/
     │   ├── bridge-route.ts
     │   ├── bridge-url.ts
-    │   ├── decode-link.ts
     │   ├── obsidian-uri.ts
     │   ├── sentry-privacy.ts
     │   ├── short-bridge-link.ts
     │   ├── types.ts
     │   └── validation.ts
     ├── routes/
-    │   └── obsidian.tsx     # /ob and /ob/:query route registration
+    │   └── obsidian.tsx     # /ob and /ob/:key route registration
     └── views/
         ├── metadata.tsx     # document metadata helpers
         └── obsidian.tsx     # Hono JSX route views
@@ -47,7 +44,7 @@ e2e/
     └── routes/
         └── ob/
             ├── page.test.ts
-            └── query/
+            └── key/
                 └── page.test.ts
 ```
 
@@ -66,8 +63,8 @@ Routing follows Hono's grouping pattern. Route modules should expose top-level g
 - MUST define grouped public route modules under `src/obsidian/routes/**` and mount them from `src/common/app.tsx`.
 - MUST define grouped route handlers at module scope with `routes.get()`, `routes.post()`, or the equivalent Hono route methods instead of route factory functions.
 - MUST keep the root route as a 404 unless the user explicitly changes the public route contract.
-- MUST keep `GET /ob` as the overview route, `POST /ob` as the short-link creation route, and `GET /ob/:query` as the Obsidian bridge resolver for short keys with legacy encoded-query fallback.
-- SHOULD keep route modules as orchestration glue over helpers and views, not as a place to reimplement base64, schema, bot detection, or URI logic.
+- MUST keep `GET /ob` as the overview route, `POST /ob` as the short-link creation route, and `GET /ob/:key` as the Obsidian bridge resolver for UUIDv5 hex short keys.
+- SHOULD keep route modules as orchestration glue over helpers and views, not as a place to reimplement key generation, schema, bot detection, or URI logic.
 - SHOULD keep metadata generation in the route/view path that owns the URL.
 
 ## Repository Support Files

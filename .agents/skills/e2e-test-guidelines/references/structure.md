@@ -16,7 +16,7 @@ e2e/
     └── routes/
         └── ob/
             ├── page.test.ts
-            └── query/
+            └── key/
                 └── page.test.ts
 ```
 
@@ -24,7 +24,7 @@ e2e/
 
 - MUST place shared E2E helpers under `e2e/helpers`.
 - MUST place route-specific tests under `e2e/tests/routes/<route>/`.
-- SHOULD represent dynamic URL segments with readable directory names such as `query` instead of bracket syntax that is harder to reference from shell commands.
+- SHOULD represent dynamic URL segments with readable directory names such as `key` instead of bracket syntax that is harder to reference from shell commands.
 - MUST keep generated artifacts under `.playwright-results` or Playwright snapshot folders, not beside app source files.
 
 ## Test File Shape

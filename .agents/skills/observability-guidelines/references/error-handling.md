@@ -4,14 +4,14 @@ Apply these rules when writing, reviewing, or modifying code that might throw or
 
 ## Expected Invalid Links
 
-Malformed query strings and invalid payloads are normal public input. They should flow through safe result APIs so routes can render deterministic fallback output.
+Malformed short keys and invalid payloads are normal public input. They should flow through safe result APIs so routes can render deterministic fallback output.
 
 **Guidelines:**
 
 - MUST treat malformed proxy URLs as expected external input, not as exceptional server crashes.
-- MUST use `decodeBridgeQuerySafe()` in route rendering and metadata generation so invalid links render a stable invalid-link response.
-- SHOULD use the throwing `decodeBridgeQuery()` only in contexts where an exception is the desired API.
-- MUST NOT expose raw malformed query strings or decoded partial payloads in invalid-link UI.
+- MUST use `readShortBridgePayload()` in route rendering and metadata generation so invalid links render a stable invalid-link response.
+- SHOULD use throwing helper APIs only in contexts where an exception is the desired API.
+- MUST NOT expose raw malformed short keys or decoded partial payloads in invalid-link UI.
 
 ## Helper Boundaries
 
@@ -52,5 +52,5 @@ Internal error messages should identify the failure category without embedding t
 **Guidelines:**
 
 - SHOULD make internal error messages specific enough for tests and debugging.
-- MUST NOT include vault names, note paths, summaries, source URLs, or raw query strings in thrown error messages.
-- SHOULD prefer failure categories such as `Invalid Base64url value`, `path must be vault-relative`, or `sourceUrl must be http or https`.
+- MUST NOT include vault names, note paths, summaries, source URLs, or raw short keys in thrown error messages.
+- SHOULD prefer failure categories such as `short key is invalid`, `path must be vault-relative`, or `sourceUrl must be http or https`.

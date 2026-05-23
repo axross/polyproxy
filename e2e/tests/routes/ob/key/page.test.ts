@@ -1,20 +1,25 @@
-import { expect, test } from "@playwright/test";
+import { type APIRequestContext, expect, test } from "@playwright/test";
 
 import {
-	buildBridgeQuery,
-	buildBridgePath,
 	buildObsidianUri,
 	exampleBridgePayload,
 } from "../../../../helpers/bridge-payload";
 
-const validBridgePath = buildBridgePath(exampleBridgePayload);
 const expectedObsidianUri = buildObsidianUri(exampleBridgePayload);
+const expectedShortBridgeKey = "d80025792a1b57e5a235462ea488de44";
+const expectedShortBridgePath = `/ob/${expectedShortBridgeKey}`;
 
 test.use({ colorScheme: "light", javaScriptEnabled: false });
 
 test("Bridge page content", async ({ page }) => {
+	let shortBridgePath = "";
+
+	await test.step("Create a short bridge link", async () => {
+		shortBridgePath = await createShortBridgePath(page.request);
+	});
+
 	await test.step("Navigate to a valid bridge route", async () => {
-		await page.goto(validBridgePath);
+		await page.goto(shortBridgePath);
 	});
 
 	const bridge = page.getByTestId("page").getByTestId("bridge");
@@ -61,7 +66,15 @@ test.describe("dark color scheme", () => {
 	test.use({ colorScheme: "dark" });
 
 	test("Bridge open action keeps readable contrast", async ({ page }) => {
-		await page.goto(validBridgePath);
+		let shortBridgePath = "";
+
+		await test.step("Create a short bridge link", async () => {
+			shortBridgePath = await createShortBridgePath(page.request);
+		});
+
+		await test.step("Navigate to the short bridge route", async () => {
+			await page.goto(shortBridgePath);
+		});
 
 		const openButton = page.getByTestId("bridge").getByTestId("open-button");
 
@@ -74,8 +87,14 @@ test.describe("dark color scheme", () => {
 });
 
 test("Bridge metadata", async ({ page }) => {
+	let shortBridgePath = "";
+
+	await test.step("Create a short bridge link", async () => {
+		shortBridgePath = await createShortBridgePath(page.request);
+	});
+
 	await test.step("Navigate to a valid bridge route", async () => {
-		await page.goto(validBridgePath);
+		await page.goto(shortBridgePath);
 	});
 
 	await test.step("Verify the document title", async () => {
@@ -105,25 +124,7 @@ test("Short bridge link creation and rendering", async ({ page }) => {
 	let shortBridgePath = "";
 
 	await test.step("Create a short bridge link", async () => {
-		const response = await page.request.post("/ob", {
-			data: {
-				query: buildBridgeQuery(exampleBridgePayload),
-			},
-		});
-
-		expect(response.status()).toBe(201);
-
-		const body = (await response.json()) as {
-			expiresIn: number;
-			key: string;
-			url: string;
-		};
-
-		expect(body.expiresIn).toBe(2_592_000);
-		expect(body.key).toMatch(/^[A-Za-z0-9_-]{16}$/);
-		expect(body.url).toBe(`https://open.axross.dev/ob/${body.key}`);
-
-		shortBridgePath = new URL(body.url).pathname;
+		shortBridgePath = await createShortBridgePath(page.request);
 	});
 
 	await test.step("Navigate to the short bridge route", async () => {
@@ -158,14 +159,17 @@ test("Short bridge link creation rejects invalid input", async ({
 }) => {
 	const response = await request.post("/ob", {
 		data: {
-			query: "not valid",
+			payload: {
+				...exampleBridgePayload,
+				sourceUrl: "javascript:alert(1)",
+			},
 		},
 	});
 
 	expect(response.status()).toBe(400);
 	expect(response.headers()["content-type"]).toContain("application/json");
 	await expect(response.json()).resolves.toMatchObject({
-		error: "Invalid Base64url value",
+		error: "sourceUrl must be http or https",
 	});
 });
 
@@ -197,8 +201,14 @@ test.describe("crawler rendering", () => {
 	test.use({ userAgent: "Discordbot/2.0" });
 
 	test("Discord receives simple note HTML", async ({ page }) => {
+		let shortBridgePath = "";
+
+		await test.step("Create a short bridge link", async () => {
+			shortBridgePath = await createShortBridgePath(page.request);
+		});
+
 		await test.step("Navigate to a valid bridge route as Discord", async () => {
-			await page.goto(validBridgePath);
+			await page.goto(shortBridgePath);
 		});
 
 		const crawlerBridge = page.getByTestId("crawler-bridge");
@@ -217,3 +227,27 @@ test.describe("crawler rendering", () => {
 		});
 	});
 });
+
+async function createShortBridgePath(
+	request: APIRequestContext,
+): Promise<string> {
+	const response = await request.post("/ob", {
+		data: {
+			payload: exampleBridgePayload,
+		},
+	});
+
+	expect(response.status()).toBe(201);
+
+	const body = (await response.json()) as {
+		expiresIn: number;
+		key: string;
+		url: string;
+	};
+
+	expect(body.expiresIn).toBe(2_592_000);
+	expect(body.key).toBe(expectedShortBridgeKey);
+	expect(body.url).toBe(`https://open.axross.dev${expectedShortBridgePath}`);
+
+	return new URL(body.url).pathname;
+}

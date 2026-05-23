@@ -45,7 +45,7 @@ Dependency changes affect bundle size, supply-chain risk, runtime boundaries, an
 
 - MUST consider built-in Web APIs, Node APIs, Hono, zod, and existing packages before adding a dependency.
 - MUST verify a new dependency is maintained, typed, licensed appropriately, and compatible with the import environment.
-- MUST NOT add a dependency for base64url, URL parsing, simple user-agent substring checks, or small validation transforms already covered locally.
+- MUST NOT add a dependency for UUIDv5, URL parsing, simple user-agent substring checks, or small validation transforms already covered locally.
 - MUST commit `package.json` and `package-lock.json` together for dependency changes.
 - MUST read the relevant changelog or release notes before upgrading a dependency.
 - MUST run `npm run lint`, `npm test`, and `npm run build` after upgrading or removing runtime or build dependencies.

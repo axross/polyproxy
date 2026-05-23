@@ -19,9 +19,9 @@ Bridge URLs may encode note metadata. Logs must treat decoded payloads and gener
 
 **Safe Diagnostic Examples:**
 
-> `decodeBridgeQuerySafe failed: invalid_json`
+> `readShortBridgePayload failed: invalid_json`
 
-> `buildBridgeUrl failed: url_length_exceeded`
+> `buildShortBridgeUrl failed: url_length_exceeded`
 
 **Unsafe Diagnostic Examples:**
 
@@ -32,8 +32,8 @@ Bridge URLs may encode note metadata. Logs must treat decoded payloads and gener
 **Guidelines:**
 
 - MUST NOT log decoded `BridgePayload` objects.
-- MUST NOT log vault names, note paths, titles, summaries, source URLs, raw base64url query strings, generated proxy URLs, or `obsidian://` URIs.
-- SHOULD log only coarse context such as route name, query length, field name, or validation failure category.
+- MUST NOT log vault names, note paths, titles, summaries, source URLs, raw short keys, generated proxy URLs, or `obsidian://` URIs.
+- SHOULD log only coarse context such as route name, key length, field name, or validation failure category.
 - MUST extend `src/common/logger.ts` redaction when introducing a new diagnostic field that may contain bridge metadata or generated URLs.
 
 ## Diagnostic Shape
@@ -43,7 +43,7 @@ When diagnostics are necessary, stable operation names and coarse categories mak
 **Guidelines:**
 
 - SHOULD make diagnostic messages stable and searchable.
-- SHOULD include the operation name, such as `decodeBridgeQuerySafe` or `buildBridgeUrl`, when reporting an unexpected internal failure.
+- SHOULD include the operation name, such as `readShortBridgePayload` or `buildShortBridgeUrl`, when reporting an unexpected internal failure.
 - SHOULD include stable route, operation, or module fields when they help diagnose unexpected failures without exposing payload data.
 - MUST NOT rely on logs as the primary behavior for expected invalid links; route UI and metadata fallbacks are the behavior.
 
