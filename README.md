@@ -1,6 +1,6 @@
 # polyproxy
 
-`polyproxy` is a small URL proxy server for `open.axross.dev`.
+`polyproxy` is a small URL proxy server for `open.axross.app`.
 
 It supports private URL proxy workflows behind normal HTTPS pages. Operational details are intentionally not documented here.
 

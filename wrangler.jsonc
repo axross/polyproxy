@@ -16,6 +16,6 @@
 		"enabled": true
 	},
 	"vars": {
-		"PUBLIC_BASE_URL": "https://open.axross.dev"
+		"PUBLIC_BASE_URL": "https://open.axross.app"
 	}
 }
