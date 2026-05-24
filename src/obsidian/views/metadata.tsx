@@ -2,10 +2,6 @@ import type { Child } from "hono/jsx";
 
 export const siteName = "open.axross.app";
 
-const htmlClass = "h-full scheme-light dark:scheme-dark";
-const bodyClass =
-	"flex min-h-full max-w-[100vw] flex-col overflow-x-hidden bg-[#f5f7fb] font-sans text-[#171923] antialiased dark:bg-[#10131a] dark:text-[#f3f5f8]";
-
 export interface PageMetadata {
 	description: string;
 	title: string;
@@ -20,7 +16,7 @@ export interface DocumentProps {
 
 export function Document({ children, metadata }: DocumentProps) {
 	return (
-		<html lang="en" class={htmlClass}>
+		<html lang="en" class="scheme-light dark:scheme-dark h-full">
 			<head>
 				<meta charset="utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -41,7 +37,9 @@ export function Document({ children, metadata }: DocumentProps) {
 				<link rel="icon" href="/favicon.ico" />
 				<link rel="stylesheet" href="/styles.css" />
 			</head>
-			<body class={bodyClass}>{children}</body>
+			<body class="flex min-h-full max-w-[100vw] flex-col overflow-x-hidden bg-[#f5f7fb] font-sans text-[#171923] antialiased dark:bg-[#10131a] dark:text-[#f3f5f8]">
+				{children}
+			</body>
 		</html>
 	);
 }
