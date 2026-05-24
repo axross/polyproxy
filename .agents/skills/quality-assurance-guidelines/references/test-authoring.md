@@ -19,10 +19,9 @@ Bridge helper tests should cover both successful behavior and malformed external
 
 **Guidelines:**
 
-- SHOULD cover UTF-8 round trips, URL-safe output, malformed characters, impossible padding length, and non-canonical encodings in `base64url` tests.
 - SHOULD cover required fields, field limits, whitespace normalization, null-byte rejection, vault-relative path rules, parent segment rejection, and `sourceUrl` protocol filtering in `validation` tests.
-- SHOULD cover base URL normalization, payload validation, `/ob/[query]` legacy path shape, `/ob/[key]` short-link path shape, and max URL length errors in `bridge-url` tests.
-- SHOULD cover empty query, invalid base64url, invalid JSON, schema failure, and valid payload success in `decode-link` tests.
+- SHOULD cover base URL normalization, `/ob/[key]` short-link path shape, invalid key rejection, and max URL length errors in `bridge-url` tests.
+- SHOULD cover UUIDv5 hex output, vault/path determinism, invalid stored JSON, schema failure, and valid payload success in `short-bridge-link` tests.
 - SHOULD cover `encodeURIComponent` behavior for vault and path without double-encoding in `obsidian-uri` tests.
 - SHOULD cover known crawler user agents and ordinary browser user agents in `bot-detection` tests.
 
@@ -44,7 +43,7 @@ Test names should match the behavior being asserted, and assertions should targe
 **Guidelines:**
 
 - MUST ensure each `describe`/`it` label matches the behavior asserted.
-- SHOULD write callable identifiers with parentheses in labels, such as `buildBridgeUrl()` or `decodeBridgeQuerySafe()`.
+- SHOULD write callable identifiers with parentheses in labels, such as `buildShortBridgeUrl()` or `readShortBridgePayload()`.
 - MUST compose asymmetric matchers with `.toEqual`, `.toContain`, or `.toHaveBeenCalledWith`, not `.toBe`.
 - MUST use targeted assertions for validation errors rather than only asserting "throws".
 

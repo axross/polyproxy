@@ -27,7 +27,7 @@ Playwright verifies the browser-visible proxy route behavior that helper tests c
 **Guidelines:**
 
 - MUST require Playwright coverage for new or changed public route behavior.
-- MUST require crawler and metadata E2E coverage when `/ob/:query` rendering branches change.
+- MUST require crawler and metadata E2E coverage when `/ob/:key` rendering branches change.
 - SHOULD require both desktop and Pixel project evidence for meaningful layout changes.
 - SHOULD use [E2E Test Guidelines](../e2e-test-guidelines/SKILL.md) when writing, reviewing, or debugging Playwright tests.
 
@@ -59,7 +59,7 @@ Tests should verify the claimed behavior using Vitest, existing helper-test styl
 **Guidelines:**
 
 - MUST use Vitest APIs and existing colocated `*.test.ts` helper-test conventions.
-- SHOULD cover bridge helper edge cases for base64url, validation, URL building, decoding, Obsidian URI construction, and bot detection.
+- SHOULD cover bridge helper edge cases for UUIDv5 key generation, validation, URL building, stored-payload parsing, Obsidian URI construction, and bot detection.
 - MUST keep async, matcher, global-stubbing, and mocking patterns deterministic.
 - SHOULD use [test-authoring.md](./references/test-authoring.md) when writing or reviewing tests.
 

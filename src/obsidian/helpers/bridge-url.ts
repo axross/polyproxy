@@ -1,11 +1,6 @@
-import { encodeBase64Url } from "../../common/helpers/base64url";
 import { bridgeRoutePath } from "./bridge-route";
 import { isShortBridgeKey } from "./short-bridge-link";
-import {
-	type BridgePayload,
-	maxBridgeUrlLength,
-	validateBridgePayload,
-} from "./validation";
+import { maxBridgeUrlLength } from "./validation";
 
 export class BridgeUrlError extends Error {
 	constructor(message: string) {
@@ -15,23 +10,6 @@ export class BridgeUrlError extends Error {
 }
 
 const defaultBaseUrl = "https://open.axross.dev";
-
-export function buildBridgeUrl(
-	baseUrl: string,
-	payload: BridgePayload,
-): string {
-	const validPayload = validateBridgePayload(payload);
-	const query = encodeBase64Url(JSON.stringify(validPayload));
-	const url = new URL(`${bridgeRoutePath}/${query}`, normalizeBaseUrl(baseUrl));
-
-	const href = url.toString();
-
-	if (href.length > maxBridgeUrlLength) {
-		throw new BridgeUrlError("Bridge URL exceeds the practical length limit");
-	}
-
-	return href;
-}
 
 export function buildShortBridgeUrl(baseUrl: string, key: string): string {
 	if (!isShortBridgeKey(key)) {

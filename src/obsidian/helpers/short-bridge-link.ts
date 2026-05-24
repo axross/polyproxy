@@ -1,27 +1,31 @@
 import z from "zod";
 
-import { encodeBase64Url } from "../../common/helpers/base64url";
-import { decodeBridgeQuerySafe } from "./decode-link";
 import type { Result } from "./types";
-import { maxBridgeUrlLength } from "./validation";
+import { type BridgePayload, validateBridgePayloadSafe } from "./validation";
 
-const bridgeQueryTtlDays = 30;
+const bridgePayloadTtlDays = 30;
 const secondsPerDay = 86_400;
-const shortBridgeKeyByteLength = 12;
-const shortBridgeKeyAttempts = 5;
-const shortBridgeKeyPattern = /^[A-Za-z0-9_-]{16}$/;
+const shortBridgeKeyPattern = /^[0-9a-f]{12}5[0-9a-f]{3}[89ab][0-9a-f]{15}$/;
 const storageKeyPrefix = "ob:";
+const uuidByteLength = 16;
+const uuidVersionFive = 0x50;
+const uuidVariantRfc4122 = 0x80;
+const uuidVersionRemainder = 0x10;
+const uuidVariantRemainder = 0x40;
+const byteHexRadix = 16;
+const byteHexWidth = 2;
+const obsidianBridgeNamespaceHex = "2411260ec47e4e388afcf2c764310c57";
 
-export const bridgeQueryTtlSeconds = bridgeQueryTtlDays * secondsPerDay;
+// This namespace is part of the public short-key contract; changing it changes every generated key.
+const obsidianBridgeNamespaceBytes = hexToBytes(obsidianBridgeNamespaceHex);
+
+export const bridgePayloadTtlSeconds = bridgePayloadTtlDays * secondsPerDay;
 
 const ShortenBridgeRequest = z.strictObject({
-	query: z
-		.string()
-		.min(1, "query is required")
-		.max(maxBridgeUrlLength, "query is too long"),
+	payload: z.unknown(),
 });
 
-export interface BridgeQueryStore {
+export interface BridgePayloadStore {
 	get(key: string): Promise<string | null>;
 	put(
 		key: string,
@@ -30,6 +34,10 @@ export interface BridgeQueryStore {
 	): Promise<void>;
 }
 
+type CreateShortBridgeKey = (
+	payload: Pick<BridgePayload, "path" | "vault">,
+) => Promise<string> | string;
+
 export class ShortBridgeLinkError extends Error {
 	constructor(message: string) {
 		super(message);
@@ -37,7 +45,9 @@ export class ShortBridgeLinkError extends Error {
 	}
 }
 
-export function parseShortenBridgeRequest(body: unknown): Result<string> {
+export function parseShortenBridgeRequest(
+	body: unknown,
+): Result<BridgePayload> {
 	const request = ShortenBridgeRequest.safeParse(body);
 
 	if (!request.success) {
@@ -47,64 +57,44 @@ export function parseShortenBridgeRequest(body: unknown): Result<string> {
 		};
 	}
 
-	const decoded = decodeBridgeQuerySafe(request.data.query);
-
-	if (!decoded.ok) {
-		return decoded;
+	if (request.data.payload === undefined) {
+		return {
+			ok: false,
+			reason: "payload is required",
+		};
 	}
 
-	return {
-		ok: true,
-		value: encodeBase64Url(JSON.stringify(decoded.value)),
-	};
+	return validateBridgePayloadSafe(request.data.payload);
 }
 
-export async function storeShortBridgeQuery(
-	store: BridgeQueryStore,
-	query: string,
-	createKey = generateShortBridgeKey,
+export async function storeShortBridgePayload(
+	store: BridgePayloadStore,
+	payload: BridgePayload,
+	createKey: CreateShortBridgeKey = createShortBridgeKey,
 ): Promise<string> {
-	const parsed = parseShortenBridgeRequest({ query });
+	const parsed = validateBridgePayloadSafe(payload);
 
 	if (!parsed.ok) {
-		throw new ShortBridgeLinkError("Bridge query is invalid");
+		throw new ShortBridgeLinkError("Bridge payload is invalid");
 	}
 
-	const candidates = Array.from({ length: shortBridgeKeyAttempts }, () =>
-		createKey(),
-	);
+	const key = await createKey(parsed.value);
 
-	for (const key of candidates) {
-		if (!isShortBridgeKey(key)) {
-			throw new ShortBridgeLinkError("Generated bridge key is invalid");
-		}
+	if (!isShortBridgeKey(key)) {
+		throw new ShortBridgeLinkError("Generated bridge key is invalid");
 	}
 
-	const existingEntries = await Promise.all(
-		candidates.map(async (key) => ({
-			existing: await store.get(toShortBridgeStorageKey(key)),
-			key,
-		})),
-	);
-	const availableEntry = existingEntries.find(
-		({ existing }) => existing === null,
-	);
-
-	if (availableEntry === undefined) {
-		throw new ShortBridgeLinkError("Could not allocate bridge key");
-	}
-
-	await store.put(toShortBridgeStorageKey(availableEntry.key), parsed.value, {
-		expirationTtl: bridgeQueryTtlSeconds,
+	await store.put(toShortBridgeStorageKey(key), JSON.stringify(parsed.value), {
+		expirationTtl: bridgePayloadTtlSeconds,
 	});
 
-	return availableEntry.key;
+	return key;
 }
 
-export async function readShortBridgeQuery(
-	store: BridgeQueryStore,
+export async function readShortBridgePayload(
+	store: BridgePayloadStore,
 	key: string,
-): Promise<Result<string>> {
+): Promise<Result<BridgePayload>> {
 	if (!isShortBridgeKey(key)) {
 		return {
 			ok: false,
@@ -112,26 +102,40 @@ export async function readShortBridgeQuery(
 		};
 	}
 
-	const query = await store.get(toShortBridgeStorageKey(key));
+	const storedPayload = await store.get(toShortBridgeStorageKey(key));
 
-	if (query === null) {
+	if (storedPayload === null) {
 		return {
 			ok: false,
 			reason: "short key was not found",
 		};
 	}
 
-	return {
-		ok: true,
-		value: query,
-	};
+	return parseStoredBridgePayload(storedPayload);
 }
 
-export function generateShortBridgeKey(): string {
-	const bytes = new Uint8Array(shortBridgeKeyByteLength);
-	crypto.getRandomValues(bytes);
+export async function createShortBridgeKey(
+	payload: Pick<BridgePayload, "path" | "vault">,
+): Promise<string> {
+	const name = new TextEncoder().encode(
+		JSON.stringify([payload.vault, payload.path]),
+	);
+	const source = new Uint8Array(
+		obsidianBridgeNamespaceBytes.length + name.length,
+	);
 
-	return Buffer.from(bytes).toString("base64url");
+	source.set(obsidianBridgeNamespaceBytes);
+	source.set(name, obsidianBridgeNamespaceBytes.length);
+
+	const hash = await crypto.subtle.digest("SHA-1", source);
+	const bytes = new Uint8Array(hash).slice(0, uuidByteLength);
+
+	bytes[6] = (bytes[6] % uuidVersionRemainder) + uuidVersionFive;
+	bytes[8] = (bytes[8] % uuidVariantRemainder) + uuidVariantRfc4122;
+
+	return Array.from(bytes, (byte) =>
+		byte.toString(byteHexRadix).padStart(byteHexWidth, "0"),
+	).join("");
 }
 
 export function isShortBridgeKey(value: string): boolean {
@@ -144,4 +148,39 @@ export function toShortBridgeStorageKey(key: string): string {
 	}
 
 	return `${storageKeyPrefix}${key}`;
+}
+
+function parseStoredBridgePayload(
+	storedPayload: string,
+): Result<BridgePayload> {
+	try {
+		const parsed: unknown = JSON.parse(storedPayload);
+		const payload = validateBridgePayloadSafe(parsed);
+
+		if (!payload.ok) {
+			return {
+				ok: false,
+				reason: "stored bridge payload is invalid",
+			};
+		}
+
+		return payload;
+	} catch {
+		return {
+			ok: false,
+			reason: "stored bridge payload is invalid",
+		};
+	}
+}
+
+function hexToBytes(value: string): Uint8Array {
+	const bytes: number[] = [];
+
+	for (let index = 0; index < value.length; index += byteHexWidth) {
+		bytes.push(
+			Number.parseInt(value.slice(index, index + byteHexWidth), byteHexRadix),
+		);
+	}
+
+	return Uint8Array.from(bytes);
 }

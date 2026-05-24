@@ -28,7 +28,7 @@ Local checks should be specific enough to reproduce the behavior without relying
 | ----- | ------- |
 | `npm run test:e2e` | Exercise route, metadata, crawler, and responsive behavior through Playwright. |
 | `npm run dev` then open the affected route in a browser | Exercise local route behavior interactively. |
-| Use a generated proxy URL from `buildBridgeUrl()` or an existing test fixture | Avoid hand-written payload drift. |
+| Use a generated proxy URL from `buildShortBridgeUrl()` or an existing test fixture | Avoid hand-written key drift. |
 | `curl -A "Discordbot"` or an equivalent request | Exercise crawler handling when bot detection changes. |
 
 **Guidelines:**

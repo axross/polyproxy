@@ -2,21 +2,16 @@ import { Hono } from "hono";
 import { isBotUserAgent } from "../../common/helpers/bot-detection";
 import type { HonoEnv } from "../../common/hono-env";
 import {
-	buildBridgeUrl,
 	buildShortBridgeUrl,
 	getConfiguredBaseUrl,
 } from "../helpers/bridge-url";
-import { decodeBridgeQuerySafe } from "../helpers/decode-link";
 import { buildObsidianUri } from "../helpers/obsidian-uri";
 import {
-	type BridgeQueryStore,
-	bridgeQueryTtlSeconds,
-	isShortBridgeKey,
+	bridgePayloadTtlSeconds,
 	parseShortenBridgeRequest,
-	readShortBridgeQuery,
-	storeShortBridgeQuery,
+	readShortBridgePayload,
+	storeShortBridgePayload,
 } from "../helpers/short-bridge-link";
-import type { Result } from "../helpers/types";
 import {
 	Document,
 	invalidBridgeMetadata,
@@ -53,13 +48,16 @@ routes.post("/", async (c) => {
 		return c.json({ error: "Request body must be JSON" }, badRequestStatus);
 	}
 
-	const query = parseShortenBridgeRequest(body);
+	const payload = parseShortenBridgeRequest(body);
 
-	if (!query.ok) {
-		return c.json({ error: query.reason }, badRequestStatus);
+	if (!payload.ok) {
+		return c.json({ error: payload.reason }, badRequestStatus);
 	}
 
-	const key = await storeShortBridgeQuery(c.env.OBSIDIAN_QUERIES, query.value);
+	const key = await storeShortBridgePayload(
+		c.env.OBSIDIAN_QUERIES,
+		payload.value,
+	);
 	const url = buildShortBridgeUrl(
 		getConfiguredBaseUrl(c.env.PUBLIC_BASE_URL),
 		key,
@@ -67,7 +65,7 @@ routes.post("/", async (c) => {
 
 	return c.json(
 		{
-			expiresIn: bridgeQueryTtlSeconds,
+			expiresIn: bridgePayloadTtlSeconds,
 			key,
 			url,
 		},
@@ -75,12 +73,11 @@ routes.post("/", async (c) => {
 	);
 });
 
-routes.get("/:query", async (c) => {
-	const routeSegment = c.req.param("query");
+routes.get("/:key", async (c) => {
+	const routeKey = c.req.param("key");
 	const userAgent = c.req.header("user-agent") ?? "";
 	const isBot = isBotUserAgent(userAgent);
-	const query = await resolveBridgeQuery(c.env.OBSIDIAN_QUERIES, routeSegment);
-	const result = query.ok ? decodeBridgeQuerySafe(query.value.query) : query;
+	const result = await readShortBridgePayload(c.env.OBSIDIAN_QUERIES, routeKey);
 
 	if (!result.ok) {
 		const body = isBot ? (
@@ -100,13 +97,10 @@ routes.get("/:query", async (c) => {
 		title: payload.title,
 		description: payload.summary,
 		type: "article" as const,
-		url:
-			query.ok && query.value.key
-				? buildShortBridgeUrl(
-						getConfiguredBaseUrl(c.env.PUBLIC_BASE_URL),
-						query.value.key,
-					)
-				: buildBridgeUrl(getConfiguredBaseUrl(c.env.PUBLIC_BASE_URL), payload),
+		url: buildShortBridgeUrl(
+			getConfiguredBaseUrl(c.env.PUBLIC_BASE_URL),
+			routeKey,
+		),
 	};
 	let body = (
 		<BridgePage payload={payload} obsidianUri={buildObsidianUri(payload)} />
@@ -120,29 +114,3 @@ routes.get("/:query", async (c) => {
 
 	return c.html(<Document metadata={metadata}>{body}</Document>);
 });
-
-async function resolveBridgeQuery(
-	store: BridgeQueryStore,
-	routeSegment: string,
-): Promise<Result<{ key?: string; query: string }>> {
-	if (!isShortBridgeKey(routeSegment)) {
-		return {
-			ok: true,
-			value: { query: routeSegment },
-		};
-	}
-
-	const storedQuery = await readShortBridgeQuery(store, routeSegment);
-
-	if (!storedQuery.ok) {
-		return storedQuery;
-	}
-
-	return {
-		ok: true,
-		value: {
-			key: routeSegment,
-			query: storedQuery.value,
-		},
-	};
-}

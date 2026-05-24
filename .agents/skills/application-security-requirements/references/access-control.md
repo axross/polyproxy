@@ -9,20 +9,21 @@ The proxy URL itself is the access token. The app has no account, session, cooki
 **Guidelines:**
 
 - MUST NOT describe the proxy URL as private, authenticated, encrypted, or access-controlled.
-- MUST treat possession of a proxy URL as possession of the decoded payload while the encoded query is present or the short KV entry is live.
+- MUST treat possession of a proxy URL as possession of the decoded payload while the short KV entry is live.
 - MUST NOT add user accounts, sessions, cookies, or new server-side storage as an incidental part of another change.
 - SHOULD surface any need for real access control as a product decision.
 
 ## Limited KV Bridge Storage
 
-Short Obsidian links store validated base64url bridge queries in Workers KV for 30 days. The stored value is encoded rather than decoded, but it still carries note metadata and must be treated as sensitive proxy payload data.
+Short Obsidian links store validated JSON bridge payloads in Workers KV for 30 days under deterministic UUIDv5 hex keys generated from the payload vault and path. The stored value carries note metadata and must be treated as sensitive proxy payload data.
 
 **Guidelines:**
 
 - MUST write short-link entries only to the `OBSIDIAN_QUERIES` KV binding.
-- MUST validate and canonicalize the bridge query through the short-link helper before writing to KV.
+- MUST validate and canonicalize the bridge payload through the short-link helper before writing to KV.
+- MUST derive short-link keys through the short-link helper's UUIDv5 vault/path key generation.
 - MUST set the configured 30-day `expirationTtl` on every short-link KV write.
-- MUST NOT persist decoded payloads in a database, log stream, analytics event, or third-party service.
+- MUST NOT persist bridge payloads outside the intended KV short-link entry.
 - MUST NOT fetch or host Obsidian note content.
 - SHOULD keep invalid-link handling generic.
 - MUST NOT echo malformed input back to the user.
@@ -45,4 +46,4 @@ Human-facing pages may show the decoded fields that the URL already carries, but
 
 - MUST show only the decoded fields intentionally carried by the URL.
 - SHOULD keep vault and path details behind secondary disclosure UI.
-- MUST NOT display raw base64url query strings on public pages.
+- MUST NOT display raw short keys on public pages.

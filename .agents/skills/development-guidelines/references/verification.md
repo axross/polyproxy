@@ -8,11 +8,10 @@ Use the changed file as the starting point for verification. Helper changes usua
 
 | Change type | Output surface at risk |
 | ----------- | ---------------------- |
-| `src/common/helpers/base64url.ts` | Accepted/rejected query strings, canonical round trips |
 | `src/obsidian/helpers/validation.ts` | Payload limits, path safety, source URL protocols |
 | `src/obsidian/helpers/obsidian-uri.ts` | Custom protocol URI escaping and vault/path behavior |
 | `src/obsidian/helpers/bridge-url.ts` | Public HTTPS URL shape and max URL length |
-| `src/obsidian/helpers/short-bridge-link.ts` | Short-key generation, KV key shape, TTL, and stored-query validation |
+| `src/obsidian/helpers/short-bridge-link.ts` | UUIDv5 short-key generation, KV key shape, TTL, and stored-payload validation |
 | `src/common/helpers/bot-detection.ts` | Discord/crawler vs human rendering path |
 | `src/obsidian/routes/obsidian.tsx` | Metadata, invalid-link rendering, crawler HTML, human UI, E2E route behavior |
 | `src/obsidian/views/obsidian.tsx` | Browser-visible route UI and custom-protocol fallback |
@@ -46,7 +45,7 @@ Manual checks cover browser behavior that unit tests, E2E tests, and build outpu
 - MUST consult [manual-verification.md](../../quality-assurance-guidelines/references/manual-verification.md) for required manual evidence.
 - SHOULD run `npm run test:e2e` for automated browser coverage after visual, routing, metadata, or crawler-rendering changes.
 - SHOULD start `npm run dev` and open a valid generated `/ob/[key]` URL when real custom-protocol launch behavior needs manual confirmation.
-- SHOULD verify an invalid query renders the invalid-link path and does not throw.
+- SHOULD verify an invalid key renders the invalid-link path and does not throw.
 - SHOULD verify a Discord-like crawler user agent receives simple server-rendered title/summary HTML and no client redirect behavior.
 - SHOULD verify the Open in Obsidian button remains visible when automatic custom-protocol launch fails or is blocked.
 - SHOULD test layout changes at a narrow mobile width and a desktop width.
@@ -61,5 +60,5 @@ For test authoring and QA evidence rules, consult [quality-assurance-guidelines]
 
 - SHOULD cover pure helpers in `src/common/helpers/**` and `src/obsidian/helpers/**` with unit tests.
 - MUST include valid and failing payload cases when validation behavior changes.
-- SHOULD include malformed base64url, invalid JSON, unsafe paths, over-limit fields, and unsafe source URL protocols in validation tests when relevant.
+- SHOULD include malformed stored JSON, invalid keys, unsafe paths, over-limit fields, and unsafe source URL protocols in validation tests when relevant.
 - SHOULD cover Hono route behavior with Playwright tests under `e2e/tests/routes/**`.

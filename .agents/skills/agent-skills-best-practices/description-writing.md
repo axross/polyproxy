@@ -25,7 +25,7 @@ A useful description contains both coverage and trigger. "Covers validation and 
 
 **Complete Description Example:**
 
-> Apply this skill when reviewing bridge payload security: covers base64url decoding, source URL validation, Obsidian URI construction, metadata exposure, and npm dependency risk.
+> Apply this skill when reviewing bridge payload security: covers UUIDv5 key handling, source URL validation, Obsidian URI construction, metadata exposure, and npm dependency risk.
 
 **Guidelines:**
 

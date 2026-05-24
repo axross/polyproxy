@@ -61,7 +61,7 @@ Scopes should be coarse enough to stay stable as files move. Prefer the broad re
 - SHOULD use `app` for behavior changes even when the touched files are helper-focused.
 - SHOULD use `tests` only when the change is test-only; otherwise use the behavior scope.
 - MAY omit scope when a change intentionally spans several coarse areas.
-- MUST NOT use helper-level scopes such as `bridge-url`, `decode-link`, `base64url`, `validation`, `metadata`, or `bot-detection`.
+- MUST NOT use helper-level scopes such as `bridge-url`, `short-bridge-link`, `validation`, `metadata`, or `bot-detection`.
 - MUST NOT invent a one-off scope when an existing coarse scope communicates the change clearly.
 
 ## Subject

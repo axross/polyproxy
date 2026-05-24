@@ -15,14 +15,6 @@ export const exampleBridgePayload = {
 	sourceUrl: "https://example.com/articles/agent-ready-web",
 } satisfies TestBridgePayload;
 
-export function buildBridgeQuery(payload: TestBridgePayload): string {
-	return Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
-}
-
-export function buildBridgePath(payload: TestBridgePayload): string {
-	return `/ob/${buildBridgeQuery(payload)}`;
-}
-
 export function buildObsidianUri(
 	payload: Pick<TestBridgePayload, "vault" | "path">,
 ): string {
