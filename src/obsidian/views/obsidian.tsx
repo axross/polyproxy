@@ -104,7 +104,7 @@ export function OverviewPage() {
 						Proxy Obsidian deeplinks through HTTPS.
 					</h1>
 					<p class={descriptionClass} data-testid="description">
-						open.axross.dev is a multi-purpose URL proxy server. This route
+						open.axross.app is a multi-purpose URL proxy server. This route
 						turns a short Obsidian bridge key into Open Graph preview data and
 						an Obsidian open action.
 					</p>

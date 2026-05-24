@@ -114,7 +114,7 @@ function scrubUrl(value: string | undefined): string | undefined {
 	}
 
 	try {
-		const url = new URL(value, "https://open.axross.dev");
+		const url = new URL(value, "https://open.axross.app");
 		const pathname = scrubText(url.pathname);
 
 		return `${url.origin}${pathname}`;

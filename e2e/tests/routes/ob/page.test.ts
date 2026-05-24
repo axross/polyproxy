@@ -28,7 +28,7 @@ test("Overview content", async ({ page }) => {
 
 test("Overview metadata", async ({ page }) => {
 	await test.step("Verify the document title", async () => {
-		await expect(page).toHaveTitle("open.axross.dev");
+		await expect(page).toHaveTitle("open.axross.app");
 	});
 
 	await test.step("Verify the description metadata", async () => {

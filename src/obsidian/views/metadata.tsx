@@ -1,6 +1,6 @@
 import type { Child } from "hono/jsx";
 
-export const siteName = "open.axross.dev";
+export const siteName = "open.axross.app";
 
 const htmlClass = "h-full scheme-light dark:scheme-dark";
 const bodyClass =

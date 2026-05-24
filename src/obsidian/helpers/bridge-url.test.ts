@@ -6,7 +6,7 @@ const payloadKey = "d80025792a1b57e5a235462ea488de44";
 
 describe("getConfiguredBaseUrl", () => {
 	it("defaults to the production origin", () => {
-		expect(getConfiguredBaseUrl()).toBe("https://open.axross.dev");
+		expect(getConfiguredBaseUrl()).toBe("https://open.axross.app");
 	});
 
 	it("uses the configured public base URL when provided", () => {

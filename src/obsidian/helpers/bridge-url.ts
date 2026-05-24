@@ -9,7 +9,7 @@ export class BridgeUrlError extends Error {
 	}
 }
 
-const defaultBaseUrl = "https://open.axross.dev";
+const defaultBaseUrl = "https://open.axross.app";
 
 export function buildShortBridgeUrl(baseUrl: string, key: string): string {
 	if (!isShortBridgeKey(key)) {
