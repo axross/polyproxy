@@ -6,7 +6,7 @@ describe("scrubSentryEvent", () => {
 	it("redacts bridge route details from request fields", () => {
 		const event = scrubSentryEvent({
 			request: {
-				url: "https://open.axross.dev/ob/eyJ2YXVsdCI6IlBlcnNvbmFsIn0",
+				url: "https://open.axross.app/ob/eyJ2YXVsdCI6IlBlcnNvbmFsIn0",
 				query_string: "secret=true",
 				headers: { cookie: "session=secret" },
 				cookies: "session=secret",
@@ -14,7 +14,7 @@ describe("scrubSentryEvent", () => {
 			},
 		});
 
-		expect(event.request?.url).toBe("https://open.axross.dev/ob/[key]");
+		expect(event.request?.url).toBe("https://open.axross.app/ob/[key]");
 		expect(event.request?.query_string).toBeUndefined();
 		expect(event.request?.headers).toBeUndefined();
 		expect(event.request?.cookies).toBeUndefined();
@@ -27,7 +27,7 @@ describe("scrubSentryEvent", () => {
 				{
 					message: "Opening obsidian://open?vault=Personal&file=Private%2FNote",
 					data: {
-						href: "https://open.axross.dev/ob/abc123",
+						href: "https://open.axross.app/ob/abc123",
 						navigationType: "push",
 					},
 				},

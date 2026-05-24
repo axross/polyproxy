@@ -149,7 +149,7 @@ test("Short bridge link creation and rendering", async ({ page }) => {
 	await test.step("Verify the canonical Open Graph URL uses the short key", async () => {
 		await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
 			"content",
-			`https://open.axross.dev${shortBridgePath}`,
+			`https://open.axross.app${shortBridgePath}`,
 		);
 	});
 });
@@ -247,7 +247,7 @@ async function createShortBridgePath(
 
 	expect(body.expiresIn).toBe(2_592_000);
 	expect(body.key).toBe(expectedShortBridgeKey);
-	expect(body.url).toBe(`https://open.axross.dev${expectedShortBridgePath}`);
+	expect(body.url).toBe(`https://open.axross.app${expectedShortBridgePath}`);
 
 	return new URL(body.url).pathname;
 }
