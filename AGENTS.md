@@ -39,8 +39,7 @@ Use this workflow for single-agent work in this repository. The agent owns plann
 ### Overall Strategy
 
 Follow this ordered strategy for non-trivial work. Small answer-only requests may compress the sequence, but the same decision order still applies.
-
-1. Classify the request and load the relevant project guidance.
+1. Classify the request and load the relevant project guidance. If anything about the request is unclear, incomplete, or raises potential risks, the agent MUST ask clarifying questions and explicitly surface any concerns (scope, privacy, platform constraints, missing inputs, or security implications) before proceeding to define success criteria.
 2. Define success criteria, constraints, affected surface, dependencies, and verification expectations.
 3. Inspect the smallest useful context and draft an ordered local workflow.
 4. Implement, investigate, or review within the narrowest surface that satisfies the criteria.
