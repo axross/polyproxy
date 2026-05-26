@@ -26,6 +26,24 @@ export function buildShortBridgeUrl(baseUrl: string, key: string): string {
 	return href;
 }
 
+export function buildShortBridgeImageUrl(baseUrl: string, key: string): string {
+	if (!isShortBridgeKey(key)) {
+		throw new BridgeUrlError("Short bridge key is invalid");
+	}
+
+	const url = new URL(
+		`${bridgeRoutePath}/${key}/image`,
+		normalizeBaseUrl(baseUrl),
+	);
+	const href = url.toString();
+
+	if (href.length > maxBridgeUrlLength) {
+		throw new BridgeUrlError("Bridge image URL exceeds the practical length limit");
+	}
+
+	return href;
+}
+
 export function getConfiguredBaseUrl(configuredBaseUrl?: string): string {
 	return configuredBaseUrl ?? defaultBaseUrl;
 }

@@ -1,13 +1,21 @@
 import { describe, expect, it } from "vitest";
 
 import {
+	bridgeImageContentType,
+	bridgeImageHeight,
+	bridgeImageWidth,
 	bridgePayloadTtlSeconds,
+	type BridgeImageStore,
 	type BridgePayloadStore,
 	createShortBridgeKey,
 	isShortBridgeKey,
 	parseShortenBridgeRequest,
+	readShortBridgeImage,
 	readShortBridgePayload,
+	storeShortBridgeImage,
 	storeShortBridgePayload,
+	type StoredBridgeImageMetadata,
+	toShortBridgeImageStorageKey,
 	toShortBridgeStorageKey,
 } from "./short-bridge-link";
 import type { BridgePayload } from "./validation";
@@ -20,6 +28,11 @@ const payload: BridgePayload = {
 		"An article about Google's effort to make the web easier for agents to navigate.",
 };
 const payloadKey = "d80025792a1b57e5a235462ea488de44";
+const imageMetadata: StoredBridgeImageMetadata = {
+	contentType: bridgeImageContentType,
+	height: bridgeImageHeight,
+	width: bridgeImageWidth,
+};
 
 describe("parseShortenBridgeRequest", () => {
 	it("accepts a valid bridge payload and returns a canonical payload", () => {
@@ -95,6 +108,24 @@ describe("storeShortBridgePayload", () => {
 			JSON.stringify(payload),
 		);
 	});
+
+	it("stores image metadata only when the caller provides verified image metadata", async () => {
+		const store = new MemoryBridgePayloadStore();
+
+		await expect(
+			storeShortBridgePayload(store, payload, {
+				createKey: () => payloadKey,
+				image: imageMetadata,
+			}),
+		).resolves.toBe(payloadKey);
+
+		expect(store.values.get(toShortBridgeStorageKey(payloadKey))).toBe(
+			JSON.stringify({
+				...payload,
+				image: imageMetadata,
+			}),
+		);
+	});
 });
 
 describe("readShortBridgePayload", () => {
@@ -109,6 +140,26 @@ describe("readShortBridgePayload", () => {
 		await expect(readShortBridgePayload(store, payloadKey)).resolves.toEqual({
 			ok: true,
 			value: payload,
+		});
+	});
+
+	it("reads stored bridge payload image metadata", async () => {
+		const store = new MemoryBridgePayloadStore();
+
+		store.values.set(
+			toShortBridgeStorageKey(payloadKey),
+			JSON.stringify({
+				...payload,
+				image: imageMetadata,
+			}),
+		);
+
+		await expect(readShortBridgePayload(store, payloadKey)).resolves.toEqual({
+			ok: true,
+			value: {
+				...payload,
+				image: imageMetadata,
+			},
 		});
 	});
 
@@ -152,6 +203,91 @@ describe("readShortBridgePayload", () => {
 			reason: "stored bridge payload is invalid",
 		});
 	});
+
+	it("rejects invalid stored image metadata", async () => {
+		const store = new MemoryBridgePayloadStore();
+
+		store.values.set(
+			toShortBridgeStorageKey(payloadKey),
+			JSON.stringify({
+				...payload,
+				image: {
+					contentType: "image/png",
+					height: bridgeImageHeight,
+					width: bridgeImageWidth,
+				},
+			}),
+		);
+
+		await expect(readShortBridgePayload(store, payloadKey)).resolves.toEqual({
+			ok: false,
+			reason: "stored bridge payload is invalid",
+		});
+	});
+});
+
+describe("storeShortBridgeImage", () => {
+	it("stores binary image data with the bridge payload TTL", async () => {
+		const store = new MemoryBridgePayloadStore();
+		const imageBytes = Uint8Array.from([1, 2, 3]);
+		const imageBody = arrayBufferFromBytes(imageBytes);
+
+		await expect(
+			storeShortBridgeImage(store, payloadKey, streamFromBytes(imageBytes)),
+		).resolves.toEqual(imageMetadata);
+
+		expect(store.imageValues.get(toShortBridgeImageStorageKey(payloadKey))).toEqual(
+			imageBody,
+		);
+		expect(store.puts.at(-1)).toEqual({
+			key: toShortBridgeImageStorageKey(payloadKey),
+			value: imageBody,
+			options: { expirationTtl: bridgePayloadTtlSeconds },
+		});
+	});
+});
+
+describe("readShortBridgeImage", () => {
+	it("reads image data only when stored payload metadata is present", async () => {
+		const store = new MemoryBridgePayloadStore();
+		const imageBytes = Uint8Array.from([1, 2, 3]);
+		const imageBody = arrayBufferFromBytes(imageBytes);
+
+		store.values.set(
+			toShortBridgeStorageKey(payloadKey),
+			JSON.stringify({
+				...payload,
+				image: imageMetadata,
+			}),
+		);
+		store.imageValues.set(
+			toShortBridgeImageStorageKey(payloadKey),
+			imageBody,
+		);
+
+		await expect(readShortBridgeImage(store, payloadKey)).resolves.toEqual({
+			ok: true,
+			value: {
+				body: imageBody,
+				metadata: imageMetadata,
+			},
+		});
+	});
+
+	it("rejects orphaned image data when payload metadata is absent", async () => {
+		const store = new MemoryBridgePayloadStore();
+
+		store.values.set(toShortBridgeStorageKey(payloadKey), JSON.stringify(payload));
+		store.imageValues.set(
+			toShortBridgeImageStorageKey(payloadKey),
+			arrayBufferFromBytes(Uint8Array.from([1, 2, 3])),
+		);
+
+		await expect(readShortBridgeImage(store, payloadKey)).resolves.toEqual({
+			ok: false,
+			reason: "image was not found",
+		});
+	});
 });
 
 describe("createShortBridgeKey", () => {
@@ -185,25 +321,71 @@ describe("isShortBridgeKey", () => {
 	});
 });
 
-class MemoryBridgePayloadStore implements BridgePayloadStore {
+describe("storage keys", () => {
+	it("uses the article key layout for metadata and image entries", () => {
+		expect(toShortBridgeStorageKey(payloadKey)).toBe(`articles/${payloadKey}`);
+		expect(toShortBridgeImageStorageKey(payloadKey)).toBe(
+			`articles/${payloadKey}/image`,
+		);
+	});
+});
+
+class MemoryBridgePayloadStore
+	implements BridgePayloadStore, BridgeImageStore
+{
 	readonly puts: Array<{
 		key: string;
 		options: { expirationTtl: number };
-		value: string;
+		value: ArrayBuffer | string;
 	}> = [];
 
+	readonly imageValues = new Map<string, ArrayBuffer>();
 	readonly values = new Map<string, string>();
 
-	async get(key: string): Promise<string | null> {
+	async get(key: string): Promise<string | null>;
+	async get(key: string, type: "arrayBuffer"): Promise<ArrayBuffer | null>;
+	async get(
+		key: string,
+		type?: "arrayBuffer",
+	): Promise<ArrayBuffer | string | null> {
+		if (type === "arrayBuffer") {
+			return this.imageValues.get(key) ?? null;
+		}
+
 		return this.values.get(key) ?? null;
 	}
 
 	async put(
 		key: string,
-		value: string,
+		value: ArrayBuffer | ReadableStream<Uint8Array> | string,
 		options: { expirationTtl: number },
 	): Promise<void> {
-		this.puts.push({ key, options, value });
-		this.values.set(key, value);
+		const storedValue =
+			typeof value === "string" ? value : await new Response(value).arrayBuffer();
+
+		this.puts.push({ key, options, value: storedValue });
+
+		if (typeof storedValue === "string") {
+			this.values.set(key, storedValue);
+		} else {
+			this.imageValues.set(key, storedValue);
+		}
 	}
+}
+
+function streamFromBytes(bytes: Uint8Array): ReadableStream<Uint8Array> {
+	const body = new Response(arrayBufferFromBytes(bytes)).body;
+
+	if (body === null) {
+		throw new Error("Test image stream could not be created");
+	}
+
+	return body;
+}
+
+function arrayBufferFromBytes(bytes: Uint8Array): ArrayBuffer {
+	const body = new ArrayBuffer(bytes.byteLength);
+	new Uint8Array(body).set(bytes);
+
+	return body;
 }

@@ -9,9 +9,12 @@
 	},
 	"kv_namespaces": [
 		{
-			"binding": "OBSIDIAN_QUERIES"
+			"binding": "CF_KV"
 		}
 	],
+	"images": {
+		"binding": "CF_IMAGES"
+	},
 	"observability": {
 		"enabled": true
 	},

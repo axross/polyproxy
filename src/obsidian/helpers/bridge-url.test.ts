@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { buildShortBridgeUrl, getConfiguredBaseUrl } from "./bridge-url";
+import {
+	buildShortBridgeImageUrl,
+	buildShortBridgeUrl,
+	getConfiguredBaseUrl,
+} from "./bridge-url";
 
 const payloadKey = "d80025792a1b57e5a235462ea488de44";
 
@@ -42,5 +46,19 @@ describe("buildShortBridgeUrl", () => {
 				payloadKey,
 			),
 		).toThrow("Bridge URL exceeds the practical length limit");
+	});
+});
+
+describe("buildShortBridgeImageUrl", () => {
+	it("builds a deterministic /ob/[key]/image URL", () => {
+		expect(
+			buildShortBridgeImageUrl("https://notes.example.com/path", payloadKey),
+		).toBe(`https://notes.example.com/ob/${payloadKey}/image`);
+	});
+
+	it("rejects invalid short keys", () => {
+		expect(() =>
+			buildShortBridgeImageUrl("https://notes.example.com", "not-valid"),
+		).toThrow("Short bridge key is invalid");
 	});
 });

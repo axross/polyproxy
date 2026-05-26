@@ -15,11 +15,11 @@ The proxy URL itself is the access token. The app has no account, session, cooki
 
 ## Limited KV Bridge Storage
 
-Short Obsidian links store validated JSON bridge payloads in Workers KV for 30 days under deterministic UUIDv5 hex keys generated from the payload vault and path. The stored value carries note metadata and must be treated as sensitive proxy payload data.
+Short Obsidian links store validated JSON bridge payloads in Workers KV for 30 days under deterministic UUIDv5 hex keys generated from the payload vault and path. Payload metadata lives at `articles/<key>`, derived preview image bytes live at `articles/<key>/image`, and both must be treated as sensitive proxy payload data.
 
 **Guidelines:**
 
-- MUST write short-link entries only to the `OBSIDIAN_QUERIES` KV binding.
+- MUST write short-link entries only to the `CF_KV` KV binding.
 - MUST validate and canonicalize the bridge payload through the short-link helper before writing to KV.
 - MUST derive short-link keys through the short-link helper's UUIDv5 vault/path key generation.
 - MUST set the configured 30-day `expirationTtl` on every short-link KV write.
