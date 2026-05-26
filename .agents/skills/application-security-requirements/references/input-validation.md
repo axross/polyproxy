@@ -38,13 +38,17 @@ Obsidian paths should remain vault-relative human-readable paths until the URI b
 
 ## Source URL Safety
 
-`sourceUrl` can become a clickable external link. Non-web schemes are unsafe in this context.
+`sourceUrl` can become a clickable external link and may also drive best-effort server-side metadata fetches. Non-web schemes are unsafe in this context, and fetchable URLs need tighter checks than render-only links because the Worker would initiate outbound requests.
 
 **Guidelines:**
 
 - MUST allow only `http:` and `https:` for `sourceUrl`.
 - MUST render external source links with `rel="noreferrer"` when opening a new tab.
 - MUST reject `javascript:`, `data:`, custom protocols, protocol-relative URLs, and relative paths.
+- MUST keep source-derived Open Graph image fetching best-effort so link creation succeeds when metadata or image resolution fails.
+- MUST bound source and image fetches by timeout, redirect count, content type, and byte limits before storing derived image data.
+- MUST reject obvious local, loopback, private, link-local, and reserved IP literal hosts for server-side source or image fetches.
+- MUST store only validated derived image metadata and optimized image bytes, never raw fetched HTML or unoptimized source image URLs.
 - SHOULD omit `sourceUrl` when the source is absent or blank.
 
 ## Metadata Safety
