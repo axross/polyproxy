@@ -12,6 +12,9 @@
 			"binding": "OBSIDIAN_QUERIES"
 		}
 	],
+	"images": {
+		"binding": "CF_IMAGES"
+	},
 	"observability": {
 		"enabled": true
 	},
