@@ -6,8 +6,8 @@ import { type BridgePayload, validateBridgePayloadSafe } from "./validation";
 const bridgePayloadTtlDays = 30;
 const secondsPerDay = 86_400;
 const shortBridgeKeyPattern = /^[0-9a-f]{12}5[0-9a-f]{3}[89ab][0-9a-f]{15}$/;
-const imageStorageKeyPrefix = "ob:image:";
-const storageKeyPrefix = "ob:";
+const articleStorageKeyPrefix = "articles/";
+const imageStorageKeySuffix = "/image";
 const uuidByteLength = 16;
 const uuidVersionFive = 0x50;
 const uuidVariantRfc4122 = 0x80;
@@ -256,7 +256,7 @@ export function toShortBridgeStorageKey(key: string): string {
 		throw new ShortBridgeLinkError("Short bridge key is invalid");
 	}
 
-	return `${storageKeyPrefix}${key}`;
+	return `${articleStorageKeyPrefix}${key}`;
 }
 
 export function toShortBridgeImageStorageKey(key: string): string {
@@ -264,7 +264,7 @@ export function toShortBridgeImageStorageKey(key: string): string {
 		throw new ShortBridgeLinkError("Short bridge key is invalid");
 	}
 
-	return `${imageStorageKeyPrefix}${key}`;
+	return `${articleStorageKeyPrefix}${key}${imageStorageKeySuffix}`;
 }
 
 function parseStoredBridgePayload(

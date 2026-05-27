@@ -9,7 +9,7 @@
 	},
 	"kv_namespaces": [
 		{
-			"binding": "OBSIDIAN_QUERIES"
+			"binding": "CF_KV"
 		}
 	],
 	"images": {

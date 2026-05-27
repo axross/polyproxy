@@ -2,9 +2,9 @@
 
 ## Project Overview
 
-This repository is `polyproxy`, a small Hono URL proxy Cloudflare Worker for `open.axross.app` designed to host multiple proxy route types over time. The currently implemented proxy is the Obsidian deeplink route: `POST /ob` stores a validated JSON payload in Workers KV for 30 days under a deterministic UUIDv5 hex key derived from the payload vault and path, and `GET /ob/:key` resolves short keys, emits Open Graph metadata for crawlers such as Discord, and gives human visitors a browser-mediated path into `obsidian://open`.
+This repository is `polyproxy`, a small Hono URL proxy Cloudflare Worker for `open.axross.app` designed to host multiple proxy route types over time. The currently implemented proxy is the Obsidian deeplink route: `POST /ob` stores a validated JSON payload in Workers KV for 30 days under `articles/<key>`, where `<key>` is a deterministic UUIDv5 hex key derived from the payload vault and path. When a source preview image is available, the optimized image binary is stored under `articles/<key>/image` with the same TTL. `GET /ob/:key` resolves short keys, emits Open Graph metadata for crawlers such as Discord, and gives human visitors a browser-mediated path into `obsidian://open`.
 
-The app stores only validated Obsidian bridge payloads needed for short links, with a 30-day KV TTL. It does not store or host target note content. Short keys are obfuscation only, not access control.
+The app stores only validated Obsidian bridge payloads and derived preview image bytes needed for short links, with a 30-day KV TTL. It does not store or host target note content. Short keys are obfuscation only, not access control.
 
 ## Requirement Level Keywords
 
