@@ -66,12 +66,12 @@ routes.post("/", async (c) => {
 
 	const key = await createShortBridgeKey(payload.value);
 	const image = await resolveAndStoreBridgeImage(
-		c.env.OBSIDIAN_QUERIES,
+		c.env.CF_KV,
 		c.env.CF_IMAGES,
 		key,
 		payload.value.sourceUrl,
 	);
-	await storeShortBridgePayload(c.env.OBSIDIAN_QUERIES, payload.value, {
+	await storeShortBridgePayload(c.env.CF_KV, payload.value, {
 		createKey: () => key,
 		image,
 	});
@@ -92,7 +92,7 @@ routes.post("/", async (c) => {
 
 routes.get("/:key/image", async (c) => {
 	const routeKey = c.req.param("key");
-	const result = await readShortBridgeImage(c.env.OBSIDIAN_QUERIES, routeKey);
+	const result = await readShortBridgeImage(c.env.CF_KV, routeKey);
 
 	if (!result.ok) {
 		return new Response(null, { status: notFoundStatus });
@@ -111,7 +111,7 @@ routes.get("/:key", async (c) => {
 	const routeKey = c.req.param("key");
 	const userAgent = c.req.header("user-agent") ?? "";
 	const isBot = isBotUserAgent(userAgent);
-	const result = await readShortBridgePayload(c.env.OBSIDIAN_QUERIES, routeKey);
+	const result = await readShortBridgePayload(c.env.CF_KV, routeKey);
 
 	if (!result.ok) {
 		const body = isBot ? (

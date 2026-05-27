@@ -321,6 +321,15 @@ describe("isShortBridgeKey", () => {
 	});
 });
 
+describe("storage keys", () => {
+	it("uses the article key layout for metadata and image entries", () => {
+		expect(toShortBridgeStorageKey(payloadKey)).toBe(`articles/${payloadKey}`);
+		expect(toShortBridgeImageStorageKey(payloadKey)).toBe(
+			`articles/${payloadKey}/image`,
+		);
+	});
+});
+
 class MemoryBridgePayloadStore
 	implements BridgePayloadStore, BridgeImageStore
 {
